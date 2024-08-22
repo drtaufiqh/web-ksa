@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PadiAmatanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +32,11 @@ Route::get('/padi_kondef', function () {
     return view('padi.kondef');
 })->middleware('auth')->name('padi_kondef');
 
-Route::get('/padi_unggah', function () {
-    return view('padi.unggah');
-})->middleware('auth')->name('padi_unggah');
+// Route::get('/padi_unggah', function () {
+//     return view('padi.unggah');
+// })->middleware('auth')->name('padi_unggah');
+Route::get('/padi_unggah', [PadiAmatanController::class, 'showUploadForm'])->middleware('auth')->name('padi_unggah');
+Route::post('/padiamatan/upload', [PadiAmatanController::class, 'uploadExcel'])->name('padiamatan.upload');
 
 Route::get('/padi_riwayat', function () {
     return view('padi.riwayat');
