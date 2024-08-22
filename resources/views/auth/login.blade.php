@@ -24,7 +24,7 @@
            		   </div>
            		   <div class="div">
            		   		{{-- <input type="text" class="input" placeholder ="Username"> --}}
-                        <input type="email" name="email" class="input form-control" id="email" placeholder ="Email" required>
+                        <input type="email" value="{{ old('email') }}" name="email" class="input form-control" id="email" placeholder ="Email" required>
            		   </div>
            		</div>
            		<div class="input-div pass">

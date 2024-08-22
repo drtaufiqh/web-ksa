@@ -26,3 +26,23 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
+
+Route::get('/padi_kondef', function () {
+    return view('padi.kondef');
+})->middleware('auth')->name('padi_kondef');
+
+Route::get('/padi_unggah', function () {
+    return view('padi.unggah');
+})->middleware('auth')->name('padi_unggah');
+
+Route::get('/padi_riwayat', function () {
+    return view('padi.riwayat');
+})->middleware('auth')->name('padi_riwayat');
+
+Route::get('/padi_validasi', function () {
+    return view('padi.validasi');
+})->middleware('auth')->name('padi_validasi');
+
+Route::get('/padi_panduan', function () {
+    return view('padi.panduan');
+})->middleware('auth')->name('padi_panduan');

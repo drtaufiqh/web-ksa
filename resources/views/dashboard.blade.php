@@ -25,5 +25,16 @@
             @csrf
             <button type="submit">Logout</button>
         </form>
+        <ul>
+            <li><a href="{{ route('padi_kondef') }}">kondef</a></li>
+            <li>Amatan
+                <ul>
+                    <li><a href="{{ route('padi_unggah') }}">unggah</a></li>
+                    <li><a href="{{ route('padi_riwayat') }}">riwayat</a></li>
+                </ul>
+            </li>
+            <li><a href="{{ route('padi_validasi') }}">validasi</a></li>
+            <li><a href="{{ route('padi_panduan') }}">panduan</a></li>
+        </ul>
     </body>
 </html>

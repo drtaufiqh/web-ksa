@@ -69,6 +69,7 @@ class UserSeeder extends Seeder
 
             $user = new User([
                 'name' => $data['nama'],
+                'kode' => $data['id_user'],
                 'email' => $email,
                 'password' => bcrypt($password),
                 'role' => $role
