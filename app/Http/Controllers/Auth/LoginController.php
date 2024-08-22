@@ -34,7 +34,7 @@ class LoginController extends Controller
 
         // Jika login gagal, redirect kembali ke halaman login dengan pesan error
         return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
+            'email' => 'Masukkan email dan password dengan benar!',
         ])->onlyInput('email');
     }
 

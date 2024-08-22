@@ -18,13 +18,19 @@
                 @csrf
 				<img src="/assets/img/logo.png">
 				<h2 class="title">Selamat Datang!</h2>
+				<!-- Cek apakah ada pesan error -->
+				@if($errors->any())
+					<div class="alert alert-danger">
+						<strong>Error!</strong> {{ $errors->first('email') }}
+					</div>
+				@endif
            		<div class="input-div one">
            		   <div class="i">
            		   		<i class="fas fa-user"></i>
            		   </div>
            		   <div class="div">
            		   		{{-- <input type="text" class="input" placeholder ="Username"> --}}
-                        <input type="email" value="{{ old('email') }}" name="email" class="input form-control" id="email" placeholder ="Email" required>
+                        <input type="email" value="{{ old('email') }}" name="email" class="input form-control" id="email" placeholder ="Email" required autofocus>
            		   </div>
            		</div>
            		<div class="input-div pass">
