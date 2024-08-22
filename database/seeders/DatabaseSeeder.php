@@ -4,8 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Database\Seeders\UserSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,13 +23,6 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Menghasilkan 10 data dummy users
-        User::factory()->count(10)->create();
-
-        // Membuat user dengan email dan password spesifik
-        User::create([
-            'name' => 'John Doe',
-            'email' => 'abcd@def.co',
-            'password' => Hash::make('abcde'),
-        ]);
+        UserSeeder::run();
     }
 }
