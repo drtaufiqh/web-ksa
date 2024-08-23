@@ -16,11 +16,14 @@ use App\Http\Controllers\PadiAmatanController;
 */
 
 Route::get('/', function () {
-    // return view('welcome');
     return redirect('login');
 });
 
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::get('/home', function () {
+    return redirect('dashboard');
+});
+
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login')->middleware("guest");
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
