@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('padi_amatans', function (Blueprint $table) {
             $table->id();
-            $table->string('indeks', 20)->index();
+            $table->string('indeks', 20);
             $table->string('tabul', 6);
             $table->string('tahun', 4);
             $table->string('bulan', 2);
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('c2', 2);
             $table->string('c3', 2);
             $table->string('status', 20);
-            $table->string('akun', 20);
+            $table->string('akun', 20)->nullable();
             $table->timestamps();
         });
     }

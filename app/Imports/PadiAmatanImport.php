@@ -43,6 +43,7 @@ class PadiAmatanImport implements ToModel, WithHeadingRow, WithValidation, Skips
             'c2' => $row['c2'],
             'c3' => $row['c3'],
             'status' => $row['status'],
+            'akun' => $row['akun'] ?? null, // Menyertakan kolom 'akun' dengan nilai null jika tidak ada
             // Kolom created_at dan akun akan diisi secara otomatis atau diabaikan
         ]);
     }
