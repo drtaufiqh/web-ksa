@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>MARTANI</title>
+	<title>PAK TANI</title>
 	<link rel="stylesheet" href="/assets/css/stylelogin.css" />
 	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
