@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\PadiAmatan;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class PadiAmatanController extends Controller
 {
@@ -18,7 +19,7 @@ class PadiAmatanController extends Controller
         $minYear = PadiAmatan::min('tahun');
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->year;
+        $currentYear = Carbon::now()->addHours(7)->year;
 
         // Kirim tahun terkecil dan tahun sekarang ke view
         return view('padi.unggah', [
@@ -56,12 +57,19 @@ class PadiAmatanController extends Controller
 
         // Ambil file
         $file = $request->file('file');
-
+        $bulanInput = $request->input('bulan');
+        $tahunInput = $request->input('tahun');
+        $tabulInput = $tahunInput . $bulanInput;
+        
         // Ambil nama file dan ambil 4 karakter pertama
         $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $tahun = substr($fileName, 0, 4);
         $bulan = substr($fileName, 4, 2);
         $tabul = substr($fileName, 0, 6);
+        // dd($bulanInput == $bulan);
+        if ($tabulInput != $tabul) {
+            return back()->withErrors(['input' => 'Pastikan format file sesuai dengan tahun dan bulan yang dipilih!'])->withInput();
+        }
 
         // Baca file excel
         $data = Excel::toArray([], $file);
@@ -81,79 +89,6 @@ class PadiAmatanController extends Controller
 
         // // Pemetaan indeks header untuk akses data
         $headerIndexes = array_flip($header);
-
-        // // Proses data jika validasi sukses
-        // foreach ($data[0] as $key => $row) {
-        //     if ($key == 0) {
-        //         continue; // Lewatkan header
-        //     }
-
-        //     // Buat array untuk mapping subsegmen ke kolom database
-        //     $mapping = [
-        //         'A1' => 'a1',
-        //         'A2' => 'a2',
-        //         'A3' => 'a3',
-        //         'B1' => 'b1',
-        //         'B2' => 'b2',
-        //         'B3' => 'b3',
-        //         'C1' => 'c1',
-        //         'C2' => 'c2',
-        //         'C3' => 'c3',
-        //     ];
-
-        //     if (isset($headerIndexes['id segmen'], $headerIndexes['nama'], $headerIndexes['subsegmen'], $headerIndexes['status'], $headerIndexes['amatan'])) {
-        //         $indeks = $tabul . $row[$headerIndexes['id segmen']];
-        //         $pcs = $row[$headerIndexes['nama']];
-        //         $kode_segmen = $row[$headerIndexes['id segmen']];
-        //         $status = $row[$headerIndexes['status']];
-        //         $subsegmen = $row[$headerIndexes['subsegmen']];
-
-        //         $amatan = $row[$headerIndexes['amatan']];
-        //         $parts = explode('.', $amatan);
-        //         $nValue = $parts[0];
-
-        //         // Pemetaan subsegmen ke kolom database
-        //         $mapping = [
-        //             'A1' => 'a1',
-        //             'A2' => 'a2',
-        //             'A3' => 'a3',
-        //             'B1' => 'b1',
-        //             'B2' => 'b2',
-        //             'B3' => 'b3',
-        //             'C1' => 'c1',
-        //             'C2' => 'c2',
-        //             'C3' => 'c3',
-        //         ];
-    
-        //         // Buat array dengan data yang akan diinput ke database
-        //         $dataToInsert = [
-        //             'indeks' => $indeks,
-        //             'tabul' => $tabul,
-        //             'tahun' => $tahun,
-        //             'bulan' => $bulan,
-        //             'kode_segmen' => $kode_segmen,
-        //             'pcs' => $pcs,
-        //             'status' => $status,
-        //             $mapping[$subsegmen] => $nValue, // Isi kolom yang sesuai dengan subsegmen
-        //         ];
-        //         // dd($dataToInsert);
-    
-        //         // Periksa apakah entri dengan kode_segmen yang sama sudah ada
-        //         $existingRecord = PadiAmatan::where('indeks', $indeks)->first();
-    
-        //         if ($existingRecord) {
-        //             // Jika sudah ada, perbarui data
-        //             $existingRecord->update($dataToInsert);
-        //         } else {
-        //             // Jika tidak ada, buat entri baru
-        //             PadiAmatan::create($dataToInsert);
-        //         }
-        //     } else {
-        //         // Tangani kasus jika kunci header tidak ada dalam data
-        //         return back()->withErrors(['file' => 'Kolom yang diperlukan tidak ada dalam file Excel.'])->withInput();
-        //     }
-        // }
-        // Array untuk menampung data yang akan dimasukkan ke database
         $groupedData = [];
 
         // Proses data jika validasi sukses
@@ -196,6 +131,8 @@ class PadiAmatanController extends Controller
                         'kode_segmen' => $kode_segmen,
                         'pcs' => $pcs,
                         'status' => $status,
+                        'akun' => Auth::user()->email,
+                        'updated_at' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
                     ];
                 }
 
@@ -208,15 +145,18 @@ class PadiAmatanController extends Controller
 
         // Masukkan data yang sudah digabung ke dalam database
         foreach ($groupedData as $dataToInsert) {
-            // Periksa apakah entri dengan kode_segmen yang sama sudah ada
-            $existingRecord = PadiAmatan::where('indeks', $dataToInsert['indeks'])->first();
+            $kodekab = substr($dataToInsert['indeks'], 0, 4);
+            if (Auth::user()->role == 'prov' || Auth::user()->kode == $kodekab){
+                // Periksa apakah entri dengan kode_segmen yang sama sudah ada
+                $existingRecord = PadiAmatan::where('indeks', $dataToInsert['indeks'])->first();
 
-            if ($existingRecord) {
-                // Jika sudah ada, perbarui data
-                $existingRecord->update($dataToInsert);
-            } else {
-                // Jika tidak ada, buat entri baru
-                PadiAmatan::create($dataToInsert);
+                if ($existingRecord) {
+                    // Jika sudah ada, perbarui data
+                    $existingRecord->update($dataToInsert);
+                } else {
+                    // Jika tidak ada, buat entri baru
+                    PadiAmatan::create($dataToInsert);
+                }
             }
         }
 

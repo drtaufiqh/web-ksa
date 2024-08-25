@@ -35,7 +35,7 @@
 
         <form id="myForm" action="{{ route('padiamatan.upload') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            
+
             {{-- Tahun --}}
             @php
                 $years = [];
@@ -58,23 +58,29 @@
             </div>
 
             {{-- Bulan --}}
+            @php
+                // Ambil bulan saat ini dalam format dua digit
+                $currentMonth = date('m');
+            @endphp
+
             <div class="form-group">
                 <label for="bulan">Bulan</label>
-                <select class="form-control" id="bulan" >
-                  <option value="01">01 - Januari</option>
-                  <option value="02">02 - Februari</option>
-                  <option value="03">03 - Maret</option>
-                  <option value="04">04 - April</option>
-                  <option value="05">05 - Mei</option>
-                  <option value="06">06 - Juni</option>
-                  <option value="07">07 - Juli</option>
-                  <option value="08">08 - Agustus</option>
-                  <option value="09">09 - September</option>
-                  <option value="10">10 - Oktober</option>
-                  <option value="11">11 - November</option>
-                  <option value="12">12 - Desember</option>
+                <select class="form-control" id="bulan" name="bulan">
+                    <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
+                    <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
+                    <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
+                    <option value="04" {{ $currentMonth == '04' ? 'selected' : '' }}>04 - April</option>
+                    <option value="05" {{ $currentMonth == '05' ? 'selected' : '' }}>05 - Mei</option>
+                    <option value="06" {{ $currentMonth == '06' ? 'selected' : '' }}>06 - Juni</option>
+                    <option value="07" {{ $currentMonth == '07' ? 'selected' : '' }}>07 - Juli</option>
+                    <option value="08" {{ $currentMonth == '08' ? 'selected' : '' }}>08 - Agustus</option>
+                    <option value="09" {{ $currentMonth == '09' ? 'selected' : '' }}>09 - September</option>
+                    <option value="10" {{ $currentMonth == '10' ? 'selected' : '' }}>10 - Oktober</option>
+                    <option value="11" {{ $currentMonth == '11' ? 'selected' : '' }}>11 - November</option>
+                    <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
                 </select>
             </div>
+            
             {{-- File --}}
             <div class="form-group">
                 <label>File upload</label>
@@ -85,11 +91,24 @@
                     <button class="file-upload-browse btn btn-gradient-primary py-3" type="button">Upload</button>
                   </span>
                 </div> --}}
-                <input type="file" name="file" class="form-control" required>
+                <input type="file" name="file" class="form-control" accept=".xls,.xlsx,.csv" required>
             </div>
             {{-- Submit --}}
             <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+            
+            {{-- Loading Spinner --}}
+            <div id="loading1" class="text-center" style="display: none;">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </form>
     </div>
 </body>
+<script>
+    document.getElementById('myForm').addEventListener('submit', function() {
+        // Tampilkan spinner loading
+        document.getElementById('loading1').style.display = 'block';
+    });
+</script>
 </html>
