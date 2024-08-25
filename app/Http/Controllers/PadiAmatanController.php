@@ -9,12 +9,22 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Session;
 use App\Models\PadiAmatan;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class PadiAmatanController extends Controller
 {
-    public function showUploadForm()
-    {
-        return view('padi.unggah');
+    public function showUploadForm(){
+        // Ambil tahun terkecil dari database
+        $minYear = PadiAmatan::min('tahun');
+
+        // Tahun sekarang
+        $currentYear = Carbon::now()->year;
+
+        // Kirim tahun terkecil dan tahun sekarang ke view
+        return view('padi.unggah', [
+            'minYear' => $minYear-1,
+            'currentYear' => $currentYear,
+        ]);
     }
 
     // public function uploadExcel(Request $request)
