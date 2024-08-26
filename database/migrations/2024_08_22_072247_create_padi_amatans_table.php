@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tahun', 4)->nullable()->default(null);
             $table->string('bulan', 2)->nullable()->default(null);
             $table->string('kode_segmen', 9)->nullable()->default(null);
+            $table->string('kode_kabkota', 4)->nullable()->default(null);
             $table->string('pcs', 64)->nullable()->default(null);
             $table->string('a1', 2)->nullable()->default("0");
             $table->string('a2', 2)->nullable()->default("0");

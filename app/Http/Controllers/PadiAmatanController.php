@@ -101,6 +101,7 @@ class PadiAmatanController extends Controller
                 $indeks = $tabul . $row[$headerIndexes['id segmen']];
                 $pcs = $row[$headerIndexes['nama']];
                 $kode_segmen = $row[$headerIndexes['id segmen']];
+                $kode_kabkota = substr($kode_segmen, 0, 4);
                 $status = $row[$headerIndexes['status']];
                 $subsegmen = $row[$headerIndexes['subsegmen']];
 
@@ -129,6 +130,7 @@ class PadiAmatanController extends Controller
                         'tahun' => $tahun,
                         'bulan' => $bulan,
                         'kode_segmen' => $kode_segmen,
+                        'kode_kabkota' => $kode_kabkota,
                         'pcs' => $pcs,
                         'status' => $status,
                         'akun' => Auth::user()->email,
@@ -145,7 +147,7 @@ class PadiAmatanController extends Controller
 
         // Masukkan data yang sudah digabung ke dalam database
         foreach ($groupedData as $dataToInsert) {
-            $kodekab = substr($dataToInsert['indeks'], 0, 4);
+            $kodekab = $dataToInsert['kode_kabkota'];
             if (Auth::user()->role == 'prov' || Auth::user()->kode == $kodekab){
                 // Periksa apakah entri dengan kode_segmen yang sama sudah ada
                 $existingRecord = PadiAmatan::where('indeks', $dataToInsert['indeks'])->first();
