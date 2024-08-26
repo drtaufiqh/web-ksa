@@ -8,9 +8,11 @@ use App\Imports\PadiAmatanImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Session;
 use App\Models\PadiAmatan;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PadiAmatanController extends Controller
 {
@@ -27,23 +29,6 @@ class PadiAmatanController extends Controller
             'currentYear' => $currentYear,
         ]);
     }
-
-    // public function uploadExcel(Request $request)
-    // {
-    //     $import = new PadiAmatanImport();
-
-    //     try {
-    //         Excel::import($import, $request->file('file'));
-
-    //         if (session('error')) {
-    //             return redirect()->back()->with('error', session('error'));
-    //         }
-
-    //         return redirect()->back()->with('success', 'File berhasil diunggah dan data telah dimasukkan.');
-    //     } catch (\Exception $e) {
-    //         return redirect()->back()->with('error', 'File Excel tidak valid atau kolom tidak sesuai.');
-    //     }
-    // }
 
     public function import(Request $request){
         // Validasi file
@@ -165,4 +150,28 @@ class PadiAmatanController extends Controller
         return redirect()->back()->with('success', 'Data berhasil diunggah.');
     }
 
+    public function riwayat(){
+        // $data = PadiAmatan::all();
+        // $data = PadiAmatan::paginate(10);
+        $allKabKota = User::getAllKabKota();
+        $data = DB::table('padi_amatans')
+            ->join('users', 'padi_amatans.kode_kabkota', '=', 'users.kode')
+            ->selectRaw('CONCAT(padi_amatans.kode_kabkota, " - ", users.nama) as kab_kota, padi_amatans.kode_kabkota as kode_kabkota, padi_amatans.tahun, padi_amatans.bulan, COUNT(*) as baris, MAX(padi_amatans.updated_at) as last_update')
+            ->groupBy('padi_amatans.kode_kabkota', 'padi_amatans.tahun', 'padi_amatans.bulan', 'users.nama')
+            ->get();
+        return view('padi.riwayat', [
+            'data' => $data,
+            'allKabKota' => $allKabKota,
+        ]);
+    }
+
+    public function showDetail($id){
+        // Ambil data detail dari database berdasarkan ID
+        $data = PadiAmatan::where('kode_kabkota', $id)->get(); // Sesuaikan dengan query Anda
+        
+        // Kirimkan data dalam format JSON
+        return response()->json([
+            'data' => $data
+        ]);
+    }
 }

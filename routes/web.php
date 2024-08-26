@@ -42,9 +42,12 @@ Route::get('/padi_unggah', [PadiAmatanController::class, 'showUploadForm'])->mid
 // Route::post('/padiamatan/upload', [PadiAmatanController::class, 'uploadExcel'])->name('padiamatan.upload');
 Route::post('/padiamatan/upload', [PadiAmatanController::class, 'import'])->name('padiamatan.upload');
 
-Route::get('/padi_riwayat', function () {
-    return view('padi.riwayat');
-})->middleware('auth')->name('padi_riwayat');
+// Route::get('/padi_riwayat', function () {
+//     return view('padi.riwayat');
+// })->middleware('auth')->name('padi_riwayat');
+
+Route::get('/padi_riwayat', [PadiAmatanController::class, 'riwayat'])->middleware('auth')->name('padi_riwayat');
+Route::get('/detail/{id}', [PadiAmatanController::class, 'showDetail']);
 
 Route::get('/padi_validasi', function () {
     return view('padi.validasi');
