@@ -142,7 +142,7 @@
                 var id = $(this).data('id');
                 // Lakukan AJAX atau ambil data detail berdasarkan ID
                 $.ajax({
-                    url: '/detail/' + id, // Ganti dengan URL yang sesuai untuk mengambil data detail
+                    url: '/padi_detail/' + id, // Ganti dengan URL yang sesuai untuk mengambil data detail
                     method: 'GET',
                     success: function (response) {
                         // Kosongkan tabel popup

@@ -47,7 +47,7 @@ Route::post('/padiamatan/upload', [PadiAmatanController::class, 'import'])->name
 // })->middleware('auth')->name('padi_riwayat');
 
 Route::get('/padi_riwayat', [PadiAmatanController::class, 'riwayat'])->middleware('auth')->name('padi_riwayat');
-Route::get('/detail/{id}', [PadiAmatanController::class, 'showDetail']);
+Route::get('/padi_detail/{id}', [PadiAmatanController::class, 'showDetail']);
 
 Route::get('/padi_validasi', function () {
     return view('padi.validasi');
