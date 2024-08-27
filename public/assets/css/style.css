@@ -21822,21 +21822,21 @@ code {
 }
 
 .badge-info, .preview-list .preview-item .preview-thumbnail .badge.badge-offline {
-  border: 1px solid #198ae3;
+  border: 1px solid #ff5050;
   color: #ffffff;
-  background: #198ae3;
+  background: #ff5050;
 }
 
 .badge-warning, .preview-list .preview-item .preview-thumbnail .badge.badge-busy {
-  border: 1px solid #fed713;
+  border: 1px solid #3b5740;
   color: #ffffff;
-  background: #fed713;
+  background:#3b5740;
 }
 
 .badge-danger {
-  border: 1px solid #fe7c96;
+  border: 1px solid #7b9d5d;
   color: #ffffff;
-  background: #fe7c96;
+  background: #7b9d5d;
 }
 
 .badge-light {
@@ -22622,6 +22622,80 @@ code {
 }
 .btn-gradient-primary:not(.btn-gradient-light):hover, .btn-gradient-primary:not(.btn-gradient-light):focus, .btn-gradient-primary:not(.btn-gradient-light):active {
   color: #ffffff;
+}
+.btn-gradient-unggah {
+  background: linear-gradient(to right ,#a4d17c ,#f4c35c);
+  border: 0;
+  font-weight: bold;
+  -webkit-transition: opacity 0.3s ease;
+  -moz-transition: opacity 0.3s ease;
+  -ms-transition: opacity 0.3s ease;
+  -o-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+.btn-gradient-unggah:not([disabled]):not(.disabled):active, .btn-gradient-unggah:not([disabled]):not(.disabled).active, .show > .btn-gradient-unggah.dropdown-toggle {
+  background: linear-gradient(to right, #da8cff, #9a55ff);
+}
+.btn-gradient-u.navbar-toggler:not(.navbar-toggler-right):focus {
+  opacity: 0.5;
+}
+.btn-gradient-unggah:not(.btn-gradient-light) {
+  color: #ffffff;
+}
+.btn-gradient-unggah:not(.btn-gradient-light):hover, .btn-gradient-unggah:not(.btn-gradient-light):focus, .btn-gradient-unggah:not(.btn-gradient-light):active {
+  color: #ffffff;
+}
+
+.popup{
+  width: 400px;
+  background: #fff;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.1);
+  text-align: center;
+  padding: 0 30px 60px;
+  color: #333;
+  visibility: hidden;
+  transition: all 0.4s ease-in-out;
+}
+
+.open-popup{
+  visibility: visible;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.popup img{
+  width: 100px;
+  margin-top: -50px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.popup h2{
+  font-size: 38px;
+  font-weight: 500;
+  margin: 30px 0 10px;
+}
+
+.popup button{
+  width: 100%;
+  margin-top: 50px;
+  padding: 10px 0;
+  background-color: #e02189;
+  color: #fff;
+  border: 0;
+  outline: none;
+  font-size: 18px;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px rgba(0,0,0,0.2);
 }
 
 .btn-gradient-secondary {
@@ -23557,7 +23631,7 @@ code {
 
 /* Forms */
 .form-group {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1rem;
 }
 
 .input-group-append,
@@ -23596,8 +23670,8 @@ select.tt-query,
 select.tt-hint, .select2-container--default .select2-selection--single select.select2-search__field, .select2-container--default select.select2-selection--single {
   padding: 0.4375rem 0.75rem;
   border: 0;
-  outline: 1px solid #ebedf2;
-  color: #c9c8c8;
+  outline: 1px solid #aaa;
+  color: #000000;
 }
 select.form-control:focus, select.typeahead:focus,
 select.tt-query:focus,
@@ -24071,6 +24145,7 @@ dl li {
 /* Tables */
 .table {
   margin-bottom: 0;
+  text-align: center;
   margin-top: 2rem;
 }
 .table thead th {
@@ -24089,6 +24164,7 @@ dl li {
   line-height: 1;
   white-space: nowrap;
   padding: 0.9375rem;
+  border: 0.1rem solid #e9e5e5;
 }
 .table th img,
 .table td img {
@@ -24131,6 +24207,10 @@ dl li {
 .table-hover tbody tr:hover,
 .table-hover tbody td {
   color: gray;
+}
+.paginate_button.next:hover {
+  background:linear-gradient(to right, #a4d17c, #f4c35c); /* Warna latar belakang ketika hover */
+  color: white; /* Warna teks ketika hover */
 }
 
 /* Tabs */
@@ -25184,7 +25264,6 @@ dl li {
   font-size: 1.5rem;
   line-height: 48px;
   margin-right: 0;
-  background-image: url(/assets/img/bg-jagung.png);
   background-position: center;
   padding: 0.25rem 0;
   width: 100%;

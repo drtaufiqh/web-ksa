@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PadiAmatanController;
 use App\Http\Controllers\PadiValidasiController;
+use App\Models\User;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,9 +52,8 @@ Route::post('/padiamatan/upload', [PadiAmatanController::class, 'import'])->name
 Route::get('/padi_riwayat', [PadiAmatanController::class, 'riwayat'])->middleware('auth')->name('padi_riwayat');
 Route::get('/padi_detail/{id}', [PadiAmatanController::class, 'showDetail']);
 
-Route::get('/padi_validasi', function () {
-    return view('padi.validasi');
-})->middleware('auth')->name('padi_validasi');
+Route::get('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi');
+Route::post('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi_post');
 
 Route::get('/padi_panduan', function () {
     return view('padi.panduan');

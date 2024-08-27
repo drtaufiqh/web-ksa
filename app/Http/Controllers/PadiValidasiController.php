@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PadiAmatan;
 use App\Models\PadiValidasi;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,6 +15,46 @@ class PadiValidasiController extends Controller
     public function showTestPage()
     {
         return view('test-proses');
+    }
+
+    public function showValidasi(Request $request){
+        if ($request->isMethod('post')) {
+            $wil = $request->input('wil');
+            $tahun = $request->input('tahun');
+            $bulan = $request->input('bulan');
+            $tabul1 = $tahun . $bulan;
+            if ($bulan == '01'){
+                $tabul0 = ($tahun - 1) . '12';
+            } else if (intval($bulan) <= 10) {
+                $tabul0 = $tahun . '0' . (intval($bulan) - 1);
+            } else {
+                $tabul0 = $tahun . $bulan;
+            }
+            $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
+
+            // Simpan nilai ke session
+            $request->session()->put('selected_tahun', $tahun);
+            $request->session()->put('selected_bulan', $bulan);
+            $request->session()->put('selected_wil', $wil);
+        } else {
+            $tahun = $request->session()->get('selected_tahun', Carbon::now()->year);
+            $bulan = $request->session()->get('selected_bulan', date('m'));
+            $wil = $request->session()->get('selected_wil', '3399');
+
+            // Default tabul values
+            $tabul1 = $tahun . $bulan;
+            $tabul0 = $bulan == '01' ? ($tahun - 1) . '12' : ($bulan <= 10 ? $tahun . '0' . (intval($bulan) - 1) : $tahun . $bulan);
+            $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
+        }
+
+        return view('padi.validasi', [
+            'allKabKota' => User::getAllKabKota(),
+            'currentYear' => Carbon::now()->addHours(7)->year,
+            'hasil' => $hasil,
+            'selected_tahun' => $tahun,
+            'selected_bulan' => $bulan,
+            'selected_wil' => $wil,
+        ]);
     }
 
     function proses($wil=null,$tabul0=null,$tabul1=null,$output='array', Request $request) // output = 'json'
@@ -50,8 +91,8 @@ class PadiValidasiController extends Controller
             if(!$tabul1 && !empty($request->input('tabul1')))
                 $tabul1 = $request->input('tabul1');
 
-            $data0 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul0, 'kode_kabkota' => $wil]);//yg awal
-            $data1 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul1, 'kode_kabkota' => $wil]);//yang baru
+            $data0 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul0, 'kode_kabkota' => $wil . "%"]);//yg awal
+            $data1 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul1, 'kode_kabkota' => $wil . "%"]);//yang baru
             $tmp = '';
             $count_subsegmen = [];
             $count_subsegmen['K'] = 0;
@@ -161,9 +202,11 @@ class PadiValidasiController extends Controller
             }
         }
 
-        if(request()->ajax())
+        if(request()->ajax()){
             echo json_encode($message);
-        else
+        // else if ($message['status'] == false){
+        //     return $message['message'];
+        }else
             return $message;
     }
 
@@ -250,11 +293,11 @@ class PadiValidasiController extends Controller
 
     function colorPadi($value){
         if($value == 'K'){
-            $color = '#47A152';
+            $color = '#abe96c';
         } else if($value == 'W'){
-            $color = '#F99533';
+            $color = '#ffc37c';
         } else {
-            $color = '#BD2E2E';
+            $color = '#ff5050';
         }
         return $color;
     }

@@ -25,7 +25,7 @@
             <select id="kabkota-select" class="form-control">
                 <option value="all">Seluruh Kab/Kota</option>
                 @foreach ($allKabKota as $item)
-                    <option value="{{ str($item, 0,4) }}">{{ $item }}</option>
+                    <option value="{{ substr($item, 0,4) }}">{{ $item }}</option>
                 @endforeach
             </select>
         </div>

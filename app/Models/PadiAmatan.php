@@ -37,7 +37,7 @@ class PadiAmatan extends Model
         $query = self::query();
 
         foreach ($conditions as $field => $value) {
-            $query->where($field, $value);
+            $query->where($field, 'like', $value);
         }
 
         return $query->get();
