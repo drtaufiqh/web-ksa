@@ -15,4 +15,31 @@ class PadiAmatan extends Model
      * @var array<int, string>
      */
     protected $guarded = [];
+
+    public static function getDataByField($field, $value)
+    {
+        return self::where($field, $value)->get();
+    }
+
+    public static function getDataByIndeks($value)
+    {
+        return self::where('indeks', 'like', $value . '%')->get();
+    }
+
+    /**
+     * Get data by matching multiple field values.
+     *
+     * @param array $conditions
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public static function getDataByMultipleField(array $conditions)
+    {
+        $query = self::query();
+
+        foreach ($conditions as $field => $value) {
+            $query->where($field, $value);
+        }
+
+        return $query->get();
+    }
 }

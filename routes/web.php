@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PadiAmatanController;
+use App\Http\Controllers\PadiValidasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,3 +57,6 @@ Route::get('/padi_validasi', function () {
 Route::get('/padi_panduan', function () {
     return view('padi.panduan');
 })->middleware('auth')->name('padi_panduan');
+
+Route::get('/test-proses', [PadiValidasiController::class, 'showTestPage']);
+Route::post('/test-proses', [PadiValidasiController::class, 'proses'])->name('test.proses');
