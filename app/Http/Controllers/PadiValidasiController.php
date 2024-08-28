@@ -176,11 +176,11 @@ class PadiValidasiController extends Controller
                     'akun' => Auth::user()->email,
                 );
 
-                $cekVal = PadiValidasi::getDataByIndeks($tabul1.$wil);
-                if(empty($cekVal)){
-                    PadiValidasi::create($dataVal);
-                } else {
+                $cekVal = PadiValidasi::getDataByIndeks($tabul1.$wil)->first();
+                if($cekVal){
                     $cekVal->update($dataVal);
+                } else {
+                    PadiValidasi::create($dataVal);
                 }
 
                 $message = array(
