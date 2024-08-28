@@ -31,6 +31,15 @@ return new class extends Migration
             $table->string('c1', 2)->nullable()->default("0");
             $table->string('c2', 2)->nullable()->default("0");
             $table->string('c3', 2)->nullable()->default("0");
+            $table->string('hasil_a1', 2)->nullable()->default(null);
+            $table->string('hasil_a2', 2)->nullable()->default(null);
+            $table->string('hasil_a3', 2)->nullable()->default(null);
+            $table->string('hasil_b1', 2)->nullable()->default(null);
+            $table->string('hasil_b2', 2)->nullable()->default(null);
+            $table->string('hasil_b3', 2)->nullable()->default(null);
+            $table->string('hasil_c1', 2)->nullable()->default(null);
+            $table->string('hasil_c2', 2)->nullable()->default(null);
+            $table->string('hasil_c3', 2)->nullable()->default(null);
             $table->string('status', 20)->nullable()->default(null);
             $table->string('akun', 20)->nullable()->default(null);
             $table->timestamps();

@@ -60,5 +60,5 @@ Route::get('/padi_panduan', function () {
     return view('padi.panduan');
 })->middleware('auth')->name('padi_panduan');
 
-Route::get('/test-proses', [PadiValidasiController::class, 'showTestPage']);
-Route::post('/test-proses', [PadiValidasiController::class, 'proses'])->name('test.proses');
+Route::get('/test-proses', [PadiAmatanController::class, 'testProses'])->name('test.proses');
+Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('run.proses');

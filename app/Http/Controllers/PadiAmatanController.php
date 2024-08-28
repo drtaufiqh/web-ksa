@@ -8,6 +8,7 @@ use App\Imports\PadiAmatanImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Session;
 use App\Models\PadiAmatan;
+use App\Models\PadiValidasi;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -173,5 +174,239 @@ class PadiAmatanController extends Controller
         return response()->json([
             'data' => $data
         ]);
+    }
+
+    public function testProses()
+    {
+        return view('test-proses');
+    }
+
+    public function runProses(Request $request)
+    {
+        $tabul0 = $request->input('tabul0');
+        $tabul1 = $request->input('tabul1');
+
+        $result = $this->proses($tabul0, $tabul1);
+
+        return view('test-proses', compact('result'));
+    }
+
+    function proses($tabul0=null,$tabul1=null)
+    {
+        $data0 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul0]);//yg awal
+        $data1 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul1]);//yang baru
+        $tmp = '';
+        $count_subsegmen = [];
+        $count_subsegmen['K'] = 0;
+        $count_subsegmen['TK'] = 0;
+        $count_subsegmen['W'] = 0;
+        $count_subsegmen['Total'] = 0;
+        $jenis_subsegmen = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3'];
+
+        //validasi
+        if(!empty($data1) && !empty($data0) ){
+            $count_segmen = [];
+            $count_segmen['K'] = 0;
+            $count_segmen['TK'] = 0;
+            $evita = [];
+            $evita['A'] = 0;
+            $evita['R'] = 0;
+            
+            $status = [];
+            $status['A'] = 0;
+            $status['R'] = 0;
+
+            $uniqueKodeKabkota = $data1->pluck('kode_kabkota')->unique()->toArray();
+
+            foreach ($uniqueKodeKabkota as $wil) {
+                $filteredData1 = $data1->filter(function ($item) use ($wil) {
+                    return $item['kode_kabkota'] === $wil;
+                })->values();
+                $filteredData0 = $data0->filter(function ($item) use ($wil) {
+                    return $item['kode_kabkota'] === $wil;
+                })->values();
+                
+                for($i=0; $i < count($filteredData1); $i++){
+                    for($j=0; $j < count($filteredData0); $j++){
+                        if($filteredData1[$i]['kode_segmen'] == $filteredData0[$j]['kode_segmen']){
+                            $tmp = $j;
+                            break;
+                        }
+                    }
+
+                    foreach ($jenis_subsegmen as $jenis) {
+                        $filteredData1[$i]['hasil_'.$jenis] = $this->validatePadi($filteredData0[$tmp][$jenis],$filteredData1[$i][$jenis]);
+                    }
+                    $dataUpdate = array(
+                        'hasil_a1' => $filteredData1[$i]['hasil_a1'],
+                        'hasil_a2' => $filteredData1[$i]['hasil_a2'],
+                        'hasil_a3' => $filteredData1[$i]['hasil_a3'],
+                        'hasil_b1' => $filteredData1[$i]['hasil_b1'],
+                        'hasil_b2' => $filteredData1[$i]['hasil_b2'],
+                        'hasil_b3' => $filteredData1[$i]['hasil_b3'],
+                        'hasil_c1' => $filteredData1[$i]['hasil_c1'],
+                        'hasil_c2' => $filteredData1[$i]['hasil_c2'],
+                        'hasil_c3' => $filteredData1[$i]['hasil_c3'],
+                    );
+                    PadiAmatan::where('indeks', $tabul1 . $filteredData1[$i]['kode_segmen'])->first()->update($dataUpdate);
+
+                    $count_seg = 0;
+                    foreach ($jenis_subsegmen as $jenis){                            
+                        $var = 'hasil'.$jenis;
+                        if($filteredData1[$i][$var] == 'K'){
+                            $count_subsegmen['K'] += 1;
+                        } else if($filteredData1[$i][$var] == 'W'){
+                            $count_subsegmen['W'] += 1;
+                        } else if($filteredData1[$i][$var] == 'TK'){
+                            $count_subsegmen['TK'] += 1;
+                            $count_seg += 1;
+                        }
+                    }
+                    if($count_seg == 0){
+                        $count_segmen['K'] += 1;
+                    } else {
+                        $count_segmen['TK'] += 1;
+                    }
+                    
+                    if($filteredData1[$i]['status'] == 'Approved'){
+                        $status['A'] += 1;
+                    }
+                    if($count_seg == 0 && $filteredData1[$i]['status'] == 'Approved'){
+                        $evita['A'] += 1;
+                        $filteredData1[$i]['evita'] = 'APPROVED';
+                    } else {
+                        $evita['R'] += 1;
+                        $filteredData1[$i]['evita'] = 'REJECTED';
+                    }
+                }
+
+                $count_subsegmen['Total'] = $count_subsegmen['K']+$count_subsegmen['TK']+$count_subsegmen['W'];
+                $count_segmen['Total'] = $count_segmen['K']+$count_segmen['TK'];
+                $evita['Total'] = $evita['A']+$evita['R'];
+                $status['R'] = $count_segmen['Total'] - $status['A'];
+                
+                $dataVal = array (
+                    'indeks' => $tabul1.$wil,
+                    'subsegmen_K' => $count_subsegmen['K'],
+                    'subsegmen_TK' => $count_subsegmen['TK'],
+                    'subsegmen_W' => $count_subsegmen['W'],
+                    'subsegmen_total' => $count_segmen['Total'],
+                    'segmen_K' => $count_segmen['K'],
+                    'segmen_TK' => $count_segmen['TK'],
+                    'segmen_total' => $count_segmen['Total'],
+                    'status_A' => $status['A'],
+                    'status_R' => $status['R'],
+                    'status_total' => $count_segmen['Total'],//pasti sama dengan segmen, dan harus sama
+                    'evita_A' => $evita['A'],
+                    'evita_R' => $evita['R'],
+                    'evita_total' => $evita['Total'],
+                    'last_update' => date("Y-m-d H:i:s"),
+                    'akun' => Auth::user()->email,
+                );
+
+                $cekVal = PadiValidasi::getDataByIndeks($tabul1.$wil)->first();
+                if($cekVal){
+                    $cekVal->update($dataVal);
+                } else {
+                    PadiValidasi::create($dataVal);
+                }
+            }
+
+            $message = array(
+                'status' => true,
+                'data1' => $data1,
+                'count_subsegmen' => $count_subsegmen,
+            );
+
+        } else {
+            $message = array(
+                'status' => false,
+                'message' => 'Data ada yang belum diupload data ' . $tabul0 . ': '.sizeof($data0).' - data ' . $tabul1 . ': ' .sizeof($data1) //__LINE__
+            );
+        }
+
+        return $message;
+    }
+
+    
+    function validatePadi($x,$y){
+        $hasil = '';
+        switch($y){
+            case 0:
+                $hasil = 'TK';
+                break;
+            case 1:
+                if($x == 2 || $x == 8){
+                    $hasil = 'TK';
+                } else if($x == 3){
+                    $hasil = 'W';
+                } else {
+                    $hasil = 'K';
+                }
+                break;
+            case 2:
+                if($x == 0 || $x == 1){
+                    $hasil = 'K';
+                } else {
+                    $hasil = 'TK';
+                }
+                break;
+            case 3:
+                if($x == 0 || $x == 1 || $x == 2 || $x == 3){
+                    $hasil = 'K';
+                } else {
+                    $hasil = "TK";
+                }
+                break;
+            case 4:
+                if($x == 0 || $x == 3 || $x == 4){
+                    $hasil = 'K';
+                } else {
+                    $hasil = 'TK';
+                }
+                break;
+            case 5:
+                if($x == 1 || $x == 2 || $x == 8){
+                    $hasil = 'TK';
+                } else if($x == 3){
+                    $hasil = 'W';
+                } else {
+                    $hasil = 'K';
+                }
+                break;
+            case 6:
+                if($x == 0 || $x == 6){
+                    $hasil = 'K';
+                } else if($x == 4 || $x == 7 || $x == 8){
+                    $hasil = 'TK';
+                } else {
+                    $hasil = 'W';
+                }
+                break;
+            case 7:
+                if($x == 1 || $x == 2){
+                    $hasil = 'W';
+                } else if($x == 8){
+                    $hasil = 'TK';
+                } else {
+                    $hasil = 'K';
+                }
+                break;
+            case 8:
+                if($x == 0 ||$x == 8){
+                    $hasil = 'K';
+                } else {
+                    $hasil = 'TK';
+                }
+                break;
+            case 12:
+                if($x == 0){
+                    $hasil = 'K';
+                } else {
+                    $hasil = 'TK';
+                }
+                break;
+        }
+        return $hasil;
     }
 }
