@@ -78,7 +78,7 @@
                                 <td>{{ $row->baris }}</td>
                                 <td>{{ $row->last_update }}</td>
                                 <td>
-                                    <button class="btn btn-gradient-primary btn-icon-text" data-id="{{ $row->kode_kabkota }}" style="padding:0.5rem;background: #87c351;">
+                                    <button class="btn btn-gradient-primary btn-icon-text view-btn" data-id="{{ $row->kode_kabkota }}" style="padding:0.5rem;background: #87c351;">
                                         <i class="fa fa-edit"></i> Lihat
                                     </button>
                                 </td>
