@@ -199,11 +199,11 @@
                 if (selectedValue === 'all') {
                     // Tampilkan semua baris dan kolom
                     table.columns().search('').draw();
-                    table.column(0).visible(true); // Tampilkan kolom Kab/Kota
+                    // table.column(0).visible(true); // Tampilkan kolom Kab/Kota
                 } else {
                     // Filter berdasarkan kab/kota yang dipilih
                     table.columns(0).search(selectedValue).draw();
-                    table.column(0).visible(false); // Sembunyikan kolom Kab/Kota
+                    // table.column(0).visible(false); // Sembunyikan kolom Kab/Kota
                 }
             });
 
