@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TahunBulan;
 use Illuminate\Http\Request;
 use App\Http\Requests\UploadPadiAmatanRequest;
 use App\Imports\PadiAmatanImport;
@@ -148,6 +149,11 @@ class PadiAmatanController extends Controller
             }
         }
 
+        $tabul_sebelum = TahunBulan::getTabulSebelum($tabul);
+        $tabul_sesudah = TahunBulan::getTabulSesudah($tabul);
+        $message_sebelum = $this->proses($tabul_sebelum, $tabul);
+        $message_sesudah = $this->proses($tabul, $tabul_sesudah);
+
         return redirect()->back()->with('success', 'Data berhasil diunggah.');
     }
 
@@ -204,7 +210,7 @@ class PadiAmatanController extends Controller
         $jenis_subsegmen = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3'];
 
         //validasi
-        if(!empty($data1) && !empty($data0) ){
+        if(!$data1->isEmpty() && !$data0->isEmpty()){
             $count_segmen = [];
             $count_segmen['K'] = 0;
             $count_segmen['TK'] = 0;
@@ -226,89 +232,94 @@ class PadiAmatanController extends Controller
                     return $item['kode_kabkota'] === $wil;
                 })->values();
                 
-                for($i=0; $i < count($filteredData1); $i++){
-                    for($j=0; $j < count($filteredData0); $j++){
-                        if($filteredData1[$i]['kode_segmen'] == $filteredData0[$j]['kode_segmen']){
-                            $tmp = $j;
-                            break;
+                if(!$filteredData1->isEmpty() && !$filteredData0->isEmpty()){
+                    foreach ($filteredData1 as $i => $row1) {
+                    // for($i=0; $i < count($filteredData1); $i++){
+                        foreach ($filteredData0 as $j => $row0) {
+                        // for($j=0; $j < count($filteredData0); $j++){
+                            if($filteredData1[$i]['kode_segmen'] == $filteredData0[$j]['kode_segmen']){
+                                $tmp = $j;
+                                break;
+                            }
+                        }
+
+                        foreach ($jenis_subsegmen as $jenis) {
+                            $filteredData1[$i]['hasil_'.$jenis] = $this->validatePadi($filteredData0[$tmp][$jenis],$filteredData1[$i][$jenis]);
+                        }
+
+                        $dataUpdate = array(
+                            'hasil_a1' => $filteredData1[$i]['hasil_a1'],
+                            'hasil_a2' => $filteredData1[$i]['hasil_a2'],
+                            'hasil_a3' => $filteredData1[$i]['hasil_a3'],
+                            'hasil_b1' => $filteredData1[$i]['hasil_b1'],
+                            'hasil_b2' => $filteredData1[$i]['hasil_b2'],
+                            'hasil_b3' => $filteredData1[$i]['hasil_b3'],
+                            'hasil_c1' => $filteredData1[$i]['hasil_c1'],
+                            'hasil_c2' => $filteredData1[$i]['hasil_c2'],
+                            'hasil_c3' => $filteredData1[$i]['hasil_c3'],
+                        );
+                        PadiAmatan::where('indeks', $tabul1 . $filteredData1[$i]['kode_segmen'])->first()->update($dataUpdate);
+
+                        $count_seg = 0;
+                        foreach ($jenis_subsegmen as $jenis){                            
+                            $var = 'hasil_'.$jenis;
+                            if($filteredData1[$i][$var] == 'K'){
+                                $count_subsegmen['K'] += 1;
+                            } else if($filteredData1[$i][$var] == 'W'){
+                                $count_subsegmen['W'] += 1;
+                            } else if($filteredData1[$i][$var] == 'TK'){
+                                $count_subsegmen['TK'] += 1;
+                                $count_seg += 1;
+                            }
+                        }
+                        if($count_seg == 0){
+                            $count_segmen['K'] += 1;
+                        } else {
+                            $count_segmen['TK'] += 1;
+                        }
+                        
+                        if($filteredData1[$i]['status'] == 'Approved'){
+                            $status['A'] += 1;
+                        }
+                        if($count_seg == 0 && $filteredData1[$i]['status'] == 'Approved'){
+                            $evita['A'] += 1;
+                            $filteredData1[$i]['evita'] = 'APPROVED';
+                        } else {
+                            $evita['R'] += 1;
+                            $filteredData1[$i]['evita'] = 'REJECTED';
                         }
                     }
 
-                    foreach ($jenis_subsegmen as $jenis) {
-                        $filteredData1[$i]['hasil_'.$jenis] = $this->validatePadi($filteredData0[$tmp][$jenis],$filteredData1[$i][$jenis]);
-                    }
-                    $dataUpdate = array(
-                        'hasil_a1' => $filteredData1[$i]['hasil_a1'],
-                        'hasil_a2' => $filteredData1[$i]['hasil_a2'],
-                        'hasil_a3' => $filteredData1[$i]['hasil_a3'],
-                        'hasil_b1' => $filteredData1[$i]['hasil_b1'],
-                        'hasil_b2' => $filteredData1[$i]['hasil_b2'],
-                        'hasil_b3' => $filteredData1[$i]['hasil_b3'],
-                        'hasil_c1' => $filteredData1[$i]['hasil_c1'],
-                        'hasil_c2' => $filteredData1[$i]['hasil_c2'],
-                        'hasil_c3' => $filteredData1[$i]['hasil_c3'],
-                    );
-                    PadiAmatan::where('indeks', $tabul1 . $filteredData1[$i]['kode_segmen'])->first()->update($dataUpdate);
-
-                    $count_seg = 0;
-                    foreach ($jenis_subsegmen as $jenis){                            
-                        $var = 'hasil'.$jenis;
-                        if($filteredData1[$i][$var] == 'K'){
-                            $count_subsegmen['K'] += 1;
-                        } else if($filteredData1[$i][$var] == 'W'){
-                            $count_subsegmen['W'] += 1;
-                        } else if($filteredData1[$i][$var] == 'TK'){
-                            $count_subsegmen['TK'] += 1;
-                            $count_seg += 1;
-                        }
-                    }
-                    if($count_seg == 0){
-                        $count_segmen['K'] += 1;
-                    } else {
-                        $count_segmen['TK'] += 1;
-                    }
+                    $count_subsegmen['Total'] = $count_subsegmen['K']+$count_subsegmen['TK']+$count_subsegmen['W'];
+                    $count_segmen['Total'] = $count_segmen['K']+$count_segmen['TK'];
+                    $evita['Total'] = $evita['A']+$evita['R'];
+                    $status['R'] = $count_segmen['Total'] - $status['A'];
                     
-                    if($filteredData1[$i]['status'] == 'Approved'){
-                        $status['A'] += 1;
-                    }
-                    if($count_seg == 0 && $filteredData1[$i]['status'] == 'Approved'){
-                        $evita['A'] += 1;
-                        $filteredData1[$i]['evita'] = 'APPROVED';
+                    $dataVal = array (
+                        'indeks' => $tabul1.$wil,
+                        'subsegmen_K' => $count_subsegmen['K'],
+                        'subsegmen_TK' => $count_subsegmen['TK'],
+                        'subsegmen_W' => $count_subsegmen['W'],
+                        'subsegmen_total' => $count_subsegmen['Total'],
+                        'segmen_K' => $count_segmen['K'],
+                        'segmen_TK' => $count_segmen['TK'],
+                        'segmen_total' => $count_segmen['Total'],
+                        'status_A' => $status['A'],
+                        'status_R' => $status['R'],
+                        'status_total' => $count_segmen['Total'],//pasti sama dengan segmen, dan harus sama
+                        'evita_A' => $evita['A'],
+                        'evita_R' => $evita['R'],
+                        'evita_total' => $evita['Total'],
+                        'last_update' => date("Y-m-d H:i:s"),
+                        'akun' => Auth::user()->email,
+                    );
+
+                    $cekVal = PadiValidasi::getDataByIndeks($tabul1.$wil)->first();
+                    if($cekVal){
+                        $cekVal->update($dataVal);
                     } else {
-                        $evita['R'] += 1;
-                        $filteredData1[$i]['evita'] = 'REJECTED';
+                        PadiValidasi::create($dataVal);
                     }
-                }
-
-                $count_subsegmen['Total'] = $count_subsegmen['K']+$count_subsegmen['TK']+$count_subsegmen['W'];
-                $count_segmen['Total'] = $count_segmen['K']+$count_segmen['TK'];
-                $evita['Total'] = $evita['A']+$evita['R'];
-                $status['R'] = $count_segmen['Total'] - $status['A'];
-                
-                $dataVal = array (
-                    'indeks' => $tabul1.$wil,
-                    'subsegmen_K' => $count_subsegmen['K'],
-                    'subsegmen_TK' => $count_subsegmen['TK'],
-                    'subsegmen_W' => $count_subsegmen['W'],
-                    'subsegmen_total' => $count_segmen['Total'],
-                    'segmen_K' => $count_segmen['K'],
-                    'segmen_TK' => $count_segmen['TK'],
-                    'segmen_total' => $count_segmen['Total'],
-                    'status_A' => $status['A'],
-                    'status_R' => $status['R'],
-                    'status_total' => $count_segmen['Total'],//pasti sama dengan segmen, dan harus sama
-                    'evita_A' => $evita['A'],
-                    'evita_R' => $evita['R'],
-                    'evita_total' => $evita['Total'],
-                    'last_update' => date("Y-m-d H:i:s"),
-                    'akun' => Auth::user()->email,
-                );
-
-                $cekVal = PadiValidasi::getDataByIndeks($tabul1.$wil)->first();
-                if($cekVal){
-                    $cekVal->update($dataVal);
-                } else {
-                    PadiValidasi::create($dataVal);
                 }
             }
 

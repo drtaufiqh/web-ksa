@@ -22,4 +22,18 @@ class TahunBulan extends Model
 
         return $tabul_sebelum;
     }
+
+    public static function getTabulSesudah($tabul){
+        $tahun = substr($tabul, 0, 4);
+        $bulan = substr($tabul, 4, 2);
+        if ($bulan == '12'){
+            $tabul_sesudah = ($tahun + 1) . '01';
+        } else if (intval($bulan) <= 8) {
+            $tabul_sesudah = $tahun . '0' . (intval($bulan) + 1);
+        } else {
+            $tabul_sesudah = $tahun . (intval($bulan) + 1);
+        }
+
+        return $tabul_sesudah;
+    }
 }
