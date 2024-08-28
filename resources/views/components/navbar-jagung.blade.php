@@ -17,7 +17,7 @@
                   <span class="availability-status online"></span>
                 </div>
                 <div class="nav-profile-text">
-                  <p class="mb-1 text-black">Admin Provinsi</p>
+                  <p class="mb-1 text-black">{{ Auth::user()->nama }}</p>
                 </div>
               </a>
               <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -44,7 +44,7 @@
                     </div>
                   </div>
                   <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                    <h6 class="preview-subject font-weight-normal mb-1">Padi Pro</h6>
+                    <h6 class="preview-subject font-weight-normal mb-1">Padi</h6>
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
