@@ -242,6 +242,19 @@
                 });
             });
         });
+        // Event handler untuk tombol tutup
+        $(document).ready(function() {
+            // Tombol tutup modal
+            $('.modal-footer .btn-secondary').on('click', function () {
+                $('#detailModal').modal('hide');
+            });
+
+            // Atau jika Anda ingin menutup modal saat tombol "X" di pojok kanan atas diklik
+            $('.modal-header .close').on('click', function () {
+                $('#detailModal').modal('hide');
+            });
+        });
+
     </script>
   </body>
 </html>
