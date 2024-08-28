@@ -11,6 +11,6 @@ class PadiValidasi extends Model
     
     public static function getDataByIndeks($value)
     {
-        return self::where('indeks', $value);
+        return self::where('indeks', 'like', $value);
     }
 }
