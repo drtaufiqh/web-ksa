@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PadiAmatan;
 use App\Models\PadiValidasi;
+use App\Models\TahunBulan;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -23,13 +24,7 @@ class PadiValidasiController extends Controller
             $tahun = $request->input('tahun');
             $bulan = $request->input('bulan');
             $tabul1 = $tahun . $bulan;
-            if ($bulan == '01'){
-                $tabul0 = ($tahun - 1) . '12';
-            } else if (intval($bulan) <= 10) {
-                $tabul0 = $tahun . '0' . (intval($bulan) - 1);
-            } else {
-                $tabul0 = $tahun . $bulan;
-            }
+            $tabul0 = TahunBulan::getTabulSebelum($tabul1);
             $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
 
             // Simpan nilai ke session
@@ -43,7 +38,7 @@ class PadiValidasiController extends Controller
 
             // Default tabul values
             $tabul1 = $tahun . $bulan;
-            $tabul0 = $bulan == '01' ? ($tahun - 1) . '12' : ($bulan <= 10 ? $tahun . '0' . (intval($bulan) - 1) : $tahun . $bulan);
+            $tabul0 = TahunBulan::getTabulSebelum($tabul1);
             $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
         }
 
