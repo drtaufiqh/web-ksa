@@ -25,6 +25,8 @@
     <link rel="shortcut icon" href="/assets/img/logo.png" />
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- DataTables Buttons CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css">
 </head>
 <body>
     <div class="container-scroller">
@@ -95,7 +97,7 @@
                             <label for="kabkota-select">Wilayah Amatan</label>
                             <select id="kabkota-select" class="form-control">
                                 <option value="-">Pilih Kab/Kota</option>
-                                <option value="3399">Seluruh Kab/Kota</option>
+                                <option value="3300">Seluruh Kab/Kota</option>
                                 @foreach ($allKabKota as $item)
                                     <option value="{{ substr($item, 0,4) }}">{{ $item }}</option>
                                 @endforeach
@@ -186,6 +188,28 @@
             "pageLength": 10,
             "lengthMenu": [5, 10, 20, 50],
             "compact": true,
+            dom: 'Bfrtip',  // Tambahkan 'Bfrtip' untuk menampilkan tombol
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-download"></i> Download Excel',
+                    title: function() {
+                        var tahun = $('#tahun').val();
+                        var bulan = $('#bulan').val();
+                        var kabkota = $('#kabkota-select option:selected').text();
+                        return 'Data Amatan ' + kabkota + ' - ' + bulan + '/' + tahun;
+                    },
+                    filename: function() {
+                        var tahun = $('#tahun').val();
+                        var bulan = $('#bulan').val();
+                        var kabkota = $('#kabkota-select option:selected').text();
+                        return 'Data_Amatan_' + kabkota + '_' + bulan + '_' + tahun;
+                    },
+                }
+            ],
             "ajax": null, // Disable initial AJAX call
             "columns": [
                 // { "data": "tahun" },
@@ -276,5 +300,11 @@
     });
 
     </script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
   </body>
 </html>

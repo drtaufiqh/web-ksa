@@ -91,7 +91,7 @@ class PadiValidasiController extends Controller
             $query->where('bulan', $bulan);
         }
     
-        if ($kabkota && $kabkota !== '3399') {
+        if ($kabkota && $kabkota !== '3300') {
             $query->where('kode_kabkota', $kabkota);
         }
     
