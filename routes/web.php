@@ -36,7 +36,7 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 // padi_dashboard
 Route::get('/padi_dashboard', function () {
-    return view('padi_dashboard');
+    return view('padi.dashboard');
 })->middleware('auth')->name('padi_dashboard');
 
 // padi_kondef
@@ -68,3 +68,36 @@ Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('r
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth');
+
+
+// padi
+
+// jagung_dashboard
+Route::get('/jagung_dashboard', function () {
+    return view('jagung.dashboard');
+})->middleware('auth')->name('jagung_dashboard');
+
+// jagung_kondef
+Route::get('/jagung_kondef', function () {
+    return view('jagung.kondef');
+})->middleware('auth')->name('jagung_kondef');
+
+// jagung_unggah
+Route::get('/jagung_unggah', function () {
+    return view('jagung.unggah');
+})->middleware('auth')->name('jagung_unggah');
+
+// jagung_riwayat
+Route::get('/jagung_riwayat', function () {
+    return view('jagung.riwayat');
+})->middleware('auth')->name('jagung_riwayat');
+
+// jagung_validasi
+Route::get('/jagung_validasi', function () {
+    return view('jagung.validasi');
+})->middleware('auth')->name('jagung_validasi');
+
+// jagung_panduan
+Route::get('/jagung_panduan', function () {
+    return view('jagung.panduan');
+})->middleware('auth')->name('jagung_panduan');
