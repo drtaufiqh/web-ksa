@@ -41,6 +41,12 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
+                        {{-- Loading Spinner --}}
+                        <div id="loading" class="text-center" style="display: none;">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
                     <form class="forms-sample">
                         {{-- Tahun --}}
                         @php
@@ -238,6 +244,8 @@
 
         // Event listener untuk tombol "Lihat"
         $('#lihat-btn').on('click', function () {
+            $('#loading').show();
+
             // Ambil nilai dari form
             var tahun = $('#tahun').val();
             var bulan = $('#bulan').val();
@@ -253,11 +261,15 @@
                     kabkota: kabkota
                 },
                 success: function (data) {
+                    $('#loading').hide();
                     // Clear table sebelum menambahkan data baru
                     table.clear();
 
                     // Tambah data baru ke dalam tabel
                     table.rows.add(data).draw();
+                },
+                error:function (){
+                    $('#loading').hide();
                 }
             });
         });
