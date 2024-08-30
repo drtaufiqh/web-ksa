@@ -18,49 +18,53 @@ use Carbon\Carbon;
 |
 */
 
+// default page
 Route::get('/', function () {
     return redirect('login');
 });
-
 Route::get('/home', function () {
-    return redirect('dashboard');
+    return redirect('padi_dashboard');
 });
 
+// login logout
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login')->middleware("guest");
 Route::post('login', [LoginController::class, 'login']);
 Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
+// padi
 
+// padi_dashboard
+Route::get('/padi_dashboard', function () {
+    return view('padi_dashboard');
+})->middleware('auth')->name('padi_dashboard');
+
+// padi_kondef
 Route::get('/padi_kondef', function () {
     return view('padi.kondef');
 })->middleware('auth')->name('padi_kondef');
 
-// Route::get('/padi_unggah', function () {
-//     return view('padi.unggah');
-// })->middleware('auth')->name('padi_unggah');
+// padi_unggah
 Route::get('/padi_unggah', [PadiAmatanController::class, 'showUploadForm'])->middleware('auth')->name('padi_unggah');
-// Route::post('/padiamatan/upload', [PadiAmatanController::class, 'uploadExcel'])->name('padiamatan.upload');
 Route::post('/padiamatan/upload', [PadiAmatanController::class, 'import'])->name('padiamatan.upload');
 
-// Route::get('/padi_riwayat', function () {
-//     return view('padi.riwayat');
-// })->middleware('auth')->name('padi_riwayat');
-
+// padi_riwayat
 Route::get('/padi_riwayat', [PadiAmatanController::class, 'riwayat'])->middleware('auth')->name('padi_riwayat');
 Route::get('/padi_detail/{id}', [PadiAmatanController::class, 'showDetail']);
 
+// padi_validasi
 Route::get('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi');
 Route::post('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi_post');
+Route::get('/get-filtered-data', [PadiValidasiController::class, 'getFilteredData']);
 
+// padi_panduan
 Route::get('/padi_panduan', function () {
     return view('padi.panduan');
 })->middleware('auth')->name('padi_panduan');
 
+// testing only
 Route::get('/test-proses', [PadiAmatanController::class, 'testProses'])->name('test.proses');
 Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('run.proses');
-
-Route::get('/get-filtered-data', [PadiValidasiController::class, 'getFilteredData']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware('auth');
