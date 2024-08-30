@@ -247,19 +247,6 @@ class PadiAmatanController extends Controller
                             $filteredData1[$i]['hasil_'.$jenis] = $this->validatePadi($filteredData0[$tmp][$jenis],$filteredData1[$i][$jenis]);
                         }
 
-                        $dataUpdate = array(
-                            'hasil_a1' => $filteredData1[$i]['hasil_a1'],
-                            'hasil_a2' => $filteredData1[$i]['hasil_a2'],
-                            'hasil_a3' => $filteredData1[$i]['hasil_a3'],
-                            'hasil_b1' => $filteredData1[$i]['hasil_b1'],
-                            'hasil_b2' => $filteredData1[$i]['hasil_b2'],
-                            'hasil_b3' => $filteredData1[$i]['hasil_b3'],
-                            'hasil_c1' => $filteredData1[$i]['hasil_c1'],
-                            'hasil_c2' => $filteredData1[$i]['hasil_c2'],
-                            'hasil_c3' => $filteredData1[$i]['hasil_c3'],
-                        );
-                        PadiAmatan::where('indeks', $tabul1 . $filteredData1[$i]['kode_segmen'])->first()->update($dataUpdate);
-
                         $count_seg = 0;
                         foreach ($jenis_subsegmen as $jenis){                            
                             $var = 'hasil_'.$jenis;
@@ -288,6 +275,20 @@ class PadiAmatanController extends Controller
                             $evita['R'] += 1;
                             $filteredData1[$i]['evita'] = 'REJECTED';
                         }
+                        
+                        $dataUpdate = array(
+                            'hasil_a1' => $filteredData1[$i]['hasil_a1'],
+                            'hasil_a2' => $filteredData1[$i]['hasil_a2'],
+                            'hasil_a3' => $filteredData1[$i]['hasil_a3'],
+                            'hasil_b1' => $filteredData1[$i]['hasil_b1'],
+                            'hasil_b2' => $filteredData1[$i]['hasil_b2'],
+                            'hasil_b3' => $filteredData1[$i]['hasil_b3'],
+                            'hasil_c1' => $filteredData1[$i]['hasil_c1'],
+                            'hasil_c2' => $filteredData1[$i]['hasil_c2'],
+                            'hasil_c3' => $filteredData1[$i]['hasil_c3'],
+                            'evita' => $filteredData1[$i]['evita'],
+                        );
+                        PadiAmatan::where('indeks', $tabul1 . $filteredData1[$i]['kode_segmen'])->first()->update($dataUpdate);
                     }
 
                     $count_subsegmen['Total'] = $count_subsegmen['K']+$count_subsegmen['TK']+$count_subsegmen['W'];

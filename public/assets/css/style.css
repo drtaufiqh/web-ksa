@@ -16857,7 +16857,7 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
 /* rtl:end:remove */
 .text-primary, .list-wrapper .completed .remove {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important;
+  color: rgb(114 179 122) !important;
 }
 
 .text-secondary, .list-wrapper .remove {
@@ -16867,7 +16867,7 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
 
 .text-success {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important;
+  color: #3b5740!important;
 }
 
 .text-info {
@@ -20959,9 +20959,8 @@ code {
 
 /* Footer */
 .footer {
-  background: #f2edf3;
+  background: #ffffff;
   color: color(dark);
-  border-top: 1px solid #e7dee9;
   padding: 30px 1rem;
   transition: all 0.25s ease;
   -moz-transition: all 0.25s ease;
@@ -20971,9 +20970,10 @@ code {
   font-family: "ubuntu-regular", sans-serif;
 }
 .footer a {
-  color: #1bcfb4;
+  color: #6e6767;
   font-size: inherit;
 }
+
 @media (max-width: 991px) {
   .footer {
     margin-left: 0;
@@ -22721,16 +22721,17 @@ code {
 }
 
 .btn-gradient-success {
-  background: linear-gradient(to right, #84d9d2, #07cdae);
+  background:linear-gradient(to right, #8ec783, #a7e194);
   border: 0;
   -webkit-transition: opacity 0.3s ease;
   -moz-transition: opacity 0.3s ease;
   -ms-transition: opacity 0.3s ease;
   -o-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease;
+  --bs-btn-padding-x: 6rem;
 }
 .btn-gradient-success:not([disabled]):not(.disabled):active, .btn-gradient-success:not([disabled]):not(.disabled).active, .show > .btn-gradient-success.dropdown-toggle {
-  background: linear-gradient(to right, #84d9d2, #07cdae);
+  background: linear-gradient(to right, #8ec783, #a7e194);
 }
 .btn-gradient-success:hover {
   opacity: 0.8;
@@ -24149,7 +24150,6 @@ dl li {
   margin-top: 2rem;
 }
 .table thead th {
-  border-top: 0;
   border-bottom-width: 1px;
   font-family: "ubuntu-medium", sans-serif;
   font-weight: bold;
@@ -24163,8 +24163,8 @@ dl li {
   font-size: 0.875rem;
   line-height: 1;
   white-space: nowrap;
-  padding: 0.9375rem;
-  border: 0.1rem solid #e9e5e5;
+  padding: 0.5rem;
+  border: 0.1px solid #e9e5e5;
 }
 .table th img,
 .table td img {
@@ -24192,7 +24192,7 @@ dl li {
 
 .table > :not(:last-child) > :last-child > *,
 .jsgrid .jsgrid-table > :not(:last-child) > :last-child > * {
-  border-bottom-color: #ebedf2;
+ border-bottom: 2px solid;
 }
 
 .table > :not(:first-child),
@@ -25240,6 +25240,7 @@ dl li {
   -webkit-transition: background 0.25s ease;
   -moz-transition: background 0.25s ease;
   -ms-transition: background 0.25s ease;
+  background-image: url(/assets/img/bg-jagung.png);
 }
 .navbar .navbar-brand {
   width: 110px;
@@ -25267,8 +25268,7 @@ dl li {
   background-position: center;
   padding: 0.25rem 0;
   width: 100%;
-  text-align: left;
-  padding-left: 2.25rem;
+  text-align: center;
 }
 .navbar .navbar-brand-wrapper .navbar-brand:active, .navbar .navbar-brand-wrapper .navbar-brand:focus, .navbar .navbar-brand-wrapper .navbar-brand:hover {
   color: #1b2658;
@@ -25295,7 +25295,6 @@ dl li {
   color: #3b5740;
   padding-left: 24px;
   padding-right: 24px;
-  background-image: url(/assets/img/bg-jagung.png);
   background-position: center;
   width: calc(100% - 260px);
   height: 70px;
@@ -25422,7 +25421,7 @@ dl li {
   font-size: 1.25rem;
 }
 .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-toggle:after {
-  color: #b66dff;
+  color: #3b5740;
   font-size: 1rem;
 }
 .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu {
@@ -26408,5 +26407,52 @@ dl li {
   right: 10px;
   font-size: 20px;
   cursor: pointer;
+}
+
+ #map{
+            height: 100vh;
+            width: 100%;
+        }
+
+        .info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+
+.legend {
+    line-height: 18px;
+    color: #555;
+}
+.legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
+}
+
+.dropdown-chart {
+  display: flex;
+  align-content: stretch;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin: 1rem;
+  justify-content: space-around;
+}
+
+.judul-chart{
+    text-align: center;
+    font-weight: bold;
+    color: #3b5740;
+    background-color: #def4ca;
+    padding: 0.5rem;
 }
 /*# sourceMappingURL=maps/style.css.map */

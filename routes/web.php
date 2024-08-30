@@ -62,3 +62,5 @@ Route::get('/padi_panduan', function () {
 
 Route::get('/test-proses', [PadiAmatanController::class, 'testProses'])->name('test.proses');
 Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('run.proses');
+
+Route::get('/get-filtered-data', [PadiValidasiController::class, 'getFilteredData']);

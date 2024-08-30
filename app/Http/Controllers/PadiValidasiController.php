@@ -7,6 +7,7 @@ use App\Models\PadiValidasi;
 use App\Models\TahunBulan;
 use App\Models\User;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,39 +19,86 @@ class PadiValidasiController extends Controller
         return view('test-proses');
     }
 
-    public function showValidasi(Request $request){
-        if ($request->isMethod('post')) {
-            $wil = $request->input('wil');
-            $tahun = $request->input('tahun');
-            $bulan = $request->input('bulan');
-            $tabul1 = $tahun . $bulan;
-            $tabul0 = TahunBulan::getTabulSebelum($tabul1);
-            $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
+    // public function showValidasi(Request $request){
+    //     if ($request->isMethod('post')) {
+    //         $wil = $request->input('wil');
+    //         $tahun = $request->input('tahun');
+    //         $bulan = $request->input('bulan');
+    //         $tabul1 = $tahun . $bulan;
+    //         $tabul0 = TahunBulan::getTabulSebelum($tabul1);
+    //         $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
 
-            // Simpan nilai ke session
-            $request->session()->put('selected_tahun', $tahun);
-            $request->session()->put('selected_bulan', $bulan);
-            $request->session()->put('selected_wil', $wil);
-        } else {
-            $tahun = $request->session()->get('selected_tahun', Carbon::now()->year);
-            $bulan = $request->session()->get('selected_bulan', date('m'));
-            $wil = $request->session()->get('selected_wil', '3399');
+    //         // Simpan nilai ke session
+    //         $request->session()->put('selected_tahun', $tahun);
+    //         $request->session()->put('selected_bulan', $bulan);
+    //         $request->session()->put('selected_wil', $wil);
+    //     } else {
+    //         $tahun = $request->session()->get('selected_tahun', Carbon::now()->year);
+    //         $bulan = $request->session()->get('selected_bulan', date('m'));
+    //         $wil = $request->session()->get('selected_wil', '3399');
 
-            // Default tabul values
-            $tabul1 = $tahun . $bulan;
-            $tabul0 = TahunBulan::getTabulSebelum($tabul1);
-            $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
-        }
+    //         // Default tabul values
+    //         $tabul1 = $tahun . $bulan;
+    //         $tabul0 = TahunBulan::getTabulSebelum($tabul1);
+    //         $hasil = $this->proses($wil, $tabul0, $tabul1, 'array', $request);
+    //     }
 
+    //     return view('padi.validasi', [
+    //         'allKabKota' => User::getAllKabKota(),
+    //         'currentYear' => Carbon::now()->addHours(7)->year,
+    //         'hasil' => $hasil,
+    //         'selected_tahun' => $tahun,
+    //         'selected_bulan' => $bulan,
+    //         'selected_wil' => $wil,
+    //     ]);
+    // }
+
+    
+    public function showValidasi(){
+        $data = PadiAmatan::all();
+        // $data = PadiAmatan::paginate(10);
+        $allKabKota = User::getAllKabKota();
+        $tahun = Carbon::now()->year;
+        $bulan = date('m');
+        $wil = '3399';
+        // $data = DB::table('padi_amatans')
+        //     ->join('users', 'padi_amatans.kode_kabkota', '=', 'users.kode')
+        //     ->selectRaw('CONCAT(padi_amatans.kode_kabkota, " - ", users.nama) as kab_kota, padi_amatans.kode_kabkota as kode_kabkota, padi_amatans.tahun, padi_amatans.bulan, COUNT(*) as baris, MAX(padi_amatans.updated_at) as last_update')
+        //     ->groupBy('padi_amatans.kode_kabkota', 'padi_amatans.tahun', 'padi_amatans.bulan', 'users.nama')
+        //     ->get();
         return view('padi.validasi', [
-            'allKabKota' => User::getAllKabKota(),
+            'data' => $data,
             'currentYear' => Carbon::now()->addHours(7)->year,
-            'hasil' => $hasil,
+            'allKabKota' => $allKabKota,
             'selected_tahun' => $tahun,
             'selected_bulan' => $bulan,
             'selected_wil' => $wil,
         ]);
     }
+
+    public function getFilteredData(Request $request) {
+        $tahun = $request->input('tahun');
+        $bulan = $request->input('bulan');
+        $kabkota = $request->input('kabkota');
+    
+        $query = DB::table('padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
+    
+        if ($tahun) {
+            $query->where('tahun', $tahun);
+        }
+    
+        if ($bulan) {
+            $query->where('bulan', $bulan);
+        }
+    
+        if ($kabkota && $kabkota !== '3399') {
+            $query->where('kode_kabkota', $kabkota);
+        }
+    
+        $data = $query->get();
+    
+        return response()->json($data);
+    }    
 
     function proses($wil=null,$tabul0=null,$tabul1=null,$output='array', Request $request) // output = 'json'
     {
