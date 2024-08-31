@@ -39,25 +39,28 @@
                 <div class="card">
                 <div class="card-body">
                     @if (session('success'))
-                        <div class="alert alert-success" style="color: green;">
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
                             {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
 
-                    <!-- Menampilkan pesan error -->
                     @if($errors->any())
-                    <div class="alert alert-danger" style="color: red;">
-                        @foreach ($errors->all() as $error)
-                            {{ $error }}
-                        @endforeach
-                    </div>
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }}
+                            @endforeach
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     @endif
 
                     @if (session('error'))
-                        <div class="alert alert-danger" style="color: red;">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             {!! session('error') !!}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
+
                     <form id="myForm" action="{{ route('padiamatan.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
@@ -103,6 +106,17 @@
                                 <option value="10" {{ $currentMonth == '10' ? 'selected' : '' }}>10 - Oktober</option>
                                 <option value="11" {{ $currentMonth == '11' ? 'selected' : '' }}>11 - November</option>
                                 <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
+                            </select>
+                        </div>
+
+                        {{-- pilih --}}
+                        <div class="form-group">
+                            <label for="kolom">Kolom yang akan diupload (Pemrosesan data membutuhkan waktu 1 menit/bulan)</label>
+                            <select class="form-control" id="kolom" name="kolom">
+                                <option value="n" selected> bulan terpilih saja (n) - [1 Menit]</option>
+                                <option value="n-1"> dengan 1 bulan sebelumnya (n, n-1) - [2 Menit]</option>
+                                <option value="n-2"> dengan 2 bulan sebelumnya (n, n-1, n-2) - [3 Menit]</option>
+                                <option value="n-3"> dengan 3 bulan sebelumnya (n, n-1, n-2, n-3) - [4 Menit]</option>
                             </select>
                         </div>
                         
