@@ -24,7 +24,10 @@ Route::get('/', function () {
 });
 Route::get('/home', function () {
     return redirect('padi_dashboard');
-});
+})->middleware('auth');
+Route::get('/dashboard', function () {
+    return view('padi.dashboard');
+})->middleware('auth');
 
 // login logout
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login')->middleware("guest");
@@ -65,10 +68,6 @@ Route::get('/padi_panduan', function () {
 // testing only
 Route::get('/test-proses', [PadiAmatanController::class, 'testProses'])->name('test.proses');
 Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('run.proses');
-Route::get('/dashboard', function () {
-    return view('padi.dashboard');
-})->middleware('auth');
-
 
 // padi
 
