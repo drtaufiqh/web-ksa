@@ -25,7 +25,7 @@
 </head>
 <body>
     <h1>Filter Data Kabupaten Kota</h1>
-    <form action="{{ route('get.data.peta') }}" method="POST">
+    <form action="{{ route('padi.get.data.peta') }}" method="POST">
         @csrf <!-- Token CSRF untuk keamanan -->
         <label for="tahun">Tahun:</label>
         <input id="tahun" name="tahun" required>

@@ -57,7 +57,7 @@
             const tahun = document.getElementById('tahun').value;
             const bulan = document.getElementById('bulan').value;
 
-            fetch('{{ route('get.data.peta') }}', {
+            fetch('{{ route('padi.get.data.peta') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

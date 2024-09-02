@@ -63,7 +63,7 @@
             const bulan = document.getElementById('bulan').value;
             const jenis = document.getElementById('jenis').value;
 
-            fetch('{{ route('get.data.progres') }}', {
+            fetch('{{ route('padi.get.data.progres') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

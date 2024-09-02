@@ -58,32 +58,33 @@ Route::get('/padi_detail/{id}', [PadiAmatanController::class, 'showDetail']);
 // padi_validasi
 Route::get('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi');
 Route::post('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi_post');
-Route::get('/get-filtered-data', [PadiValidasiController::class, 'getFilteredData']);
+Route::get('/get-filtered-data', [PadiValidasiController::class, 'getFilteredData'])->middleware('auth');
 
 // padi_panduan
 Route::get('/padi_panduan', function () {
     return view('padi.panduan');
 })->middleware('auth')->name('padi_panduan');
 
+
+Route::get('/test-peta', [PadiAmatanController::class, 'testPeta']);
+Route::post('/padi-get-data-peta', [PadiAmatanController::class, 'getDataPeta'])->name('padi.get.data.peta');
+
+Route::get('/test-progres', [PadiAmatanController::class, 'testProgres']);
+Route::post('/padi-get-data-progres', [PadiAmatanController::class, 'getDataProgres'])->name('padi.get.data.progres');
+
+Route::get('/test-terakhir', [PadiAmatanController::class, 'testTerakhir']);
+Route::get('/padi-get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir']);
+Route::post('/padi-get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir'])->name('padi.get.data.terakhir');
+
+Route::get('/test-berjalan', [PadiAmatanController::class, 'testBerjalan']);
+Route::get('/padi-get-data-berjalan', [PadiAmatanController::class, 'getDataBerjalan']);
+Route::post('/padi-get-data-berjalan', [PadiAmatanController::class, 'getDataBerjalan'])->name('padi.get.data.berjalan');
+
 // testing only
 Route::get('/test-proses', [PadiAmatanController::class, 'testProses'])->name('test.proses');
 Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('run.proses');
 
-Route::get('/test-peta', [PadiAmatanController::class, 'testPeta']);
-Route::post('/get-data-peta', [PadiAmatanController::class, 'getDataPeta'])->name('get.data.peta');
-
-Route::get('/test-progres', [PadiAmatanController::class, 'testProgres']);
-Route::post('/get-data-progres', [PadiAmatanController::class, 'getDataProgres'])->name('get.data.progres');
-
-Route::get('/test-terakhir', [PadiAmatanController::class, 'testTerakhir']);
-Route::get('/get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir']);
-Route::post('/get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir'])->name('get.data.terakhir');
-
-Route::get('/test-berjalan', [PadiAmatanController::class, 'testBerjalan']);
-Route::get('/get-data-berjalan', [PadiAmatanController::class, 'getDataBerjalan']);
-Route::post('/get-data-berjalan', [PadiAmatanController::class, 'getDataBerjalan'])->name('get.data.berjalan');
-
-// padi
+// jagung
 
 // jagung_dashboard
 Route::get('/jagung_dashboard', function () {
@@ -96,21 +97,33 @@ Route::get('/jagung_kondef', function () {
 })->middleware('auth')->name('jagung_kondef');
 
 // jagung_unggah
-Route::get('/jagung_unggah', function () {
-    return view('jagung.unggah');
-})->middleware('auth')->name('jagung_unggah');
+Route::get('/jagung_unggah', [JagungAmatanController::class, 'showUploadForm'])->middleware('auth')->name('jagung_unggah');
+Route::post('/jagungamatan/upload', [JagungAmatanController::class, 'import'])->name('jagungamatan.upload');
 
 // jagung_riwayat
-Route::get('/jagung_riwayat', function () {
-    return view('jagung.riwayat');
-})->middleware('auth')->name('jagung_riwayat');
+Route::get('/jagung_riwayat', [JagungAmatanController::class, 'riwayat'])->middleware('auth')->name('jagung_riwayat');
+Route::get('/jagung_detail/{id}', [JagungAmatanController::class, 'showDetail']);
 
 // jagung_validasi
-Route::get('/jagung_validasi', function () {
-    return view('jagung.validasi');
-})->middleware('auth')->name('jagung_validasi');
+Route::get('/jagung_validasi', [JagungValidasiController::class, 'showValidasi'])->middleware('auth')->name('jagung_validasi');
+Route::post('/jagung_validasi', [JagungValidasiController::class, 'showValidasi'])->middleware('auth')->name('jagung_validasi_post');
+Route::get('/get-filtered-data', [JagungValidasiController::class, 'getFilteredData'])->middleware('auth');
 
 // jagung_panduan
 Route::get('/jagung_panduan', function () {
     return view('jagung.panduan');
 })->middleware('auth')->name('jagung_panduan');
+
+Route::get('/test-peta', [JagungAmatanController::class, 'testPeta']);
+Route::post('/jagung-get-data-peta', [JagungAmatanController::class, 'getDataPeta'])->name('jagung.get.data.peta');
+
+Route::get('/test-progres', [JagungAmatanController::class, 'testProgres']);
+Route::post('/jagung-get-data-progres', [JagungAmatanController::class, 'getDataProgres'])->name('jagung.get.data.progres');
+
+Route::get('/test-terakhir', [JagungAmatanController::class, 'testTerakhir']);
+Route::get('/jagung-get-data-terakhir', [JagungAmatanController::class, 'getDataTerakhir']);
+Route::post('/jagung-get-data-terakhir', [JagungAmatanController::class, 'getDataTerakhir'])->name('jagung.get.data.terakhir');
+
+Route::get('/test-berjalan', [JagungAmatanController::class, 'testBerjalan']);
+Route::get('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDataBerjalan']);
+Route::post('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDataBerjalan'])->name('jagung.get.data.berjalan');

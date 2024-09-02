@@ -60,7 +60,7 @@
             const kabkota = document.getElementById('kabkota').value;
             const jenis = document.getElementById('jenis').value;
 
-            fetch('{{ route('get.data.berjalan') }}', {
+            fetch('{{ route('padi.get.data.berjalan') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
