@@ -524,4 +524,33 @@ class PadiAmatanController extends Controller
         }
         return $hasil;
     }
+
+    public function testPeta()
+    {
+        return view('padi.test-peta');
+    }
+
+    
+    // public function getDataPeta(Request $request)
+    // {
+    //     $tahun = $request->input('tahun');
+    //     $bulan = $request->input('bulan');
+
+    //     $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
+    //                           ->get(['indeks', 'subsegmen_TK']);
+
+    //     return view('padi.test-peta', [
+    //         'data' => $data
+    //     ]);
+    // }
+    public function getDataPeta(Request $request) {
+        $tahun = $request->input('tahun');
+        $bulan = $request->input('bulan');
+
+        $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
+                            ->get(['indeks', 'subsegmen_TK']);
+
+        return response()->json($data);
+    }
+
 }

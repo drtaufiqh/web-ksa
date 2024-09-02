@@ -68,6 +68,8 @@ Route::get('/padi_panduan', function () {
 // testing only
 Route::get('/test-proses', [PadiAmatanController::class, 'testProses'])->name('test.proses');
 Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('run.proses');
+Route::get('/test-peta', [PadiAmatanController::class, 'testPeta']);
+Route::post('/get-data-peta', [PadiAmatanController::class, 'getDataPeta'])->name('get.data.peta');
 
 // padi
 
