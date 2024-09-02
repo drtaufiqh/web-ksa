@@ -304,26 +304,10 @@ class PadiAmatanController extends Controller
     {
         $data0 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul0]);//yg awal
         $data1 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul1]);//yang baru
-        $tmp = '';
-        $count_subsegmen = [];
-        $count_subsegmen['K'] = 0;
-        $count_subsegmen['TK'] = 0;
-        $count_subsegmen['W'] = 0;
-        $count_subsegmen['Total'] = 0;
         $jenis_subsegmen = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3'];
 
         //validasi
         if(!$data1->isEmpty() && !$data0->isEmpty()){
-            $count_segmen = [];
-            $count_segmen['K'] = 0;
-            $count_segmen['TK'] = 0;
-            $evita = [];
-            $evita['A'] = 0;
-            $evita['R'] = 0;
-            
-            $status = [];
-            $status['A'] = 0;
-            $status['R'] = 0;
 
             $uniqueKodeKabkota = $data1->pluck('kode_kabkota')->unique()->toArray();
 
@@ -336,6 +320,23 @@ class PadiAmatanController extends Controller
                 })->values();
                 
                 if(!$filteredData1->isEmpty() && !$filteredData0->isEmpty()){
+                    $tmp = '';
+                    $count_subsegmen = [];
+                    $count_subsegmen['K'] = 0;
+                    $count_subsegmen['TK'] = 0;
+                    $count_subsegmen['W'] = 0;
+                    $count_subsegmen['Total'] = 0;
+                    
+                    $count_segmen = [];
+                    $count_segmen['K'] = 0;
+                    $count_segmen['TK'] = 0;
+                    $evita = [];
+                    $evita['A'] = 0;
+                    $evita['R'] = 0;
+                    
+                    $status = [];
+                    $status['A'] = 0;
+                    $status['R'] = 0;
                     foreach ($filteredData1 as $i => $row1) {
                     // for($i=0; $i < count($filteredData1); $i++){
                         foreach ($filteredData0 as $j => $row0) {
@@ -524,12 +525,6 @@ class PadiAmatanController extends Controller
         }
         return $hasil;
     }
-
-    public function testPeta()
-    {
-        return view('padi.test-peta');
-    }
-
     
     // public function getDataPeta(Request $request)
     // {
@@ -543,12 +538,46 @@ class PadiAmatanController extends Controller
     //         'data' => $data
     //     ]);
     // }
+
+    public function testPeta(){
+        return view('padi.test-peta');
+    }
+
     public function getDataPeta(Request $request) {
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
 
         $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
                             ->get(['indeks', 'subsegmen_TK']);
+
+        return response()->json($data);
+    }
+    
+    public function testProgres(){
+        return view('padi.test-progres');
+    }
+
+    public function getDataProgres(Request $request) {
+        $tahun = $request->input('tahun');
+        $bulan = $request->input('bulan');
+        $jenis = $request->input('jenis');
+        $get = ['indeks'];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        // dd($get);
+        $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
+                            ->get($get);
 
         return response()->json($data);
     }
