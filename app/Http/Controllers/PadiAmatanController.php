@@ -575,11 +575,51 @@ class PadiAmatanController extends Controller
             $get[] = $jenis . '_R';
         }
 
-        // dd($get);
         $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
                             ->get($get);
 
         return response()->json($data);
     }
 
+    public function testTerakhir(){
+        return view('padi.test-terakhir');
+    }
+
+    public function getDataTerakhir(Request $request) {
+        $tahun = Carbon::now()->year;
+        $bulan = Carbon::now()->month;
+        $kode_kabkota = $request->input('kabkota');
+        $jenis = $request->input('jenis');
+        $get = ['indeks'];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        // Mendapatkan tahun terbesar
+        $maxTahun = PadiValidasi::select(DB::raw('MAX(SUBSTRING(indeks, 1, 4)) as max_tahun'))
+        ->pluck('max_tahun')
+        ->first() ?? $tahun;
+
+        // Mendapatkan bulan terbesar untuk tahun terbesar
+        $maxBulan = PadiValidasi::where(DB::raw('SUBSTRING(indeks, 1, 4)'), $maxTahun)
+            ->select(DB::raw('MAX(SUBSTRING(indeks, 5, 2)) as max_bulan'))
+            ->pluck('max_bulan')
+            ->first() ?? $bulan;
+
+        // Mengambil data dengan tahun dan bulan terbesar
+        $data = PadiValidasi::where('indeks', 'like', $maxTahun . $maxBulan . $kode_kabkota . "%")
+        ->get($get);
+        
+        // dd($data);
+        return response()->json($data);
+    }
 }

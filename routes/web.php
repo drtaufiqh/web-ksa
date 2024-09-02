@@ -68,10 +68,16 @@ Route::get('/padi_panduan', function () {
 // testing only
 Route::get('/test-proses', [PadiAmatanController::class, 'testProses'])->name('test.proses');
 Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('run.proses');
+
 Route::get('/test-peta', [PadiAmatanController::class, 'testPeta']);
 Route::post('/get-data-peta', [PadiAmatanController::class, 'getDataPeta'])->name('get.data.peta');
+
 Route::get('/test-progres', [PadiAmatanController::class, 'testProgres']);
 Route::post('/get-data-progres', [PadiAmatanController::class, 'getDataProgres'])->name('get.data.progres');
+
+Route::get('/test-terakhir', [PadiAmatanController::class, 'testTerakhir']);
+Route::get('/get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir']);
+Route::post('/get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir'])->name('get.data.terakhir');
 
 // padi
 
