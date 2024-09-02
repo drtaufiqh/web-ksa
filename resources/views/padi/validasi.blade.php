@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>PAK TANI</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- DataTables Buttons CSS -->
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css"> --}}
     <!-- plugins:css -->
     <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/assets/vendors/ti-icons/css/themify-icons.css">
@@ -23,10 +27,6 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/img/logo.png" />
-    <!-- DataTables CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <!-- DataTables Buttons CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css">
 </head>
 <body>
     <div class="container-scroller">
@@ -133,8 +133,6 @@
                         </tbody>
                     </table>
 
-                    <button type="button" class="btn btn-gradient-primary btn-icon-text">
-                    <i class="fa fa-download"></i> Unduh </button>
                   </div>
                 </div>
               </div>
@@ -188,14 +186,15 @@
             "pageLength": 10,
             "lengthMenu": [5, 10, 20, 50],
             "compact": true,
-            dom: 'Bfrtip',  // Tambahkan 'Bfrtip' untuk menampilkan tombol
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
+            dom: 'lfrtpB',  // Tambahkan 'lfrtpB' untuk menampilkan tombol
+            // buttons: [
+            //     'copy', 'csv', 'excel', 'pdf', 'print'
+            // ],
             buttons: [
                 {
                     extend: 'excel',
-                    text: '<i class="fa fa-download"></i> Download Excel',
+                    text: '<i class="fa fa-download"></i> Unduh ',
+                    className: "btn btn-gradient-primary btn-icon-text mt-1",
                     title: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
@@ -212,8 +211,6 @@
             ],
             "ajax": null, // Disable initial AJAX call
             "columns": [
-                // { "data": "tahun" },
-                // { "data": "bulan" },
                 { "data": "kode_segmen" },
                 { "data": "hasil_a1" },
                 { "data": "hasil_a2" },

@@ -33,6 +33,8 @@ class PadiAmatanController extends Controller
     }
 
     public function import(Request $request){
+        set_time_limit(4 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
+
         // Validasi file
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:xls,xlsx',
@@ -47,13 +49,75 @@ class PadiAmatanController extends Controller
         $bulanInput = $request->input('bulan');
         $tahunInput = $request->input('tahun');
         $tabulInput = $tahunInput . $bulanInput;
-        
+
         // Ambil nama file dan ambil 4 karakter pertama
         $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $tahun = substr($fileName, 0, 4);
         $bulan = substr($fileName, 4, 2);
         $tabul = substr($fileName, 0, 6);
-        // dd($bulanInput == $bulan);
+        $tabul_sesudah = TahunBulan::getTabulSesudah($tabul);
+        
+        // Ambil data kolom
+        $kolom = $request->input('kolom');
+        $isSelected = [];
+        switch ($kolom) {
+            case 'n':
+                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
+                $isSelected = [
+                    'n' => true,
+                    'n-1' => false,
+                    'n-2' => false,
+                    'n-3' => false,
+                ];
+                break;
+
+            case 'n-1':
+                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
+                $tabul_n_2 = TahunBulan::getTabulSebelum($tabul_n_1);
+                $isSelected = [
+                    'n' => true,
+                    'n-1' => true,
+                    'n-2' => false,
+                    'n-3' => false,
+                ];
+                break;
+
+            case 'n-2':
+                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
+                $tabul_n_2 = TahunBulan::getTabulSebelum($tabul_n_1);
+                $tabul_n_3 = TahunBulan::getTabulSebelum($tabul_n_2);
+                $isSelected = [
+                    'n' => true,
+                    'n-1' => true,
+                    'n-2' => true,
+                    'n-3' => false,
+                ];
+                break;
+
+            case 'n-3':
+                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
+                $tabul_n_2 = TahunBulan::getTabulSebelum($tabul_n_1);
+                $tabul_n_3 = TahunBulan::getTabulSebelum($tabul_n_2);
+                $tabul_n_4 = TahunBulan::getTabulSebelum($tabul_n_3);
+                $isSelected = [
+                    'n' => true,
+                    'n-1' => true,
+                    'n-2' => true,
+                    'n-3' => true,
+                ];
+                break;
+            
+            default:
+                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
+                $isSelected = [
+                    'n' => true,
+                    'n-1' => false,
+                    'n-2' => false,
+                    'n-3' => false,
+                ];
+                break;
+        }
+
         if ($tabulInput != $tabul) {
             return back()->withErrors(['input' => 'Pastikan format file sesuai dengan tahun dan bulan yang dipilih!'])->withInput();
         }
@@ -64,71 +128,63 @@ class PadiAmatanController extends Controller
         // Ambil header (baris pertama) dari file excel
         $header = array_map('trim', $data[0][0]);
 
-        // Tentukan header yang diharapkan
-        $expectedHeader = [
-            'id segmen', 'subsegmen', 'nama', 'n-3', 'n-2', 'n-1', 'n', 'amatan', 'status', 'evaluasi', 'tanggal', 'flag kode 12', 'note'
+        // Tentukan header minimal yang diharapkan
+        $requiredHeader = [
+            'id segmen', 'subsegmen', 'nama', 'n', 'status'
         ];
+        if($isSelected['n-1']){
+            $requiredHeader[] = 'n-1';
+        }
+        if($isSelected['n-2']){
+            $requiredHeader[] = 'n-2';
+        }
+        if($isSelected['n-3']){
+            $requiredHeader[] = 'n-3';
+        }
 
         // Validasi header
-        if ($header !== $expectedHeader) {
-            return back()->withErrors(['file' => 'Format kolom Excel tidak sesuai.'])->withInput();
+        foreach ($requiredHeader as $requiredColumn) {
+            if (!in_array($requiredColumn, $header)) {
+                return back()->withErrors(['file' => 'Format kolom Excel tidak sesuai. Kolom ' . $requiredColumn . ' tidak ditemukan.'])->withInput();
+            }
         }
 
         // // Pemetaan indeks header untuk akses data
         $headerIndexes = array_flip($header);
         $groupedData = [];
+        $tabul_berhasil = '';
+
+        // Pemetaan subsegmen ke kolom database
+        $mapping = [
+            'A1' => 'a1',
+            'A2' => 'a2',
+            'A3' => 'a3',
+            'B1' => 'b1',
+            'B2' => 'b2',
+            'B3' => 'b3',
+            'C1' => 'c1',
+            'C2' => 'c2',
+            'C3' => 'c3',
+        ];
 
         // Proses data jika validasi sukses
         foreach ($data[0] as $key => $row) {
             if ($key == 0) {
                 continue; // Lewatkan header
             }
-
-            if (isset($headerIndexes['id segmen'], $headerIndexes['nama'], $headerIndexes['subsegmen'], $headerIndexes['status'], $headerIndexes['amatan'])) {
-                $indeks = $tabul . $row[$headerIndexes['id segmen']];
-                $pcs = $row[$headerIndexes['nama']];
-                $kode_segmen = $row[$headerIndexes['id segmen']];
-                $kode_kabkota = substr($kode_segmen, 0, 4);
-                $status = $row[$headerIndexes['status']];
-                $subsegmen = $row[$headerIndexes['subsegmen']];
-
-                $amatan = $row[$headerIndexes['amatan']];
-                $parts = explode('.', $amatan);
-                $nValue = $parts[0];
-
-                // Pemetaan subsegmen ke kolom database
-                $mapping = [
-                    'A1' => 'a1',
-                    'A2' => 'a2',
-                    'A3' => 'a3',
-                    'B1' => 'b1',
-                    'B2' => 'b2',
-                    'B3' => 'b3',
-                    'C1' => 'c1',
-                    'C2' => 'c2',
-                    'C3' => 'c3',
-                ];
-
-                // Gabungkan data dengan subsegmen yang sesuai dalam satu baris
-                if (!isset($groupedData[$indeks])) {
-                    $groupedData[$indeks] = [
-                        'indeks' => $indeks,
-                        'tabul' => $tabul,
-                        'tahun' => $tahun,
-                        'bulan' => $bulan,
-                        'kode_segmen' => $kode_segmen,
-                        'kode_kabkota' => $kode_kabkota,
-                        'pcs' => $pcs,
-                        'status' => $status,
-                        'akun' => Auth::user()->email,
-                        'updated_at' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
-                    ];
+            if(isset($headerIndexes['id segmen'], $headerIndexes['nama'], $headerIndexes['subsegmen'])){
+                if ($isSelected['n'] && isset($headerIndexes['n'])) {
+                    $groupedData = $this->addData('n', $tabul, $row, $headerIndexes, $mapping, $groupedData);
                 }
-
-                $groupedData[$indeks][$mapping[$subsegmen]] = $nValue; // Gabungkan data
-            } else {
-                // Tangani kasus jika kunci header tidak ada dalam data
-                return back()->withErrors(['file' => 'Kolom yang diperlukan tidak ada dalam file Excel.'])->withInput();
+                if ($isSelected['n-1'] && isset($headerIndexes['n-1'])) {
+                    $groupedData = $this->addData('n-1', $tabul_n_1, $row, $headerIndexes, $mapping, $groupedData);
+                }
+                if ($isSelected['n-2'] && isset($headerIndexes['n-2'])) {
+                    $groupedData = $this->addData('n-2', $tabul_n_2, $row, $headerIndexes, $mapping, $groupedData);
+                }
+                if ($isSelected['n-3'] && isset($headerIndexes['n-3'])) {
+                    $groupedData = $this->addData('n-3', $tabul_n_3, $row, $headerIndexes, $mapping, $groupedData);
+                }
             }
         }
 
@@ -149,17 +205,64 @@ class PadiAmatanController extends Controller
             }
         }
 
-        $tabul_sebelum = TahunBulan::getTabulSebelum($tabul);
-        $tabul_sesudah = TahunBulan::getTabulSesudah($tabul);
-        $message_sebelum = $this->proses($tabul_sebelum, $tabul);
-        $message_sesudah = $this->proses($tabul, $tabul_sesudah);
+        if(isset($headerIndexes['id segmen'], $headerIndexes['nama'], $headerIndexes['subsegmen'], $headerIndexes['status'])){
+            if ($isSelected['n'] && isset($headerIndexes['n'])) {
+                $tabul_berhasil .= $tabul;
+                $message_sesudah = $this->proses($tabul, $tabul_sesudah);
+                $message_n = $this->proses($tabul_n_1, $tabul);
+            }
+            if ($isSelected['n-1'] && isset($headerIndexes['n-1'])) {
+                $tabul_berhasil .= ', ' . $tabul_n_1;
+                $message_n_1 = $this->proses($tabul_n_2, $tabul_n_1);
+            }
+            if ($isSelected['n-2'] && isset($headerIndexes['n-2'])) {
+                $tabul_berhasil .= ', ' . $tabul_n_2;
+                $message_n_2 = $this->proses($tabul_n_3, $tabul_n_2);
+            }
+            if ($isSelected['n-3'] && isset($headerIndexes['n-3'])) {
+                $tabul_berhasil .= ', ' . $tabul_n_3;
+                $message_n_3 = $this->proses($tabul_n_4, $tabul_n_3);
+            }
+        }
 
-        return redirect()->back()->with('success', 'Data berhasil diunggah.');
+        return redirect()->back()->with('success', 'Data padi ' . $tabul_berhasil . ' berhasil diunggah.')->withInput();
+    }
+
+    public function addData($nKolom, $tabul, $row, $headerIndexes, $mapping, $groupedData){
+        $indeks = $tabul . $row[$headerIndexes['id segmen']];
+        $tahun = substr($tabul, 0, 4);
+        $bulan = substr($tabul, 4, 2);
+        $pcs = $row[$headerIndexes['nama']];
+        $kode_segmen = $row[$headerIndexes['id segmen']];
+        $kode_kabkota = substr($kode_segmen, 0, 4);
+        $status = $row[$headerIndexes['status']];
+        $subsegmen = $row[$headerIndexes['subsegmen']];
+
+        $n = $row[$headerIndexes[$nKolom]];
+        $parts = explode('.', $n);
+        $nValue = $parts[0];
+
+        // Gabungkan data dengan subsegmen yang sesuai dalam satu baris
+        if (!isset($groupedData[$indeks])) {
+            $groupedData[$indeks] = [
+                'indeks' => $indeks,
+                'tabul' => $tabul,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'kode_segmen' => $kode_segmen,
+                'kode_kabkota' => $kode_kabkota,
+                'pcs' => $pcs,
+                'status' => $status,
+                'akun' => Auth::user()->email,
+                'updated_at' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        $groupedData[$indeks][$mapping[$subsegmen]] = $nValue; // Gabungkan data
+        return $groupedData;
     }
 
     public function riwayat(){
-        // $data = PadiAmatan::all();
-        // $data = PadiAmatan::paginate(10);
         $allKabKota = User::getAllKabKota();
         $data = DB::table('padi_amatans')
             ->join('users', 'padi_amatans.kode_kabkota', '=', 'users.kode')
@@ -201,26 +304,10 @@ class PadiAmatanController extends Controller
     {
         $data0 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul0]);//yg awal
         $data1 = PadiAmatan::getDataByMultipleField(['tabul' => $tabul1]);//yang baru
-        $tmp = '';
-        $count_subsegmen = [];
-        $count_subsegmen['K'] = 0;
-        $count_subsegmen['TK'] = 0;
-        $count_subsegmen['W'] = 0;
-        $count_subsegmen['Total'] = 0;
         $jenis_subsegmen = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3'];
 
         //validasi
         if(!$data1->isEmpty() && !$data0->isEmpty()){
-            $count_segmen = [];
-            $count_segmen['K'] = 0;
-            $count_segmen['TK'] = 0;
-            $evita = [];
-            $evita['A'] = 0;
-            $evita['R'] = 0;
-            
-            $status = [];
-            $status['A'] = 0;
-            $status['R'] = 0;
 
             $uniqueKodeKabkota = $data1->pluck('kode_kabkota')->unique()->toArray();
 
@@ -233,6 +320,23 @@ class PadiAmatanController extends Controller
                 })->values();
                 
                 if(!$filteredData1->isEmpty() && !$filteredData0->isEmpty()){
+                    $tmp = '';
+                    $count_subsegmen = [];
+                    $count_subsegmen['K'] = 0;
+                    $count_subsegmen['TK'] = 0;
+                    $count_subsegmen['W'] = 0;
+                    $count_subsegmen['Total'] = 0;
+                    
+                    $count_segmen = [];
+                    $count_segmen['K'] = 0;
+                    $count_segmen['TK'] = 0;
+                    $evita = [];
+                    $evita['A'] = 0;
+                    $evita['R'] = 0;
+                    
+                    $status = [];
+                    $status['A'] = 0;
+                    $status['R'] = 0;
                     foreach ($filteredData1 as $i => $row1) {
                     // for($i=0; $i < count($filteredData1); $i++){
                         foreach ($filteredData0 as $j => $row0) {
@@ -420,5 +524,133 @@ class PadiAmatanController extends Controller
                 break;
         }
         return $hasil;
+    }
+    
+    // public function getDataPeta(Request $request)
+    // {
+    //     $tahun = $request->input('tahun');
+    //     $bulan = $request->input('bulan');
+
+    //     $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
+    //                           ->get(['indeks', 'subsegmen_TK']);
+
+    //     return view('padi.test-peta', [
+    //         'data' => $data
+    //     ]);
+    // }
+
+    public function testPeta(){
+        return view('padi.test-peta');
+    }
+
+    public function getDataPeta(Request $request) {
+        $tahun = $request->input('tahun');
+        $bulan = $request->input('bulan');
+
+        $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
+                            ->get(['indeks', 'subsegmen_TK']);
+
+        return response()->json($data);
+    }
+    
+    public function testProgres(){
+        return view('padi.test-progres');
+    }
+
+    public function getDataProgres(Request $request) {
+        $tahun = $request->input('tahun');
+        $bulan = $request->input('bulan');
+        $jenis = $request->input('jenis');
+        $get = ['indeks'];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
+                            ->get($get);
+
+        return response()->json($data);
+    }
+
+    public function testTerakhir(){
+        return view('padi.test-terakhir');
+    }
+
+    public function getDataTerakhir(Request $request) {
+        $tahun = Carbon::now()->year;
+        $bulan = Carbon::now()->month;
+        $kode_kabkota = $request->input('kabkota');
+        $jenis = $request->input('jenis');
+        $get = ['indeks'];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        // Mendapatkan tahun terbesar
+        $maxTahun = PadiValidasi::select(DB::raw('MAX(SUBSTRING(indeks, 1, 4)) as max_tahun'))
+        ->pluck('max_tahun')
+        ->first() ?? $tahun;
+
+        // Mendapatkan bulan terbesar untuk tahun terbesar
+        $maxBulan = PadiValidasi::where(DB::raw('SUBSTRING(indeks, 1, 4)'), $maxTahun)
+            ->select(DB::raw('MAX(SUBSTRING(indeks, 5, 2)) as max_bulan'))
+            ->pluck('max_bulan')
+            ->first() ?? $bulan;
+
+        // Mengambil data dengan tahun dan bulan terbesar
+        $data = PadiValidasi::where('indeks', 'like', $maxTahun . $maxBulan . $kode_kabkota . "%")
+        ->get($get);
+        
+        // dd($data);
+        return response()->json($data);
+    }
+    
+    public function testBerjalan(){
+        return view('padi.test-berjalan');
+    }
+
+    public function getDataBerjalan(Request $request) {
+        $tahun = Carbon::now()->year;
+        $kode_kabkota = $request->input('kabkota');
+        $jenis = $request->input('jenis');
+        $get = ['indeks'];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        // Mengambil data dengan tahun dan bulan terbesar
+        $data = PadiValidasi::where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->get($get);
+        
+        // dd($data);
+        return response()->json($data);
     }
 }
