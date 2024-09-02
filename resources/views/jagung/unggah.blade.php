@@ -37,47 +37,94 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                 <div class="card-body">
-                <div class="form-group">
-                  <form  id="myForm">
-                    <label for="exampleInput2">Tahun</label>
-                        <select type="text" class="form-control" id="exampleInput2">
-                          <option value="0">2020</option>
-                          <option value="1">2021</option>
-                          <option value="2">2022</option>
-                          <option value="3">2023</option>
-                        </select> 
-                </div>
-                      <div class="form-group">
-                        <label for="exampleInpu3">Bulan</label>
-                        <select class="form-control" id="exampleInput3" >
-                          <option value="01">01 - Januari</option>
-                          <option value="02">02 - Februari</option>
-                          <option value="03">03 - Maret</option>
-                          <option value="04">04 - April</option>
-                          <option value="05">05 - Mei</option>
-                          <option value="06">06 - Juni</option>
-                          <option value="07">07 - Juli</option>
-                          <option value="08">08 - Agustus</option>
-                          <option value="09">09 - September</option>
-                          <option value="10">10 - Oktober</option>
-                          <option value="11">11 - November</option>
-                          <option value="12">12 - Desember</option>
-                        </select>
+                  @if (session('success'))
+                      <div class="alert alert-success alert-dismissible fade show" role="alert">
+                          {{ session('success') }}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                       </div>
-                      <div class="form-group">
+                  @endif
+
+                  @if($errors->any())
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                          @foreach ($errors->all() as $error)
+                              {{ $error }}
+                          @endforeach
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                  @endif
+
+                  @if (session('error'))
+                      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                          {!! session('error') !!}
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                  @endif
+
+                  <form id="myForm" action="{{ route('jagungamatan.upload') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    {{-- Tahun --}}
+                    @php
+                        $years = [];
+                        $currentYear = $currentYear ?? Carbon::now()->year; // Menggunakan tahun sekarang jika tidak ada
+                        $minYear = $minYear ?? 2020; // Menyediakan tahun default jika tidak ada dari database
+
+                        // Generate array tahun dari tahun sekarang ke tahun terkecil
+                        for ($year = $currentYear; $year >= $minYear; $year--) {
+                            $years[] = $year;
+                        }
+                    @endphp
+
+                    <div class="form-group">
+                        <label for="tahun">Tahun</label>
+                        <select name="tahun" class="form-control" id="tahun">
+                            @foreach($years as $year)
+                                <option value="{{ $year }}">{{ $year }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Bulan --}}
+                    @php
+                        // Ambil bulan saat ini dalam format dua digit
+                        $currentMonth = date('m');
+                    @endphp
+
+                    <div class="form-group">
+                        <label for="bulan">Bulan</label>
+                        <select class="form-control" id="bulan" name="bulan">
+                            <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
+                            <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
+                            <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
+                            <option value="04" {{ $currentMonth == '04' ? 'selected' : '' }}>04 - April</option>
+                            <option value="05" {{ $currentMonth == '05' ? 'selected' : '' }}>05 - Mei</option>
+                            <option value="06" {{ $currentMonth == '06' ? 'selected' : '' }}>06 - Juni</option>
+                            <option value="07" {{ $currentMonth == '07' ? 'selected' : '' }}>07 - Juli</option>
+                            <option value="08" {{ $currentMonth == '08' ? 'selected' : '' }}>08 - Agustus</option>
+                            <option value="09" {{ $currentMonth == '09' ? 'selected' : '' }}>09 - September</option>
+                            <option value="10" {{ $currentMonth == '10' ? 'selected' : '' }}>10 - Oktober</option>
+                            <option value="11" {{ $currentMonth == '11' ? 'selected' : '' }}>11 - November</option>
+                            <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
+                        </select>
+                    </div>
+                    
+                    {{-- File --}}
+                    <div class="form-group">
                         <label>File upload</label>
-                        <input type="file" name="img[]" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                          <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload File">
-                          <span class="input-group-append">
-                            <button class="file-upload-browse btn btn-gradient-primary py-3" style="background: linear-gradient(to right, #3b7d46, #659f3b);" type="button">Upload</button>
-                          </span>
-                        </div>
+                        <input type="file" name="file" class="form-control" accept=".xls,.xlsx,.csv" required>
                         <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Format penamaan file harus : tahunbulanA_kodekabupaten_jagung.xlsx</p>
                         <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110A_3301_jagung.xlsx</p>
-                      </div>
-                      <button type="submit" class="btn btn-gradient-unggah me-2"style="background: linear-gradient(to right, #3b7d46, #659f3b);">Submit</button> 
-                    </form>
+                    </div>
+                    {{-- Submit --}}
+                    <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                    
+                    {{-- Loading Spinner --}}
+                    <div id="loading1" class="text-center" style="display: none;">
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                </form>
                   </div>
                 </div>
               </div>
@@ -113,6 +160,10 @@
     <script src="/assets/js/select2.js"></script>
     <!-- End custom js for this page -->
 </body>
-</html>
-  </body>
+<script>
+    document.getElementById('myForm').addEventListener('submit', function() {
+        // Tampilkan spinner loading
+        document.getElementById('loading1').style.display = 'block';
+    });
+</script>
 </html>

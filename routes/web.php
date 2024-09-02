@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PadiAmatanController;
 use App\Http\Controllers\PadiValidasiController;
+use App\Http\Controllers\JagungAmatanController;
+use App\Http\Controllers\JagungValidasiController;
 use App\Models\User;
 use Carbon\Carbon;
 

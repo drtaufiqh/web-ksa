@@ -20,7 +20,7 @@ class PadiAmatanController extends Controller
 {
     public function showUploadForm(){
         // Ambil tahun terkecil dari database
-        $minYear = PadiAmatan::min('tahun');
+        $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
         $currentYear = Carbon::now()->addHours(7)->year;

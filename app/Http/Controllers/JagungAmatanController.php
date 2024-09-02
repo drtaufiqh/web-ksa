@@ -20,7 +20,7 @@ class JagungAmatanController extends Controller
 {
     public function showUploadForm(){
         // Ambil tahun terkecil dari database
-        $minYear = JagungAmatan::min('tahun');
+        $minYear = JagungAmatan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
         $currentYear = Carbon::now()->addHours(7)->year;
@@ -37,11 +37,18 @@ class JagungAmatanController extends Controller
 
         // Validasi file
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:xls,xlsx',
+            'file' => 'required|mimes:xls,xlsx,csv',
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            // Ambil format file yang diupload
+            $file = $request->file('file');
+            $uploadedFileExtension = $file->getClientOriginalExtension();
+
+            // Format pesan error
+            $errorMessage = 'File yang diupload harus dalam format: xls, xlsx, csv. Sedangkan file yang Anda upload adalah format ' . $uploadedFileExtension . '.';
+
+            return back()->withErrors(['file' => $errorMessage])->withInput();
         }
 
         // Ambil file
@@ -56,68 +63,8 @@ class JagungAmatanController extends Controller
         $bulan = substr($fileName, 4, 2);
         $tabul = substr($fileName, 0, 6);
         $tabul_sesudah = TahunBulan::getTabulSesudah($tabul);
+        $tabul_n_1 =TahunBulan::getTabulSebelum($tabul);
         
-        // Ambil data kolom
-        $kolom = $request->input('kolom');
-        $isSelected = [];
-        switch ($kolom) {
-            case 'n':
-                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
-                $isSelected = [
-                    'n' => true,
-                    'n-1' => false,
-                    'n-2' => false,
-                    'n-3' => false,
-                ];
-                break;
-
-            case 'n-1':
-                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
-                $tabul_n_2 = TahunBulan::getTabulSebelum($tabul_n_1);
-                $isSelected = [
-                    'n' => true,
-                    'n-1' => true,
-                    'n-2' => false,
-                    'n-3' => false,
-                ];
-                break;
-
-            case 'n-2':
-                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
-                $tabul_n_2 = TahunBulan::getTabulSebelum($tabul_n_1);
-                $tabul_n_3 = TahunBulan::getTabulSebelum($tabul_n_2);
-                $isSelected = [
-                    'n' => true,
-                    'n-1' => true,
-                    'n-2' => true,
-                    'n-3' => false,
-                ];
-                break;
-
-            case 'n-3':
-                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
-                $tabul_n_2 = TahunBulan::getTabulSebelum($tabul_n_1);
-                $tabul_n_3 = TahunBulan::getTabulSebelum($tabul_n_2);
-                $tabul_n_4 = TahunBulan::getTabulSebelum($tabul_n_3);
-                $isSelected = [
-                    'n' => true,
-                    'n-1' => true,
-                    'n-2' => true,
-                    'n-3' => true,
-                ];
-                break;
-            
-            default:
-                $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
-                $isSelected = [
-                    'n' => true,
-                    'n-1' => false,
-                    'n-2' => false,
-                    'n-3' => false,
-                ];
-                break;
-        }
-
         if ($tabulInput != $tabul) {
             return back()->withErrors(['input' => 'Pastikan format file sesuai dengan tahun dan bulan yang dipilih!'])->withInput();
         }
@@ -130,17 +77,8 @@ class JagungAmatanController extends Controller
 
         // Tentukan header minimal yang diharapkan
         $requiredHeader = [
-            'id segmen', 'subsegmen', 'nama', 'n', 'status'
+            'Kode Segmen', 'Nilai A1', 'Nilai A2', 'Nilai B1', 'Nilai B2', 'Nama Petugas', 'Status'
         ];
-        if($isSelected['n-1']){
-            $requiredHeader[] = 'n-1';
-        }
-        if($isSelected['n-2']){
-            $requiredHeader[] = 'n-2';
-        }
-        if($isSelected['n-3']){
-            $requiredHeader[] = 'n-3';
-        }
 
         // Validasi header
         foreach ($requiredHeader as $requiredColumn) {
@@ -152,40 +90,38 @@ class JagungAmatanController extends Controller
         // // Pemetaan indeks header untuk akses data
         $headerIndexes = array_flip($header);
         $groupedData = [];
-        $tabul_berhasil = '';
-
-        // Pemetaan subsegmen ke kolom database
-        $mapping = [
-            'A1' => 'a1',
-            'A2' => 'a2',
-            'A3' => 'a3',
-            'B1' => 'b1',
-            'B2' => 'b2',
-            'B3' => 'b3',
-            'C1' => 'c1',
-            'C2' => 'c2',
-            'C3' => 'c3',
-        ];
 
         // Proses data jika validasi sukses
         foreach ($data[0] as $key => $row) {
             if ($key == 0) {
                 continue; // Lewatkan header
             }
-            if(isset($headerIndexes['id segmen'], $headerIndexes['nama'], $headerIndexes['subsegmen'])){
-                if ($isSelected['n'] && isset($headerIndexes['n'])) {
-                    $groupedData = $this->addData('n', $tabul, $row, $headerIndexes, $mapping, $groupedData);
-                }
-                if ($isSelected['n-1'] && isset($headerIndexes['n-1'])) {
-                    $groupedData = $this->addData('n-1', $tabul_n_1, $row, $headerIndexes, $mapping, $groupedData);
-                }
-                if ($isSelected['n-2'] && isset($headerIndexes['n-2'])) {
-                    $groupedData = $this->addData('n-2', $tabul_n_2, $row, $headerIndexes, $mapping, $groupedData);
-                }
-                if ($isSelected['n-3'] && isset($headerIndexes['n-3'])) {
-                    $groupedData = $this->addData('n-3', $tabul_n_3, $row, $headerIndexes, $mapping, $groupedData);
-                }
-            }
+            $pcs = $row[$headerIndexes['Nama Petugas']];
+            $kode_segmen = $row[$headerIndexes['Kode Segmen']];
+            $indeks = $tabul . $kode_segmen;
+            $kode_kabkota = substr($kode_segmen, 0, 4);
+            $status = $row[$headerIndexes['Status']];
+            $a1 = $row[$headerIndexes['Nilai A1']];
+            $a2 = $row[$headerIndexes['Nilai A2']];
+            $b1 = $row[$headerIndexes['Nilai B1']];
+            $b2 = $row[$headerIndexes['Nilai B2']];
+
+            $groupedData[$indeks] = [
+                'indeks' => $indeks,
+                'tabul' => $tabul,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'kode_segmen' => $kode_segmen,
+                'kode_kabkota' => $kode_kabkota,
+                'a1' => $a1,
+                'a2' => $a2,
+                'b1' => $b1,
+                'b2' => $b2,
+                'pcs' => $pcs,
+                'status' => $status,
+                'akun' => Auth::user()->email,
+                'updated_at' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
+            ];
         }
 
         // Masukkan data yang sudah digabung ke dalam database
@@ -205,61 +141,10 @@ class JagungAmatanController extends Controller
             }
         }
 
-        if(isset($headerIndexes['id segmen'], $headerIndexes['nama'], $headerIndexes['subsegmen'], $headerIndexes['status'])){
-            if ($isSelected['n'] && isset($headerIndexes['n'])) {
-                $tabul_berhasil .= $tabul;
-                $message_sesudah = $this->proses($tabul, $tabul_sesudah);
-                $message_n = $this->proses($tabul_n_1, $tabul);
-            }
-            if ($isSelected['n-1'] && isset($headerIndexes['n-1'])) {
-                $tabul_berhasil .= ', ' . $tabul_n_1;
-                $message_n_1 = $this->proses($tabul_n_2, $tabul_n_1);
-            }
-            if ($isSelected['n-2'] && isset($headerIndexes['n-2'])) {
-                $tabul_berhasil .= ', ' . $tabul_n_2;
-                $message_n_2 = $this->proses($tabul_n_3, $tabul_n_2);
-            }
-            if ($isSelected['n-3'] && isset($headerIndexes['n-3'])) {
-                $tabul_berhasil .= ', ' . $tabul_n_3;
-                $message_n_3 = $this->proses($tabul_n_4, $tabul_n_3);
-            }
-        }
+        $message_sesudah = $this->proses($tabul, $tabul_sesudah);
+        $message_n = $this->proses($tabul_n_1, $tabul);
 
-        return redirect()->back()->with('success', 'Data jagung ' . $tabul_berhasil . ' berhasil diunggah.')->withInput();
-    }
-
-    public function addData($nKolom, $tabul, $row, $headerIndexes, $mapping, $groupedData){
-        $indeks = $tabul . $row[$headerIndexes['id segmen']];
-        $tahun = substr($tabul, 0, 4);
-        $bulan = substr($tabul, 4, 2);
-        $pcs = $row[$headerIndexes['nama']];
-        $kode_segmen = $row[$headerIndexes['id segmen']];
-        $kode_kabkota = substr($kode_segmen, 0, 4);
-        $status = $row[$headerIndexes['status']];
-        $subsegmen = $row[$headerIndexes['subsegmen']];
-
-        $n = $row[$headerIndexes[$nKolom]];
-        $parts = explode('.', $n);
-        $nValue = $parts[0];
-
-        // Gabungkan data dengan subsegmen yang sesuai dalam satu baris
-        if (!isset($groupedData[$indeks])) {
-            $groupedData[$indeks] = [
-                'indeks' => $indeks,
-                'tabul' => $tabul,
-                'tahun' => $tahun,
-                'bulan' => $bulan,
-                'kode_segmen' => $kode_segmen,
-                'kode_kabkota' => $kode_kabkota,
-                'pcs' => $pcs,
-                'status' => $status,
-                'akun' => Auth::user()->email,
-                'updated_at' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
-            ];
-        }
-
-        $groupedData[$indeks][$mapping[$subsegmen]] = $nValue; // Gabungkan data
-        return $groupedData;
+        return redirect()->back()->with('success', 'Data jagung ' . $tabul . ' berhasil diunggah.')->withInput();
     }
 
     public function riwayat(){
@@ -304,7 +189,7 @@ class JagungAmatanController extends Controller
     {
         $data0 = JagungAmatan::getDataByMultipleField(['tabul' => $tabul0]);//yg awal
         $data1 = JagungAmatan::getDataByMultipleField(['tabul' => $tabul1]);//yang baru
-        $jenis_subsegmen = ['a1', 'a2', 'a3', 'b1', 'b2', 'b3', 'c1', 'c2', 'c3'];
+        $jenis_subsegmen = ['a1', 'a2', 'b1', 'b2'];
 
         //validasi
         if(!$data1->isEmpty() && !$data0->isEmpty()){
@@ -383,13 +268,8 @@ class JagungAmatanController extends Controller
                         $dataUpdate = array(
                             'hasil_a1' => $filteredData1[$i]['hasil_a1'],
                             'hasil_a2' => $filteredData1[$i]['hasil_a2'],
-                            'hasil_a3' => $filteredData1[$i]['hasil_a3'],
                             'hasil_b1' => $filteredData1[$i]['hasil_b1'],
                             'hasil_b2' => $filteredData1[$i]['hasil_b2'],
-                            'hasil_b3' => $filteredData1[$i]['hasil_b3'],
-                            'hasil_c1' => $filteredData1[$i]['hasil_c1'],
-                            'hasil_c2' => $filteredData1[$i]['hasil_c2'],
-                            'hasil_c3' => $filteredData1[$i]['hasil_c3'],
                             'evita' => $filteredData1[$i]['evita'],
                         );
                         JagungAmatan::where('indeks', $tabul1 . $filteredData1[$i]['kode_segmen'])->first()->update($dataUpdate);
@@ -452,71 +332,77 @@ class JagungAmatanController extends Controller
                 $hasil = 'TK';
                 break;
             case 1:
-                if($x == 2 || $x == 8){
+                if($x == 0 || $x == 10){
                     $hasil = 'TK';
-                } else if($x == 3){
-                    $hasil = 'W';
                 } else {
                     $hasil = 'K';
                 }
                 break;
             case 2:
-                if($x == 0 || $x == 1){
+                if($x == 0 || $x == 3 || $x == 11){
+                    $hasil = 'TK';
+                } else {
+                    $hasil = 'K';
+                }
+                break;
+            case 3:
+                if($x == 1 || $x == 2 || $x == 3){
                     $hasil = 'K';
                 } else {
                     $hasil = 'TK';
                 }
                 break;
-            case 3:
-                if($x == 0 || $x == 1 || $x == 2 || $x == 3){
-                    $hasil = 'K';
-                } else {
-                    $hasil = "TK";
-                }
-                break;
             case 4:
-                if($x == 0 || $x == 3 || $x == 4){
+                if($x == 2 || $x == 3 || $x == 4){
                     $hasil = 'K';
                 } else {
                     $hasil = 'TK';
                 }
                 break;
             case 5:
-                if($x == 1 || $x == 2 || $x == 8){
-                    $hasil = 'TK';
-                } else if($x == 3){
-                    $hasil = 'W';
-                } else {
+                if($x == 1 || $x == 2 || $x == 3 || $x == 5){
                     $hasil = 'K';
+                } else{
+                    $hasil = 'TK';
                 }
                 break;
             case 6:
-                if($x == 0 || $x == 6){
+                if($x == 2 || $x == 3 || $x == 4 || $x == 6){
                     $hasil = 'K';
-                } else if($x == 4 || $x == 7 || $x == 8){
+                } else{
                     $hasil = 'TK';
-                } else {
-                    $hasil = 'W';
                 }
                 break;
             case 7:
-                if($x == 1 || $x == 2){
-                    $hasil = 'W';
-                } else if($x == 8){
-                    $hasil = 'TK';
-                } else {
+                if($x == 3 || $x == 4 || $x == 7){
                     $hasil = 'K';
+                } else {
+                    $hasil = 'TK';
                 }
                 break;
             case 8:
-                if($x == 0 ||$x == 8){
-                    $hasil = 'K';
-                } else {
+                if($x == 0 || $x == 10){
                     $hasil = 'TK';
+                } else {
+                    $hasil = 'K';
                 }
                 break;
-            case 12:
-                if($x == 0){
+            case 9:
+                if($x == 0 || $x == 10){
+                    $hasil = 'TK';
+                } else {
+                    $hasil = 'K';
+                }
+                break;
+            case 10:
+                if($x == 0 || $x == 11 || $x==9){
+                    $hasil = 'TK';
+                } else {
+                    $hasil = 'K';
+                }
+                break;
+            case 11:
+                if($x == 1 || $x == 2 || $x == 3 || $x == 4 || $x == 11){
                     $hasil = 'K';
                 } else {
                     $hasil = 'TK';
