@@ -622,4 +622,35 @@ class PadiAmatanController extends Controller
         // dd($data);
         return response()->json($data);
     }
+    
+    public function testBerjalan(){
+        return view('padi.test-berjalan');
+    }
+
+    public function getDataBerjalan(Request $request) {
+        $tahun = Carbon::now()->year;
+        $kode_kabkota = $request->input('kabkota');
+        $jenis = $request->input('jenis');
+        $get = ['indeks'];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        // Mengambil data dengan tahun dan bulan terbesar
+        $data = PadiValidasi::where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->get($get);
+        
+        // dd($data);
+        return response()->json($data);
+    }
 }

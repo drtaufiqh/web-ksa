@@ -79,6 +79,10 @@ Route::get('/test-terakhir', [PadiAmatanController::class, 'testTerakhir']);
 Route::get('/get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir']);
 Route::post('/get-data-terakhir', [PadiAmatanController::class, 'getDataTerakhir'])->name('get.data.terakhir');
 
+Route::get('/test-berjalan', [PadiAmatanController::class, 'testBerjalan']);
+Route::get('/get-data-berjalan', [PadiAmatanController::class, 'getDataBerjalan']);
+Route::post('/get-data-berjalan', [PadiAmatanController::class, 'getDataBerjalan'])->name('get.data.berjalan');
+
 // padi
 
 // jagung_dashboard
