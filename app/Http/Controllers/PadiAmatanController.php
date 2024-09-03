@@ -33,7 +33,7 @@ class PadiAmatanController extends Controller
     }
 
     public function import(Request $request){
-        set_time_limit(4 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
+        set_time_limit(5 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
 
         // Validasi file
         $validator = Validator::make($request->all(), [
@@ -56,7 +56,7 @@ class PadiAmatanController extends Controller
         $bulan = substr($fileName, 4, 2);
         $tabul = substr($fileName, 0, 6);
         $tabul_sesudah = TahunBulan::getTabulSesudah($tabul);
-        
+
         // Ambil data kolom
         $kolom = $request->input('kolom');
         $isSelected = [];
@@ -106,7 +106,7 @@ class PadiAmatanController extends Controller
                     'n-3' => true,
                 ];
                 break;
-            
+
             default:
                 $tabul_n_1 = TahunBulan::getTabulSebelum($tabul);
                 $isSelected = [
@@ -275,10 +275,13 @@ class PadiAmatanController extends Controller
         ]);
     }
 
-    public function showDetail($id){
+    public function showDetail($id, $tahun, $bulan){
         // Ambil data detail dari database berdasarkan ID
-        $data = PadiAmatan::where('kode_kabkota', $id)->get(); // Sesuaikan dengan query Anda
-        
+        $data = PadiAmatan::where('kode_kabkota', $id)
+            ->where('tahun', $tahun)
+            ->where('bulan', $bulan)
+            ->get(); // Sesuaikan dengan query Anda
+
         // Kirimkan data dalam format JSON
         return response()->json([
             'data' => $data
@@ -318,7 +321,7 @@ class PadiAmatanController extends Controller
                 $filteredData0 = $data0->filter(function ($item) use ($wil) {
                     return $item['kode_kabkota'] === $wil;
                 })->values();
-                
+
                 if(!$filteredData1->isEmpty() && !$filteredData0->isEmpty()){
                     $tmp = '';
                     $count_subsegmen = [];
@@ -326,14 +329,14 @@ class PadiAmatanController extends Controller
                     $count_subsegmen['TK'] = 0;
                     $count_subsegmen['W'] = 0;
                     $count_subsegmen['Total'] = 0;
-                    
+
                     $count_segmen = [];
                     $count_segmen['K'] = 0;
                     $count_segmen['TK'] = 0;
                     $evita = [];
                     $evita['A'] = 0;
                     $evita['R'] = 0;
-                    
+
                     $status = [];
                     $status['A'] = 0;
                     $status['R'] = 0;
@@ -352,7 +355,7 @@ class PadiAmatanController extends Controller
                         }
 
                         $count_seg = 0;
-                        foreach ($jenis_subsegmen as $jenis){                            
+                        foreach ($jenis_subsegmen as $jenis){
                             $var = 'hasil_'.$jenis;
                             if($filteredData1[$i][$var] == 'K'){
                                 $count_subsegmen['K'] += 1;
@@ -368,7 +371,7 @@ class PadiAmatanController extends Controller
                         } else {
                             $count_segmen['TK'] += 1;
                         }
-                        
+
                         if($filteredData1[$i]['status'] == 'Approved'){
                             $status['A'] += 1;
                         }
@@ -379,7 +382,7 @@ class PadiAmatanController extends Controller
                             $evita['R'] += 1;
                             $filteredData1[$i]['evita'] = 'REJECTED';
                         }
-                        
+
                         $dataUpdate = array(
                             'hasil_a1' => $filteredData1[$i]['hasil_a1'],
                             'hasil_a2' => $filteredData1[$i]['hasil_a2'],
@@ -399,7 +402,7 @@ class PadiAmatanController extends Controller
                     $count_segmen['Total'] = $count_segmen['K']+$count_segmen['TK'];
                     $evita['Total'] = $evita['A']+$evita['R'];
                     $status['R'] = $count_segmen['Total'] - $status['A'];
-                    
+
                     $dataVal = array (
                         'indeks' => $tabul1.$wil,
                         'subsegmen_K' => $count_subsegmen['K'],
@@ -444,7 +447,7 @@ class PadiAmatanController extends Controller
         return $message;
     }
 
-    
+
     function validatePadi($x,$y){
         $hasil = '';
         switch($y){
@@ -525,7 +528,7 @@ class PadiAmatanController extends Controller
         }
         return $hasil;
     }
-    
+
     // public function getDataPeta(Request $request)
     // {
     //     $tahun = $request->input('tahun');
@@ -552,7 +555,7 @@ class PadiAmatanController extends Controller
 
         return response()->json($data);
     }
-    
+
     public function testProgres(){
         return view('padi.test-progres');
     }
@@ -618,11 +621,11 @@ class PadiAmatanController extends Controller
         // Mengambil data dengan tahun dan bulan terbesar
         $data = PadiValidasi::where('indeks', 'like', $maxTahun . $maxBulan . $kode_kabkota . "%")
         ->get($get);
-        
+
         // dd($data);
         return response()->json($data);
     }
-    
+
     public function testBerjalan(){
         return view('padi.test-berjalan');
     }
@@ -649,7 +652,7 @@ class PadiAmatanController extends Controller
         $data = PadiValidasi::where('indeks', 'like', $tahun . "%")
             ->where('indeks', 'like', "%" . $kode_kabkota)
             ->get($get);
-        
+
         // dd($data);
         return response()->json($data);
     }

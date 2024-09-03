@@ -55,7 +55,7 @@ Route::post('/padiamatan/upload', [PadiAmatanController::class, 'import'])->name
 
 // padi_riwayat
 Route::get('/padi_riwayat', [PadiAmatanController::class, 'riwayat'])->middleware('auth')->name('padi_riwayat');
-Route::get('/padi_detail/{id}', [PadiAmatanController::class, 'showDetail']);
+Route::get('/padi_detail/{id}/{tahun}/{bulan}', [PadiAmatanController::class, 'showDetail']);
 
 // padi_validasi
 Route::get('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi');
@@ -104,7 +104,7 @@ Route::post('/jagungamatan/upload', [JagungAmatanController::class, 'import'])->
 
 // jagung_riwayat
 Route::get('/jagung_riwayat', [JagungAmatanController::class, 'riwayat'])->middleware('auth')->name('jagung_riwayat');
-Route::get('/jagung_detail/{id}', [JagungAmatanController::class, 'showDetail']);
+Route::get('/jagung_detail/{id}/{tahun}/{bulan}', [JagungAmatanController::class, 'showDetail']);
 
 // jagung_validasi
 Route::get('/jagung_validasi', [JagungValidasiController::class, 'showValidasi'])->middleware('auth')->name('jagung_validasi');

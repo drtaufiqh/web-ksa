@@ -23,6 +23,14 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/img/logo.png" />
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <style>
+        /* Style untuk modal pop-up */
+        .modal-dialog {
+            max-width: 800px;
+        }
+    </style>
   </head>
   <body>
     <div class="container-scroller">
@@ -40,205 +48,85 @@
                 <div class="card">
                   <div class="card-body">
                     <form class="forms-sample" style="display:flex">
-                    <label for="exampleInput4" style="margin-bottom:2rem">Wilayah Amatan</label>
-                        <select class="form-control" id="exampleInput4" >
-                        <option value="3399">Pilih Wilayah</option><option value="3300">Jawa Tengah</option><option value="3301">3301 - Cilacap</option><option value="3302">3302 - Banyumas</option><option value="3303">3303 - Purbalingga</option><option value="3304">3304 - Banjarnegara</option><option value="3305">3305 - Kebumen</option><option value="3306">3306 - Purworejo</option><option value="3307">3307 - Wonosobo</option><option value="3308">3308 - Magelang</option><option value="3309">3309 - Boyolali</option><option value="3310">3310 - Klaten</option><option value="3311">3311 - Sukoharjo</option><option value="3312">3312 - Wonogiri</option><option value="3313">3313 - Karanganyar</option><option value="3314">3314 - Sragen</option><option value="3315">3315 - Grobogan</option><option value="3316">3316 - Blora</option><option value="3317">3317 - Rembang</option><option value="3318">3318 - Pati</option><option value="3319">3319 - Kudus</option><option value="3320">3320 - Jepara</option><option value="3321">3321 - Demak</option><option value="3322">3322 - Semarang</option><option value="3323">3323 - Temanggung</option><option value="3324">3324 - Kendal</option><option value="3325">3325 - Batang</option><option value="3326">3326 - Pekalongan</option><option value="3327">3327 - Pemalang</option><option value="3328">3328 - Tegal</option><option value="3329">3329 - Brebes</option><option value="3371">3371 - Kota Magelang</option><option value="3372">3372 - Kota Surakarta</option><option value="3373">3373 - Kota Salatiga</option><option value="3374">3374 - Kota Semarang</option><option value="3375">3375 - Kota Pekalongan</option><option value="3376">3376 - Kota Tegal</option></select>
-                        </select>
+                        <!-- Dropdown untuk memilih kab/kota -->
+                            <label for="kabkota-select" style="margin-bottom:2rem">Wilayah Amatan</label>
+                            <select id="kabkota-select" class="form-control">
+                                <option value="all">Seluruh Kab/Kota</option>
+                                @foreach ($allKabKota as $item)
+                                    <option value="{{ substr($item, 0,4) }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
                     </form>
-                    <table id="padiamatan-table" class="table table-striped" style="border: 1px solid #ebedf2;">
-                      <thead>
-                        <tr>
-                          <th> Kab/Kota </th>
-                          <th> Tahun </th>
-                          <th> Bulan </th>
-                          <th> Baris </th>
-                          <th> Last Update </th>
-                          <th> Aksi </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>3301-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3301-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3301-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3301-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3301-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3301-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                        <tr>
-                          <td>3302-Cilacap</td>
-                          <td>2022</td>
-                          <td>01-Januari</td>
-                          <td>120</td>
-                          <td>12-08-2024 08.00.34 </td>
-                          <td>
-                            <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;">
-                            <i class="fa fa-edit"></i> Lihat </button></td>
-                        </tr>
-                      </tbody>
+                    <!-- Tabel data -->
+                    <table id="datatable" class="display table table-striped" style="border: 1px solid #ebedf2;">
+                        <thead>
+                            <tr>
+                                <th>Kab/Kota</th>
+                                <th>Tahun</th>
+                                <th>Bulan</th>
+                                <th>Baris</th>
+                                <th>Last Update</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($data as $row)
+                            <tr data-kode="{{ $row->kode_kabkota }}">
+                                <td>{{ $row->kab_kota }}</td>
+                                <td>{{ $row->tahun }}</td>
+                                <td>{{ $row->bulan }}</td>
+                                <td>{{ $row->baris }}</td>
+                                <td>{{ $row->last_update }}</td>
+                                <td>
+                                    <button
+                                        class="btn btn-gradient-primary btn-icon-text view-btn"
+                                        data-id="{{ $row->kode_kabkota }}"
+                                        data-tahun="{{ $row->tahun }}"
+                                        data-bulan="{{ $row->bulan }}"
+                                        style="padding:0.5rem;background: #87c351;"
+                                    >
+                                        <i class="fa fa-edit"></i> Lihat
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
                     </table>
+
+                    <!-- Modal untuk menampilkan tabel detail -->
+                    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="detailModalLabel">Detail Data</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Tabel detail -->
+                                    <table id="tabel-popup" class="table table-bordered table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Kode Segmen</th>
+                                                <th>A1</th>
+                                                <th>A2</th>
+                                                <th>B1</th>
+                                                <th>B2</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Baris detail akan diisi dengan JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="button" class="btn btn-gradient-primary btn-icon-text"style="background: linear-gradient(to right, #3b7d46, #659f3b);">
                     <i class="fa fa-download"></i> Unduh </button>
                   </div>
@@ -278,16 +166,88 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#padiamatan-table').DataTable({
-                "pageLength": 10, // Jumlah default baris per halaman
-                "lengthMenu": [5, 10, 25, 50, 100], // Opsi jumlah baris per halaman
-                "order": [[ 0, "asc" ]], // Urutkan berdasarkan kolom pertama secara ascending
+        $(document).ready(function () {
+            // Initialize main DataTable
+            var table = $('#datatable').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 20, 50],
+                "compact": true
+            });
+
+            // DataTable instance for modal
+            var popupTable = $('#tabel-popup').DataTable({
+                "paging": true, // Pastikan pagination diaktifkan
+                "pageLength": 10,
+                "lengthMenu": [5, 10, 20, 50],
+                "bDestroy": true, // Allow re-initialization
+                "searching": true,
+                "info": true
+            });
+
+            $('#kabkota-select').on('change', function () {
+                var selectedValue = $(this).val();
+
+                if (selectedValue === 'all') {
+                    // Tampilkan semua baris dan kolom
+                    table.columns().search('').draw();
+                    // table.column(0).visible(true); // Tampilkan kolom Kab/Kota
+                } else {
+                    // Filter berdasarkan kab/kota yang dipilih
+                    table.columns(0).search(selectedValue).draw();
+                    // table.column(0).visible(false); // Sembunyikan kolom Kab/Kota
+                }
+            });
+
+            // Aksi tombol lihat
+            $('#datatable').on('click', '.view-btn', function () {
+                var id = $(this).data('id');
+                var tahun = $(this).data('tahun');
+                var bulan = $(this).data('bulan');
+                // Lakukan AJAX atau ambil data detail berdasarkan ID
+                $.ajax({
+                    url: '/jagung_detail/' + id + '/' + tahun + '/' + bulan, // Ganti dengan URL yang sesuai untuk mengambil data detail
+                    method: 'GET',
+                    success: function (response) {
+                        // Kosongkan tabel popup
+                        popupTable.clear().draw();
+
+                        // Tambahkan baris detail ke tabel popup
+                        var rows = '';
+                        response.data.forEach(function (item) {
+                            rows += '<tr>' +
+                                '<td>' + item.kode_segmen + '</td>' +
+                                '<td>' + item.a1 + '</td>' +
+                                '<td>' + item.a2 + '</td>' +
+                                '<td>' + item.b1 + '</td>' +
+                                '<td>' + item.b2 + '</td>' +
+                            '</tr>';
+                        });
+                        popupTable.rows.add($(rows)).draw();
+
+                        // Tampilkan modal
+                        $('#detailModal').modal('show');
+                    }
+                });
             });
         });
+        // Event handler untuk tombol tutup
+        $(document).ready(function() {
+            // Tombol tutup modal
+            $('.modal-footer .btn-secondary').on('click', function () {
+                $('#detailModal').modal('hide');
+            });
+
+            // Atau jika Anda ingin menutup modal saat tombol "X" di pojok kanan atas diklik
+            $('.modal-header .close').on('click', function () {
+                $('#detailModal').modal('hide');
+            });
+        });
+
     </script>
   </body>
 </html>

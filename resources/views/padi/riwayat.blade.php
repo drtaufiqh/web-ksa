@@ -78,7 +78,13 @@
                                 <td>{{ $row->baris }}</td>
                                 <td>{{ $row->last_update }}</td>
                                 <td>
-                                    <button class="btn btn-gradient-primary btn-icon-text view-btn" data-id="{{ $row->kode_kabkota }}" style="padding:0.5rem;background: #87c351;">
+                                    <button
+                                        class="btn btn-gradient-primary btn-icon-text view-btn"
+                                        data-id="{{ $row->kode_kabkota }}"
+                                        data-tahun="{{ $row->tahun }}"
+                                        data-bulan="{{ $row->bulan }}"
+                                        style="padding:0.5rem;background: #87c351;"
+                                    >
                                         <i class="fa fa-edit"></i> Lihat
                                     </button>
                                 </td>
@@ -135,12 +141,7 @@
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
-            </div>
-          </footer>
+          @include('components.footer')
           <!-- partial -->
         </div>
         <!-- main-panel ends -->
@@ -210,14 +211,16 @@
             // Aksi tombol lihat
             $('#datatable').on('click', '.view-btn', function () {
                 var id = $(this).data('id');
+                var tahun = $(this).data('tahun');
+                var bulan = $(this).data('bulan');
                 // Lakukan AJAX atau ambil data detail berdasarkan ID
                 $.ajax({
-                    url: '/padi_detail/' + id, // Ganti dengan URL yang sesuai untuk mengambil data detail
+                    url: '/padi_detail/' + id + '/' + tahun + '/' + bulan, // Ganti dengan URL yang sesuai untuk mengambil data detail
                     method: 'GET',
                     success: function (response) {
                         // Kosongkan tabel popup
                         popupTable.clear().draw();
-                        
+
                         // Tambahkan baris detail ke tabel popup
                         var rows = '';
                         response.data.forEach(function (item) {
@@ -235,7 +238,7 @@
                             '</tr>';
                         });
                         popupTable.rows.add($(rows)).draw();
-                        
+
                         // Tampilkan modal
                         $('#detailModal').modal('show');
                     }
