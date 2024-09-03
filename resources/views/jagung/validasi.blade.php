@@ -5,6 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>PAK TANI</title>
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <!-- DataTables Buttons CSS -->
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.1.0/css/buttons.dataTables.min.css"> --}}
     <!-- plugins:css -->
     <link rel="stylesheet" href="/assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="/assets/vendors/ti-icons/css/themify-icons.css">
@@ -38,116 +42,90 @@
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
-                <div class="card-body">
-                <div class="form-group">
-                  <form  id="myForm">
-                    <label for="exampleInput2">Tahun</label>
-                        <select type="text" class="form-control" id="exampleInput2">
-                          <option value="0">2020</option>
-                          <option value="1">2021</option>
-                          <option value="2">2022</option>
-                          <option value="3">2023</option>
-                        </select> 
-                </div>
-                      <div class="form-group">
-                        <label for="exampleInpu3">Bulan</label>
-                        <select class="form-control" id="exampleInput3" >
-                          <option value="01">01 - Januari</option>
-                          <option value="02">02 - Februari</option>
-                          <option value="03">03 - Maret</option>
-                          <option value="04">04 - April</option>
-                          <option value="05">05 - Mei</option>
-                          <option value="06">06 - Juni</option>
-                          <option value="07">07 - Juli</option>
-                          <option value="08">08 - Agustus</option>
-                          <option value="09">09 - September</option>
-                          <option value="10">10 - Oktober</option>
-                          <option value="11">11 - November</option>
-                          <option value="12">12 - Desember</option>
-                        </select>
-                      </div>
-                      <div class="form-group">
-                      <label for="exampleInput4">Wilayah Amatan</label>
-                        <select class="form-control" id="exampleInput4" >
-                        <option value="3399">Pilih Wilayah</option><option value="3300">Jawa Tengah</option><option value="3301">3301 - Cilacap</option><option value="3302">3302 - Banyumas</option><option value="3303">3303 - Purbalingga</option><option value="3304">3304 - Banjarnegara</option><option value="3305">3305 - Kebumen</option><option value="3306">3306 - Purworejo</option><option value="3307">3307 - Wonosobo</option><option value="3308">3308 - Magelang</option><option value="3309">3309 - Boyolali</option><option value="3310">3310 - Klaten</option><option value="3311">3311 - Sukoharjo</option><option value="3312">3312 - Wonogiri</option><option value="3313">3313 - Karanganyar</option><option value="3314">3314 - Sragen</option><option value="3315">3315 - Grobogan</option><option value="3316">3316 - Blora</option><option value="3317">3317 - Rembang</option><option value="3318">3318 - Pati</option><option value="3319">3319 - Kudus</option><option value="3320">3320 - Jepara</option><option value="3321">3321 - Demak</option><option value="3322">3322 - Semarang</option><option value="3323">3323 - Temanggung</option><option value="3324">3324 - Kendal</option><option value="3325">3325 - Batang</option><option value="3326">3326 - Pekalongan</option><option value="3327">3327 - Pemalang</option><option value="3328">3328 - Tegal</option><option value="3329">3329 - Brebes</option><option value="3371">3371 - Kota Magelang</option><option value="3372">3372 - Kota Surakarta</option><option value="3373">3373 - Kota Salatiga</option><option value="3374">3374 - Kota Semarang</option><option value="3375">3375 - Kota Pekalongan</option><option value="3376">3376 - Kota Tegal</option></select>
-                        </select>
-                      </div>
-                      <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;margin-bottom:2rem">
-                        <i class="fa fa-refresh"></i> Lihat </button></td>
+                  <div class="card-body">
+                        {{-- Loading Spinner --}}
+                        <div id="loading" class="text-center" style="display: none;">
+                            <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    <form class="forms-sample">
+                        {{-- Tahun --}}
+                        @php
+                            $years = [];
+                            $currentYear = old('tahun', $currentYear ?? 2030); // Gunakan nilai lama jika tersedia
+                            $minYear = $minYear ?? 2020; // Menyediakan tahun default jika tidak ada dari database
+
+                            // Generate array tahun dari tahun sekarang ke tahun terkecil
+                            for ($year = $currentYear; $year >= $minYear; $year--) {
+                                $years[] = $year;
+                            }
+                        @endphp
+                        <div class="form-group">
+                            <label for="tahun">Tahun</label>
+                            <select name="tahun" class="form-control" id="tahun">
+                                @foreach($years as $year)
+                                    <option value="{{ $year }}" {{ ($selected_tahun ? $selected_tahun : $currentYear) == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Bulan --}}
+                        @php
+                            $currentMonth = old('bulan', date('m')); // Gunakan nilai lama jika tersedia
+                        @endphp
+                        <div class="form-group">
+                            <label for="bulan">Bulan</label>
+                            <select class="form-control" id="bulan" name="bulan">
+                                <option value="01" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '01' ? 'selected' : '' }}>01 - Januari</option>
+                                <option value="02" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '02' ? 'selected' : '' }}>02 - Februari</option>
+                                <option value="03" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '03' ? 'selected' : '' }}>03 - Maret</option>
+                                <option value="04" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '04' ? 'selected' : '' }}>04 - April</option>
+                                <option value="05" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '05' ? 'selected' : '' }}>05 - Mei</option>
+                                <option value="06" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '06' ? 'selected' : '' }}>06 - Juni</option>
+                                <option value="07" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '07' ? 'selected' : '' }}>07 - Juli</option>
+                                <option value="08" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '08' ? 'selected' : '' }}>08 - Agustus</option>
+                                <option value="09" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '09' ? 'selected' : '' }}>09 - September</option>
+                                <option value="10" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '10' ? 'selected' : '' }}>10 - Oktober</option>
+                                <option value="11" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '11' ? 'selected' : '' }}>11 - November</option>
+                                <option value="12" {{ ($selected_bulan ? $selected_bulan : $currentMonth) == '12' ? 'selected' : '' }}>12 - Desember</option>
+                            </select>
+                        </div>
+
+                        <!-- Dropdown untuk memilih kab/kota -->
+                        <div class="form-group">
+                            <label for="kabkota-select">Wilayah Amatan</label>
+                            <select id="kabkota-select" class="form-control">
+                                <option value="-">Pilih Kab/Kota</option>
+                                <option value="3300">Seluruh Kab/Kota</option>
+                                @foreach ($allKabKota as $item)
+                                    <option value="{{ substr($item, 0,4) }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Tombol Lihat -->
+                        <button type="button" id="lihat-btn" class="btn btn-gradient-primary btn-icon-text"style="padding:0.5rem;background: #87c351;margin-bottom:2rem">
+                            <i class="fa fa-refresh"></i> Lihat </button>
                     </form>
-                    <table id="padiamatan-table" class="table table-bordered"style="border-bottom-color: #ebedf2;">
-                      <thead>
-                        <tr>
-                          <th> Kode </th>
-                          <th> A1 </th>
-                          <th> A2 </th>
-                          <th> B1 </th>
-                          <th> B2 </th>
-                          <th> Feedback </th>
-                          <th> Aksi</th>
-                          <th> Segmen & Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td> 330101001 </td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td> Data Sudah Konsisten</td>
-                          <td><button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;">
-                          <i class="fa fa-edit"></i> Edit </button></td></td>
-                          <td><label class="badge badge-warning">APPROVE</label></td>
-                        </tr>
-                        <tr>
-                        <td> 330101001 </td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td> Belum Ada Feedback  </td>
-                          <td><button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;">
-                          <i class="fa fa-edit"></i> Edit </button></td></td>
-                          <td><label class="badge badge-warning">APPROVE</label></td>
-                        </tr>
-                        <tr>
-                        <td> 330101001 </td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#ff5050"> TK</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td> Data Tidak Konsisten </td>
-                          <td><button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;">
-                          <i class="fa fa-edit"></i> Edit </button></td></td>
-                          <td><label class="badge badge-info">REJECTED</label></td>
-                        </tr>
-                        <tr>
-                          <td> 330101001 </td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#ff5050"> TK</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td> Data Inkonsisten </td>
-                          <td><button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;">
-                          <i class="fa fa-edit"></i> Edit </button></td></td>
-                          <td><label class="badge badge-info">REJECTED</label></td>
-                        </tr>
-                        <tr>
-                          <td> 330101001 </td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#ff5050"> TK</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td style="background-color:#abe96c"> K</td>
-                          <td> Belum Ada Feedback</td>
-                          <td><button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;">
-                          <i class="fa fa-edit"></i> Edit </button></td></td>
-                          <td><label class="badge badge-info">REJECTED</label></td>
-                        </tr>
-                      </tbody>
+                    <!-- Tabel data -->
+                    <table id="datatable" class="display table table-striped" style="border: 1px solid #ebedf2;">
+                        <thead>
+                            <tr>
+                                <th>Kode Segmen</th>
+                                <th>A1</th>
+                                <th>A2</th>
+                                <th>B1</th>
+                                <th>B2</th>
+                                <th> Status </th>
+                                <th> Segmen & Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data akan dimuat melalui AJAX -->
+                        </tbody>
                     </table>
-                    <button type="button" class="btn btn-gradient-primary btn-icon-text"style="background: linear-gradient(to right, #3b7d46, #659f3b);">
-                    <i class="fa fa-download"></i> Unduh </button>
+
                   </div>
                 </div>
               </div>
@@ -182,18 +160,131 @@
     <script src="/assets/js/typeahead.js"></script>
     <script src="/assets/js/select2.js"></script>
     <!-- End custom js for this page -->
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#padiamatan-table').DataTable({
-                "pageLength": 10, // Jumlah default baris per halaman
-                "lengthMenu": [5, 10, 25, 50, 100], // Opsi jumlah baris per halaman
-                "order": [[ 0, "asc" ]], // Urutkan berdasarkan kolom pertama secara ascending
+    $(document).ready(function () {
+        // Initialize DataTable
+        var table = $('#datatable').DataTable({
+            "pageLength": 10,
+            "lengthMenu": [5, 10, 20, 50],
+            "compact": true,
+            dom: 'lfrtpB',  // Tambahkan 'lfrtpB' untuk menampilkan tombol
+            // buttons: [
+            //     'copy', 'csv', 'excel', 'pdf', 'print'
+            // ],
+            buttons: [
+                {
+                    extend: 'excel',
+                    text: '<i class="fa fa-download"></i> Unduh ',
+                    className: "btn btn-gradient-primary btn-icon-text mt-1",
+                    title: function() {
+                        var tahun = $('#tahun').val();
+                        var bulan = $('#bulan').val();
+                        var kabkota = $('#kabkota-select option:selected').text();
+                        return 'Data Amatan ' + kabkota + ' - ' + bulan + '/' + tahun;
+                    },
+                    filename: function() {
+                        var tahun = $('#tahun').val();
+                        var bulan = $('#bulan').val();
+                        var kabkota = $('#kabkota-select option:selected').text();
+                        return 'Data_Amatan_' + kabkota + '_' + bulan + '_' + tahun;
+                    },
+                }
+            ],
+            "ajax": null, // Disable initial AJAX call
+            "columns": [
+                { "data": "kode_segmen" },
+                { "data": "hasil_a1" },
+                { "data": "hasil_a2" },
+                { "data": "hasil_b1" },
+                { "data": "hasil_b2" },
+                { "data": "status" },
+                { "data": "status" }
+            ],
+            "createdRow": function (row, data, dataIndex) {
+            // Array dengan kolom hasil
+            var hasilColumns = ['hasil_a1', 'hasil_a2', 'hasil_b1', 'hasil_b2'];
+
+            // Loop melalui kolom hasil dan cek nilainya
+            hasilColumns.forEach(function (col, index) {
+                var cellValue = data[col];
+                var cell = $('td', row).eq(index + 1); // offset by 3 because columns 0-2 are not hasil_*
+                if (cellValue === 'K') {
+                    cell.css('background-color', '#abe96c').css('color', 'white');
+                } else if (cellValue === 'TK') {
+                    cell.css('background-color', '#ff5050').css('color', 'white');
+                } else if (cellValue === 'W') {
+                    cell.css('background-color', '#ffc37c').css('color', 'black');
+                }
+            });
+
+            // Kolom status logic
+            var status = data['status'];
+            var statusCell = $('td', row).eq(5);
+            if (status === 'SUDAH LENGKAP') {
+                statusCell.html('<label class="badge badge-danger">' + status + '</label>');
+            } else {
+                statusCell.html('<label class="badge badge-info">' + status + '</label>');
+            }
+
+            // Kolom evita logic
+            var evita = data['evita'];
+            var evitaCell = $('td', row).eq(6);
+            if (evita === 'APPROVED') {
+                evitaCell.html('<label class="badge badge-warning">' + evita + '</label>');
+            } else if (evita === 'REJECTED') {
+                evitaCell.html('<label class="badge badge-info">' + evita + '</label>');
+            }else {
+                evitaCell.html('<label class="badge badge-info">Data bulan sebelumnya tidak tersedia</label>');
+            }
+        }
+        });
+
+        // Event listener untuk tombol "Lihat"
+        $('#lihat-btn').on('click', function () {
+            $('#loading').show();
+
+            // Ambil nilai dari form
+            var tahun = $('#tahun').val();
+            var bulan = $('#bulan').val();
+            var kabkota = $('#kabkota-select').val();
+
+            // Lakukan AJAX request untuk mendapatkan data
+            $.ajax({
+                url: '/get-filtered-data',
+                method: 'GET',
+                data: {
+                    tahun: tahun,
+                    bulan: bulan,
+                    kabkota: kabkota
+                },
+                success: function (data) {
+                    $('#loading').hide();
+                    // Clear table sebelum menambahkan data baru
+                    table.clear();
+
+                    // Tambah data baru ke dalam tabel
+                    table.rows.add(data).draw();
+                },
+                error:function (){
+                    $('#loading').hide();
+                }
             });
         });
+    });
+
     </script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
   </body>
 </html>

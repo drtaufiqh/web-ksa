@@ -257,10 +257,10 @@ class JagungAmatanController extends Controller
                             $count_segmen['TK'] += 1;
                         }
 
-                        if($filteredData1[$i]['status'] == 'Approved'){
+                        if($filteredData1[$i]['status'] == 'SUDAH LENGKAP'){
                             $status['A'] += 1;
                         }
-                        if($count_seg == 0 && $filteredData1[$i]['status'] == 'Approved'){
+                        if($count_seg == 0 && $filteredData1[$i]['status'] == 'SUDAH LENGKAP'){
                             $evita['A'] += 1;
                             $filteredData1[$i]['evita'] = 'APPROVED';
                         } else {
