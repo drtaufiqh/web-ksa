@@ -547,13 +547,29 @@ class PadiAmatanController extends Controller
     }
 
     public function getDataPeta(Request $request) {
-        $tahun = $request->input('tahun');
-        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun_peta');
+        $bulan = $request->input('bulan_peta');
+        $geodata = $request->input('geodata');
+        $geodata = json_decode($geodata,true);
+
+        // dd($geodata);
 
         $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
                             ->get(['indeks', 'subsegmen_TK']);
 
-        return response()->json($data);
+        // dd(substr($data[0]->indeks,6,4), $data[0]->indeks);
+        foreach ($geodata['features'] as $key => $feature) {
+            foreach ($data as $datum) {
+                if ($feature['properties']['IDKAB'] == substr($datum->indeks,6,4)) {
+                    // if($datum->indeks == '2024083321') dd($datum->subsegmen_TK);
+                    $geodata['features'][$key]['properties']['KONSISTEN_P'] = $datum->subsegmen_TK;
+                }
+            }
+        }
+
+        // dd($geodata);
+        // return response()->json($geodata);
+        return json_encode($geodata);
     }
 
     public function testProgres(){

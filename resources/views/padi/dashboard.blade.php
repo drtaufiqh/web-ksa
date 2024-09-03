@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,12 +19,13 @@
     <!-- inject:css -->
     <!-- endinject -->
     <!-- Map Js -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <!-- Layout styles -->
     <link rel="stylesheet" href="/assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/img/logo.png" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
   </head>
   <body>
     <div class="container-scroller">
@@ -33,85 +34,99 @@
 
         <!-- partial -->
         <div class="main-panel">
-          <div class="content-wrapper" style="background: linear-gradient(to right, #f4ffc8, #ddf3ca);">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title"> Beranda </h3>
+            </div>
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
-                <div class="card">
+              <div class="card">
                   <div class="card-body">
                     <h4 class="judul-chart"> Peta Konsistensi Perwilayah (Subsegmen)</h4>
                     <div class="dropdown-chart">
-                      <div class="dropdown">
-                        <button class="btn btn-gradient-success dropdown-toggle" type="button" id="dropdownMenuOutlineButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Tahun </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton5">
-                          <h6 class="dropdown-header">Tahun</h6>
-                          <a class="dropdown-item" id="tahun" href="#">2024</a>
-                          <a class="dropdown-item" id="tahun" href="#">2023</a>
-                          <a class="dropdown-item" id="tahun" href="#">2022</a>
-                          <a class="dropdown-item" id="tahun" href="#">2021</a>
-                          <a class="dropdown-item" id="tahun" href="#">2020</a>
+                      <div class="dropdownpadi">
+                        {{-- Tahun --}}
+                        @php
+                            $years = [];
+                            $currentYear = old('tahun', $currentYear ?? 2030); // Gunakan nilai lama jika tersedia
+                            $minYear = $minYear ?? 2020; // Menyediakan tahun default jika tidak ada dari database
+
+                            // Generate array tahun dari tahun sekarang ke tahun terkecil
+                            for ($year = $currentYear; $year >= $minYear; $year--) {
+                                $years[] = $year;
+                            }
+                        @endphp
+                        <label for="tahun_peta">Tahun</label>
+                            <select id="tahun_peta" name="tahun_peta" style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                                @foreach($years as $year)
+                                    <option value="{{ $year }}" {{ $currentYear == $year ? 'selected' : '' }}>{{ $year }}</option>
+                                @endforeach
+                            </select>
                         </div>
+                        <div class="dropdownpadi">
+
+                        {{-- Bulan --}}
+                        @php
+                            $currentMonth = old('bulan', date('m')); // Gunakan nilai lama jika tersedia
+                        @endphp
+                        <label for="bulan_peta">Bulan</label>
+                          <select id="bulan_peta" name="bulan_peta" style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                            <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
+                            <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
+                            <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
+                            <option value="04" {{ $currentMonth == '04' ? 'selected' : '' }}>04 - April</option>
+                            <option value="05" {{ $currentMonth == '05' ? 'selected' : '' }}>05 - Mei</option>
+                            <option value="06" {{ $currentMonth == '06' ? 'selected' : '' }}>06 - Juni</option>
+                            <option value="07" {{ $currentMonth == '07' ? 'selected' : '' }}>07 - Juli</option>
+                            <option value="08" {{ $currentMonth == '08' ? 'selected' : '' }}>08 - Agustus</option>
+                            <option value="09" {{ $currentMonth == '09' ? 'selected' : '' }}>09 - September</option>
+                            <option value="10" {{ $currentMonth == '10' ? 'selected' : '' }}>10 - Oktober</option>
+                            <option value="11" {{ $currentMonth == '11' ? 'selected' : '' }}>11 - November</option>
+                            <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
+                          </select>
                       </div>
-                      <div class="dropdown">
-                      <button class="btn btn-gradient-success dropdown-toggle" type="button" id="dropdownMenuOutlineButton6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Bulan </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton5">
-                          <h6 class="dropdown-header">Bulan</h6>
-                          <a class="dropdown-item" id="bulan" href="#">01 - Januari</a>
-                          <a class="dropdown-item" id="bulan" href="#">02 - Februari</a>
-                          <a class="dropdown-item" id="bulan" href="#">03 - Maret</a>
-                          <a class="dropdown-item" id="bulan" href="#">04 - April</a>
-                          <a class="dropdown-item" id="bulan" href="#">05 - Mei</a>
-                          <a class="dropdown-item" id="bulan" href="#">06 - Juni</a>
-                          <a class="dropdown-item" id="bulan" href="#">07 - Juli</a>
-                          <a class="dropdown-item" id="bulan" href="#">08 - Agustus</a>
-                          <a class="dropdown-item" id="bulan" href="#">09 - September</a>
-                          <a class="dropdown-item" id="bulan" href="#">10 - Oktober</a>
-                          <a class="dropdown-item" id="bulan" href="#">11 - November</a>
-                          <a class="dropdown-item" id="bulan" href="#">12 - Desember</a>
-                        </div>
-                      </div>
+                      <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #87c351;">
+                        <i class="fa fa-refresh"></i> Lihat </button>
                     </div>
                     <div id="map"></div>
-                  </div>
+                </div>
                   <div class="card-body">
                     <h4 class="judul-chart"> Progres Tiap Wilayah</h4>
                     <div class="dropdown-chart">
-                      <div class="dropdown">
-                        <button class="btn btn-gradient-success dropdown-toggle" type="button" id="dropdownMenuOutlineButton8" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Tahun </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton8">
-                          <h6 class="dropdown-header">Tahun</h6>
-                          <a class="dropdown-item" id="tahun" href="#">2024</a>
-                          <a class="dropdown-item" id="tahun" href="#">2023</a>
-                          <a class="dropdown-item" id="tahun" href="#">2022</a>
-                          <a class="dropdown-item" id="tahun" href="#">2021</a>
-                          <a class="dropdown-item" id="tahun" href="#">2020</a>
-                        </div>
-                      </div>
-                      <div class="dropdown">
-                      <button class="btn btn-gradient-success dropdown-toggle" type="button" id="dropdownMenuOutlineButton9" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Bulan </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton9">
-                          <h6 class="dropdown-header">Bulan</h6>
-                          <a class="dropdown-item" id="bulan" href="#">01 - Januari</a>
-                          <a class="dropdown-item" id="bulan" href="#">02 - Februari</a>
-                          <a class="dropdown-item" id="bulan" href="#">03 - Maret</a>
-                          <a class="dropdown-item" id="bulan" href="#">04 - April</a>
-                          <a class="dropdown-item" id="bulan" href="#">05 - Mei</a>
-                          <a class="dropdown-item" id="bulan" href="#">06 - Juni</a>
-                          <a class="dropdown-item" id="bulan" href="#">07 - Juli</a>
-                          <a class="dropdown-item" id="bulan" href="#">08 - Agustus</a>
-                          <a class="dropdown-item" id="bulan" href="#">09 - September</a>
-                          <a class="dropdown-item" id="bulan" href="#">10 - Oktober</a>
-                          <a class="dropdown-item" id="bulan" href="#">11 - November</a>
-                          <a class="dropdown-item" id="bulan" href="#">12 - Desember</a>
-                        </div>
-                      </div>
-                      <div class="dropdown">
-                        <button class="btn btn-gradient-success dropdown-toggle" type="button" id="dropdownMenuOutlineButton7" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Segmen </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuOutlineButton7">
-                          <a class="dropdown-item" id="segmen" href="#">Subegmen</a>
-                          <a class="dropdown-item" id="segmen" href="#">Segmen</a>
-                          <a class="dropdown-item" id="segmen" href="#">Segmen dan Status</a>
-                        </div>
-                      </div>
+                    <div class="dropdownpadi">
+                      <label>Tahun</label>
+                          <select style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">>
+                          <option>2024</option>
+                          <option>2023</option>
+                          <option>2022</option>
+                          <option>2021</option>
+                          </select>
+                    </div>
+                    <div class="dropdownpadi">
+                      <label>Bulan</label>
+                          <select style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                          <option>01-Januari</option>
+                          <option>02-Februari</option>
+                          <option>03-Maret</option>
+                          <option>04-April</option>
+                          <option>05-Mei</option>
+                          <option>06-Juni</option>
+                          <option>07-Juli</option>
+                          <option>08-Agustus</option>
+                          <option>09-September</option>
+                          <option>10-Oktober</option>
+                          <option>11-November</option>
+                          <option>12-Desember</option>
+                          </select>
+                    </div>
+                    <div class="dropdownpadi">
+                      <label>Segmen</label>
+                          <select style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                          <option>Subsegmen</option>
+                          <option>Segmen</option>
+                          <option>Segmen dan Status</option>
+                          </select>
+                    </div>
                     </div>
                     <div>
                     <div class="row">
@@ -119,7 +134,7 @@
                         <div class="card">
                           <div class="card-body">
                             <h4 class="card-title">Kabupaten Kota</h4>
-                            <canvas id="lineChart" style="height: 292px; display: block; box-sizing: border-box; width: 585px;" width="1170" height="585"></canvas>
+                            <canvas id="barChart" style="height: 292px; display: block; box-sizing: border-box; width: 585px;" width="1170" height="585"></canvas>
                           </div>
                         </div>
                       </div>
@@ -170,229 +185,171 @@
     <script src="/assets/js/select2.js"></script>
     <script src="/assets/js/dropdown.js"></script>
     <!-- End custom js for this page -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </body>
 </html>
 
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-<script src="/assets/js/data/line.js"></script>
-<script src="/assets/js/data/point.js"></script>
-<script src="/assets/js/data/polygon.js"></script>
-<script src="/assets/js/data/nepaldata.js"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-<script src="/assets/js/data/usstates.js"></script>
-<script>
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script type="text/javascript" src="assets/js/data/jateng.js"></script>
+<script type="text/javascript">
+    var map = L.map('map').setView([-7.150975, 110.1402594], 8);
 
-/*===================================================
-                      OSM  LAYER               
-===================================================*/
+    var LayerKita = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+    });
+    map.addLayer(LayerKita);
 
-    var map = L.map('map').setView([-7.30324,110.00441], 8);
-var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-});
-osm.addTo(map);
+    // Control that shows state info on hover
+    var info = L.control();
 
-/*===================================================
-                      MARKER               
-===================================================*/
-
-var singleMarker = L.marker([-7.30324,110.00441]);
-singleMarker.addTo(map);
-var popup = singleMarker.bindPopup('Jawa Tengah')
-popup.addTo(map);
-
-/*===================================================
-                     TILE LAYER               
-===================================================*/
-
-var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-subdomains: 'abcd',
-	maxZoom: 19
-});
-CartoDB_DarkMatter.addTo(map);
-
-// Google Map Layer
-
-googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-    maxZoom: 20,
-    subdomains:['mt0','mt1','mt2','mt3']
- });
- googleStreets.addTo(map);
-
- // Satelite Layer
-googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-   maxZoom: 20,
-   subdomains:['mt0','mt1','mt2','mt3']
- });
-googleSat.addTo(map);
-
-var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
- attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-subdomains: 'abcd',
-minZoom: 1,
-maxZoom: 16,
-ext: 'jpg'
-});
-Stamen_Watercolor.addTo(map);
-
-
-/*===================================================
-                      GEOJSON               
-===================================================*/
-
-var linedata = L.geoJSON(lineJSON).addTo(map);
-var pointdata = L.geoJSON(pointJSON).addTo(map);
-var nepalData = L.geoJSON(nepaldataa).addTo(map);
-var polygondata = L.geoJSON(polygonJSON,{
-    onEachFeature: function(feature,layer){
-        layer.bindPopup('<b>This is a </b>' + feature.properties.name)
-    },
-    style:{
-        fillColor: 'red',
-        fillOpacity:1,
-        color: 'green'
-    }
-}).addTo(map);
-
-/*===================================================
-                      LAYER CONTROL               
-===================================================*/
-
-var baseLayers = {
-    "Satellite":googleSat,
-    "Google Map":googleStreets,
-    "Water Color":Stamen_Watercolor,
-    "OpenStreetMap": osm,
-};
-
-var overlays = {
-    "Marker": singleMarker,
-    "PointData":pointdata,
-    "LineData":linedata,
-    "PolygonData":polygondata
-};
-
-L.control.layers(baseLayers, overlays).addTo(map);
-
-
-/*===================================================
-                      SEARCH BUTTON               
-===================================================*/
-
-L.Control.geocoder().addTo(map);
-
-
-/*===================================================
-                      Choropleth Map               
-===================================================*/
-
-L.geoJSON(statesData).addTo(map);
-
-
-function getColor(d) {
-    return d > 1000 ? '#800026' :
-           d > 500  ? '#BD0026' :
-           d > 200  ? '#E31A1C' :
-           d > 100  ? '#FC4E2A' :
-           d > 50   ? '#FD8D3C' :
-           d > 20   ? '#FEB24C' :
-           d > 10   ? '#FED976' :
-                      '#FFEDA0';
-}
-
-function style(feature) {
-    return {
-        fillColor: getColor(feature.properties.density),
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.7
+    info.onAdd = function(map) {
+        this._div = L.DomUtil.create('div', 'info');
+        this.update();
+        return this._div;
     };
-}
 
-L.geoJson(statesData, {style: style}).addTo(map);
+    info.update = function(props) {
+        this._div.innerHTML = '<h4>Peta Sebaran Konsistensi</h4>' + (props ?
+            '<b>' + props.KABKOT + '</b><br />' + props.KONSISTEN_P + ' titik' :
+            'Dekatkan mouse untuk melihat');
+    };
 
-function highlightFeature(e) {
-    var layer = e.target;
+    info.addTo(map);
 
-    layer.setStyle({
-        weight: 5,
-        color: '#666',
-        dashArray: '',
-        fillOpacity: 0.7
-    });
-
-    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-        layer.bringToFront();
+    function getColor(d) {
+        return d > 50 ? '#800026' :
+               d > 40 ? '#B41C17' :
+               d > 30 ? '#CE2C29' :
+               d >= 20 ? '#ED7D79' :
+               d >= 10 ? '#EE978D' :
+               d >= 1  ? '#F5C4B6' :
+               d < 1  ?  '#92C98C' :
+                         '#666666';
     }
 
-    info.update(layer.feature.properties);
-}
-
-function resetHighlight(e) {
-    geojson.resetStyle(e.target);
-    info.update();
-}
-
-var geojson;
-// ... our listeners
-geojson = L.geoJson(statesData);
-
-function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());
-}
-
-function onEachFeature(feature, layer) {
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-    });
-}
-
-geojson = L.geoJson(statesData, {
-    style: style,
-    onEachFeature: onEachFeature
-}).addTo(map);
-
-var info = L.control();
-
-info.onAdd = function (map) {
-    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-    this.update();
-    return this._div;
-};
-
-// method that we will use to update the control based on feature properties passed
-info.update = function (props) {
-    this._div.innerHTML = '<h4>US Population Density</h4>' +  (props ?
-        '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-        : 'Hover over a state');
-};
-
-info.addTo(map);
-
-var legend = L.control({position: 'bottomright'});
-
-legend.onAdd = function (map) {
-
-    var div = L.DomUtil.create('div', 'info legend'),
-        grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-        labels = [];
-
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    function style(feature) {
+        return {
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7,
+            fillColor: getColor(feature.properties.KONSISTEN_P)
+        };
     }
 
-    return div;
-};
+    function highlightFeature(e) {
+        var layer = e.target;
 
-legend.addTo(map);
+        layer.setStyle({
+            weight: 5,
+            color: '#666',
+            dashArray: '',
+            fillOpacity: 0.7
+        });
 
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
 
+        info.update(layer.feature.properties);
+    }
+
+    var geojson;
+
+    function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+        info.update();
+    }
+
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: function(e) {
+                zoomToFeature(e);
+                L.popup()
+                    .setLatLng(e.latlng)
+                    .setContent('<b>' + feature.properties.KABKOT + '</b><br />' + feature.properties.KONSISTEN_P + ' titik')
+                    .openOn(map);
+            }
+        });
+    }
+
+    geojson = L.geoJson(geodata, {
+        style: style,
+        onEachFeature: onEachFeature
+    }).addTo(map);
+
+    map.attributionControl.addAttribution('Konsistensi Data Padi')
+
+    var legend = L.control({position: 'bottomleft'});
+            legend.onAdd = function (map) {
+                var div = L.DomUtil.create('div', 'info legend'),
+                    grades = [0, 10, 20, 30, 40, 50],
+                    labels = [];
+
+                div.innerHTML =
+                '<i style="background:#92C98C"></i> 0 <br/>'+
+                '<i style="background:#F5C4B6"></i> 1 - 10 <br/>'+
+                '<i style="background:#EE978D"></i> 11 - 20 <br/>'+
+                '<i style="background:#ED7D79"></i> 21 - 30 <br/>'+
+                '<i style="background:#CE2C29"></i> 31 - 40 <br/>'+
+                '<i style="background:#B41C17"></i> 41 - 50 <br/>'+
+                '<i style="background:#850D0C"></i> 50+ <br/>';
+                return div;
+            };
+            legend.addTo(map);
+
+    var legend = L.control({position: 'bottomright'});
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#lihat_peta').click(function() {
+            // Ambil nilai dari dropdown
+            var tahun = $('#tahun_peta').val();
+            var bulan = $('#bulan_peta').val();
+
+            $.ajax({
+                url: '/padi-get-data-peta',
+                type: 'POST',
+                data: {
+                    tahun_peta: tahun,
+                    bulan_peta: bulan,
+                    geodata: JSON.stringify(geodata),
+                    _token: $('meta[name="csrf-token"]').attr('content') // Menambahkan CSRF token untuk Laravel
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // Simpan respons JSON ke variabel geodata
+                    var geodata = response;
+
+                    // Hapus layer geojson yang ada jika ada
+                    map.eachLayer(function(layer) {
+                        if (layer instanceof L.GeoJSON) {
+                            map.removeLayer(layer);
+                        }
+                    });
+
+                    // Tambahkan layer geojson baru
+                    geojson = L.geoJson(geodata, {
+                        style: style,
+                        onEachFeature: onEachFeature
+                    }).addTo(map);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Terjadi kesalahan: ', error);
+                }
+            });
+        });
+    });
 </script>

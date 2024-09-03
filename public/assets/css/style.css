@@ -22728,7 +22728,7 @@ code {
   -ms-transition: opacity 0.3s ease;
   -o-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease;
-  --bs-btn-padding-x: 6rem;
+  --bs-btn-padding-x: 4rem;
 }
 .btn-gradient-success:not([disabled]):not(.disabled):active, .btn-gradient-success:not([disabled]):not(.disabled).active, .show > .btn-gradient-success.dropdown-toggle {
   background: linear-gradient(to right, #8ec783, #a7e194);
@@ -26454,5 +26454,12 @@ dl li {
     color: #3b5740;
     background-color: #def4ca;
     padding: 0.5rem;
+}
+
+.dropdownpadi{
+  padding: 0.5rem;
+  background-color: #87C351;
+  color: #FFFF;
+  font-weight: bold;
 }
 /*# sourceMappingURL=maps/style.css.map */

@@ -420,8 +420,11 @@ class JagungAmatanController extends Controller
     }
 
     public function getDataPeta(Request $request) {
-        $tahun = $request->input('tahun');
-        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun_peta');
+        $bulan = $request->input('bulan_peta');
+        $geodata = $request->input('geodata');
+        $geodata = json_decode($geodata,true);
+        dd($geodata);
 
         $data = JagungValidasi::where('indeks', 'like', $tahun . $bulan . "%")
                             ->get(['indeks', 'subsegmen_TK']);

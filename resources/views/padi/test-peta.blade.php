@@ -26,16 +26,19 @@
 </head>
 <body>
     <h1>Filter Data Kabupaten Kota</h1>
-    <form id="filterForm">
+    <form id="filterForm" action="{{ route('padi.get.data.peta') }}" method="POST">
         @csrf <!-- Token CSRF untuk keamanan -->
         <label for="tahun">Tahun:</label>
         <input id="tahun" name="tahun" required>
         <label for="bulan">Bulan:</label>
         <input id="bulan" name="bulan" required>
+        <label for="geodata">geodata:</label>
+        <input id="geodata" name="geodata" required>
         <button type="submit">Tampilkan Data</button>
     </form>
 
     <!-- Hasil data akan ditampilkan di sini -->
+    @if (isset($data))
     <div id="result">
         <table>
             <thead>
@@ -44,48 +47,16 @@
                     <th>Subsegmen TK</th>
                 </tr>
             </thead>
-            <tbody id="dataBody">
-                <!-- Data akan ditambahkan di sini oleh JavaScript -->
+            <tbody>
+                @foreach ($data as $row)
+                <tr>
+                    <td>{{ $row->indeks }}</td>
+                    <td>{{ $row->subsegmen_TK }}</td>
+                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
-
-    <script>
-        document.getElementById('filterForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const tahun = document.getElementById('tahun').value;
-            const bulan = document.getElementById('bulan').value;
-
-            fetch('{{ route('padi.get.data.peta') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    tahun: tahun,
-                    bulan: bulan
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('dataBody');
-                tableBody.innerHTML = ''; // Bersihkan tabel sebelum mengisi data baru
-                
-                data.forEach(row => {
-                    const tr = document.createElement('tr');
-                    const tdIndeks = document.createElement('td');
-                    tdIndeks.textContent = row.indeks;
-                    const tdSubsegmen = document.createElement('td');
-                    tdSubsegmen.textContent = row.subsegmen_TK;
-                    tr.appendChild(tdIndeks);
-                    tr.appendChild(tdSubsegmen);
-                    tableBody.appendChild(tr);
-                });
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
+    @endif
 </body>
 </html>

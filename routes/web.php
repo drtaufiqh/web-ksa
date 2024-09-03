@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\PadiAmatan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\PadiAmatanController;
@@ -41,7 +42,17 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 // padi_dashboard
 Route::get('/padi_dashboard', function () {
-    return view('padi.dashboard');
+    // Ambil tahun terkecil dari database
+    $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
+
+    // Tahun sekarang
+    $currentYear = Carbon::now()->addHours(7)->year;
+
+    // Kirim tahun terkecil dan tahun sekarang ke view
+    return view('padi.dashboard', [
+        'minYear' => $minYear-1,
+        'currentYear' => $currentYear,
+    ]);
 })->middleware('auth')->name('padi_dashboard');
 
 // padi_kondef
@@ -69,6 +80,7 @@ Route::get('/padi_panduan', function () {
 
 
 Route::get('/test-peta', [PadiAmatanController::class, 'testPeta']);
+Route::get('/padi-get-data-peta', [PadiAmatanController::class, 'getDataPeta']);
 Route::post('/padi-get-data-peta', [PadiAmatanController::class, 'getDataPeta'])->name('padi.get.data.peta');
 
 Route::get('/test-progres', [PadiAmatanController::class, 'testProgres']);
