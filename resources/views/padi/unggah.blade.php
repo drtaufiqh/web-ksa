@@ -119,7 +119,7 @@
                                 <option value="n-3"> dengan 3 bulan sebelumnya (n, n-1, n-2, n-3) - [4 Menit]</option>
                             </select>
                         </div>
-                        
+
                         {{-- File --}}
                         <div class="form-group">
                             <label>File upload</label>
@@ -131,10 +131,12 @@
                             </span>
                             </div> --}}
                             <input type="file" name="file" class="form-control" accept=".xls,.xlsx,.csv" required>
+                            <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Format penamaan file harus : tahunbulanA_kodekabupaten_jagung.xlsx</p>
+                            <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110A_3301_jagung.xlsx</p>
                         </div>
                         {{-- Submit --}}
                         <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
-                        
+
                         {{-- Loading Spinner --}}
                         <div id="loading1" class="text-center" style="display: none;">
                             <div class="spinner-border" role="status">
@@ -148,12 +150,7 @@
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2023 <a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.</span>
-              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="mdi mdi-heart text-danger"></i></span>
-            </div>
-          </footer>
+          @include('components.footer')
           <!-- partial -->
         </div>
         <!-- main-panel ends -->
