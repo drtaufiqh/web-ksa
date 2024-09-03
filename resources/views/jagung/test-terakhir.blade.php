@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filter Data Berjalan</title>
+    <title>Filter Data Terakhir</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <h1>Filter Data Berjalan</h1>
+    <h1>Filter Data Terakhir</h1>
     <form id="filterForm">
         @csrf <!-- Token CSRF untuk keamanan -->
         <label for="kabkota">Kab/Kota:</label>
@@ -60,7 +60,7 @@
             const kabkota = document.getElementById('kabkota').value;
             const jenis = document.getElementById('jenis').value;
 
-            fetch('{{ route('padi.get.data.berjalan') }}', {
+            fetch('{{ route('jagung.get.data.terakhir') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

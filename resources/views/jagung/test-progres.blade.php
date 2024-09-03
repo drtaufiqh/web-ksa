@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Filter Data Berjalan</title>
+    <title>Filter Data Progres</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,11 +25,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <h1>Filter Data Berjalan</h1>
+    <h1>Filter Data Progres</h1>
     <form id="filterForm">
         @csrf <!-- Token CSRF untuk keamanan -->
-        <label for="kabkota">Kab/Kota:</label>
-        <input id="kabkota" name="kabkota" type="number" required>
+        <label for="tahun">Tahun:</label>
+        <input id="tahun" name="tahun" type="number" required>
+        <label for="bulan">Bulan:</label>
+        <input id="bulan" name="bulan" type="number" required>
         <label for="jenis">Jenis:</label>
         <select id="jenis" name="jenis" required>
             <option value="subsegmen">Subsegmen</option>
@@ -57,17 +59,19 @@
         document.getElementById('filterForm').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const kabkota = document.getElementById('kabkota').value;
+            const tahun = document.getElementById('tahun').value;
+            const bulan = document.getElementById('bulan').value;
             const jenis = document.getElementById('jenis').value;
 
-            fetch('{{ route('padi.get.data.berjalan') }}', {
+            fetch('{{ route('jagung.get.data.progres') }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
                 body: JSON.stringify({
-                    kabkota: kabkota,
+                    tahun: tahun,
+                    bulan: bulan,
                     jenis: jenis
                 })
             })
@@ -113,7 +117,7 @@
                     headers.forEach(header => {
                         const td = document.createElement('td');
                         td.textContent = row[transformHeader(header)];
-                        // console.log(transformHeader(header));
+                        console.log(transformHeader(header));
                         tr.appendChild(td);
                     });
                     tableBody.appendChild(tr);

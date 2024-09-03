@@ -116,16 +116,16 @@ Route::get('/jagung_panduan', function () {
     return view('jagung.panduan');
 })->middleware('auth')->name('jagung_panduan');
 
-Route::get('/test-peta', [JagungAmatanController::class, 'testPeta']);
+Route::get('/jagung-test-peta', [JagungAmatanController::class, 'testPeta']);
 Route::post('/jagung-get-data-peta', [JagungAmatanController::class, 'getDataPeta'])->name('jagung.get.data.peta');
 
-Route::get('/test-progres', [JagungAmatanController::class, 'testProgres']);
+Route::get('/jagung-test-progres', [JagungAmatanController::class, 'testProgres']);
 Route::post('/jagung-get-data-progres', [JagungAmatanController::class, 'getDataProgres'])->name('jagung.get.data.progres');
 
-Route::get('/test-terakhir', [JagungAmatanController::class, 'testTerakhir']);
+Route::get('/jagung-test-terakhir', [JagungAmatanController::class, 'testTerakhir']);
 Route::get('/jagung-get-data-terakhir', [JagungAmatanController::class, 'getDataTerakhir']);
 Route::post('/jagung-get-data-terakhir', [JagungAmatanController::class, 'getDataTerakhir'])->name('jagung.get.data.terakhir');
 
-Route::get('/test-berjalan', [JagungAmatanController::class, 'testBerjalan']);
+Route::get('/jagung-test-berjalan', [JagungAmatanController::class, 'testBerjalan']);
 Route::get('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDataBerjalan']);
 Route::post('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDataBerjalan'])->name('jagung.get.data.berjalan');
