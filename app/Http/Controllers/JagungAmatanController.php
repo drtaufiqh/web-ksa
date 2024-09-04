@@ -438,12 +438,26 @@ class JagungAmatanController extends Controller
         $bulan = $request->input('bulan_peta');
         $geodata = $request->input('geodata');
         $geodata = json_decode($geodata,true);
-        dd($geodata);
 
         $data = JagungValidasi::where('indeks', 'like', $tahun . $bulan . "%")
                             ->get(['indeks', 'subsegmen_TK']);
 
-        return response()->json($data);
+        if ($data) {
+            foreach ($geodata['features'] as $key => $feature) {
+                foreach ($data as $datum) {
+                    if ($feature['properties']['IDKAB'] == substr($datum->indeks,6,4)) {
+                        // if($datum->indeks == '2024083321') dd($datum->subsegmen_TK);
+                        $geodata['features'][$key]['properties']['KONSISTEN_P'] = $datum->subsegmen_TK;
+                    }
+                }
+            }
+        } else {
+            foreach ($geodata['features'] as $key => $feature) {
+                $geodata['features'][$key]['properties']['KONSISTEN_P'] = 'Tidak ada data';
+            }
+        }
+
+        return json_encode($geodata);
     }
 
     public function testProgres(){
