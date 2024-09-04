@@ -28,9 +28,7 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return redirect('padi_dashboard');
 })->middleware('auth');
-Route::get('/dashboard', function () {
-    return view('padi.dashboard');
-})->middleware('auth');
+Route::get('/dashboard', [PadiAmatanController::class, 'showDashboard'])->middleware('auth');
 
 // login logout
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login')->middleware("guest");
@@ -41,19 +39,7 @@ Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 // padi
 
 // padi_dashboard
-Route::get('/padi_dashboard', function () {
-    // Ambil tahun terkecil dari database
-    $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
-
-    // Tahun sekarang
-    $currentYear = Carbon::now()->addHours(7)->year;
-
-    // Kirim tahun terkecil dan tahun sekarang ke view
-    return view('padi.dashboard', [
-        'minYear' => $minYear-1,
-        'currentYear' => $currentYear,
-    ]);
-})->middleware('auth')->name('padi_dashboard');
+Route::get('/padi_dashboard', [PadiAmatanController::class, 'showDashboard'])->middleware('auth')->name('padi_dashboard');
 
 // padi_kondef
 Route::get('/padi_kondef', function () {
@@ -101,9 +87,7 @@ Route::post('/test-proses', [PadiAmatanController::class, 'runProses'])->name('r
 // jagung
 
 // jagung_dashboard
-Route::get('/jagung_dashboard', function () {
-    return view('jagung.dashboard');
-})->middleware('auth')->name('jagung_dashboard');
+Route::get('/jagung_dashboard', [JagungAmatanController::class, 'showDashboard'])->middleware('auth')->name('jagung_dashboard');
 
 // jagung_kondef
 Route::get('/jagung_kondef', function () {

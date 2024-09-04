@@ -18,6 +18,20 @@ use Illuminate\Support\Facades\DB;
 
 class PadiAmatanController extends Controller
 {
+    public function showDashboard(){
+        // Ambil tahun terkecil dari database
+        $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
+
+        // Tahun sekarang
+        $currentYear = Carbon::now()->addHours(7)->year;
+
+        // Kirim tahun terkecil dan tahun sekarang ke view
+        return view('padi.dashboard', [
+            'minYear' => $minYear-1,
+            'currentYear' => $currentYear,
+        ]);
+    }
+
     public function showUploadForm(){
         // Ambil tahun terkecil dari database
         $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
