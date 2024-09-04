@@ -27,6 +27,11 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/img/logo.png" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        #Chart {
+            display: initial; box-sizing: border-box; height: 105vh; width: 800px;font-weight: bold;
+        }
+    </style>
   </head>
   <body>
     <div class="container-scroller">
@@ -42,19 +47,19 @@
                   <div class="card-body">
                     <h4 class="judul-chart"> Peta Konsistensi Perwilayah (Subsegmen)</h4>
                     <div class="dropdown-chart">
-                      <div class="dropdownpadi">
-                        {{-- Tahun --}}
-                        @php
-                            $years = [];
-                            $currentYear = old('tahun', $currentYear ?? 2030); // Gunakan nilai lama jika tersedia
-                            $minYear = $minYear ?? 2020; // Menyediakan tahun default jika tidak ada dari database
+                        <div class="dropdownpadi">
+                            {{-- Tahun --}}
+                            @php
+                                $years = [];
+                                $currentYear = old('tahun_peta', $currentYear ?? 2030); // Gunakan nilai lama jika tersedia
+                                $minYear = $minYear ?? 2020; // Menyediakan tahun default jika tidak ada dari database
 
-                            // Generate array tahun dari tahun sekarang ke tahun terkecil
-                            for ($year = $currentYear; $year >= $minYear; $year--) {
-                                $years[] = $year;
-                            }
-                        @endphp
-                        <label for="tahun_peta">Tahun</label>
+                                // Generate array tahun dari tahun sekarang ke tahun terkecil
+                                for ($year = $currentYear; $year >= $minYear; $year--) {
+                                    $years[] = $year;
+                                }
+                            @endphp
+                            <label for="tahun_peta">Tahun</label>
                             <select id="tahun_peta" name="tahun_peta" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
                                 @foreach($years as $year)
                                     <option value="{{ $year }}" {{ $currentYear == $year ? 'selected' : '' }}>{{ $year }}</option>
@@ -62,13 +67,60 @@
                             </select>
                         </div>
                         <div class="dropdownpadi">
+                            {{-- Bulan --}}
+                            @php
+                                $currentMonth = old('bulan_peta', date('m')); // Gunakan nilai lama jika tersedia
+                            @endphp
+                            <label for="bulan_peta">Bulan</label>
+                            <select id="bulan_peta" name="bulan_peta" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                                <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
+                                <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
+                                <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
+                                <option value="04" {{ $currentMonth == '04' ? 'selected' : '' }}>04 - April</option>
+                                <option value="05" {{ $currentMonth == '05' ? 'selected' : '' }}>05 - Mei</option>
+                                <option value="06" {{ $currentMonth == '06' ? 'selected' : '' }}>06 - Juni</option>
+                                <option value="07" {{ $currentMonth == '07' ? 'selected' : '' }}>07 - Juli</option>
+                                <option value="08" {{ $currentMonth == '08' ? 'selected' : '' }}>08 - Agustus</option>
+                                <option value="09" {{ $currentMonth == '09' ? 'selected' : '' }}>09 - September</option>
+                                <option value="10" {{ $currentMonth == '10' ? 'selected' : '' }}>10 - Oktober</option>
+                                <option value="11" {{ $currentMonth == '11' ? 'selected' : '' }}>11 - November</option>
+                                <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
+                            </select>
+                        </div>
+                      <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
+                        <i class="fa fa-refresh"></i> Lihat </button>
+                    </div>
+                    <div id="map" style="height: 70vh;background: #fbf8f8;"></div>
+                </div>
+                  <div class="card-body">
+                    <h4 class="judul-chart"> Progres Tiap Wilayah</h4>
+                    <div class="dropdown-chart">
+                    <div class="dropdownpadi">
+                        {{-- Tahun --}}
+                        @php
+                            $years = [];
+                            $currentYear = old('tahun_progres', $currentYear ?? 2030); // Gunakan nilai lama jika tersedia
+                            $minYear = $minYear ?? 2020; // Menyediakan tahun default jika tidak ada dari database
 
+                            // Generate array tahun dari tahun sekarang ke tahun terkecil
+                            for ($year = $currentYear; $year >= $minYear; $year--) {
+                                $years[] = $year;
+                            }
+                        @endphp
+                        <label for="tahun_progres">Tahun</label>
+                        <select id="tahun_progres" name="tahun_progres" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                            @foreach($years as $year)
+                                <option value="{{ $year }}" {{ $currentYear == $year ? 'selected' : '' }}>{{ $year }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="dropdownpadi">
                         {{-- Bulan --}}
                         @php
-                            $currentMonth = old('bulan', date('m')); // Gunakan nilai lama jika tersedia
+                            $currentMonth = old('bulan_progres', date('m')); // Gunakan nilai lama jika tersedia
                         @endphp
-                        <label for="bulan_peta">Bulan</label>
-                          <select id="bulan_peta" name="bulan_peta" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                        <label for="bulan_progres">Bulan</label>
+                        <select id="bulan_progres" name="bulan_progres" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
                             <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
                             <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
                             <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
@@ -81,57 +133,27 @@
                             <option value="10" {{ $currentMonth == '10' ? 'selected' : '' }}>10 - Oktober</option>
                             <option value="11" {{ $currentMonth == '11' ? 'selected' : '' }}>11 - November</option>
                             <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
-                          </select>
-                      </div>
-                      <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
-                        <i class="fa fa-refresh"></i> Lihat </button>
-                    </div>
-                    <div id="map" style="height: 70vh;background: #fbf8f8;"></div>
-                </div>
-                  <div class="card-body">
-                    <h4 class="judul-chart"> Progres Tiap Wilayah</h4>
-                    <div class="dropdown-chart">
-                    <div class="dropdownpadi">
-                      <label>Tahun</label>
-                          <select style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">>
-                          <option>2024</option>
-                          <option>2023</option>
-                          <option>2022</option>
-                          <option>2021</option>
-                          </select>
+                        </select>
                     </div>
                     <div class="dropdownpadi">
-                      <label>Bulan</label>
-                          <select style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
-                          <option>01-Januari</option>
-                          <option>02-Februari</option>
-                          <option>03-Maret</option>
-                          <option>04-April</option>
-                          <option>05-Mei</option>
-                          <option>06-Juni</option>
-                          <option>07-Juli</option>
-                          <option>08-Agustus</option>
-                          <option>09-September</option>
-                          <option>10-Oktober</option>
-                          <option>11-November</option>
-                          <option>12-Desember</option>
+                        {{-- Jenis --}}
+                        @php
+                            $currentMonth = old('jenis_progres', 'subsegmen'); // Gunakan nilai lama jika tersedia
+                        @endphp
+                      <label for="jenis_progres">Segmen</label>
+                          <select id="jenis_progres" name="jenis_progres" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                            <option value="subsegmen">Subsegmen</option>
+                            <option value="segmen">Segmen</option>
+                            <option value="evita">Segmen dan Status</option>
                           </select>
                     </div>
-                    <div class="dropdownpadi">
-                      <label>Segmen</label>
-                          <select style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
-                          <option>Subsegmen</option>
-                          <option>Segmen</option>
-                          <option>Segmen dan Status</option>
-                          </select>
-                    </div>
-                    <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
+                    <button id="lihat_progres" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
                         <i class="fa fa-refresh"></i> Lihat </button>
                     </div>
                     <div>
                     <div class="row">
                         <div class="chartBox">
-                            <canvas id="Chart" style="display: initial; box-sizing: border-box; height: 1000px; width: 800px;font-weight: bold;"></canvas>
+                            <canvas id="Chart" style="display: initial; box-sizing: border-box; height: 105vh; width: 800px;font-weight: bold;"></canvas>
                       </div>
                     </div>
                     </div>
@@ -303,10 +325,10 @@
     var legend = L.control({position: 'bottomright'});
 
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const ctx = document.getElementById('Chart').getContext('2d');
-  const labels = [
+  var labels = [
     "Kabupaten Cilacap",
     "Kabupaten Banyumas",
     "Kabupaten Purbalingga",
@@ -344,7 +366,7 @@
     "Kota Tegal",
     "Provinsi Jawa Tengah"
   ];
-  const rawData = [
+  var rawData = [
     [65, 28, 18],
     [59, 48, 38],
     [80, 40, 70],
@@ -476,7 +498,7 @@
       }
     }
   });
-</script>
+</script> --}}
 <script type="text/javascript">
     $(document).ready(function() {
         $('#lihat_peta').click(function() {
@@ -512,6 +534,216 @@
                         style: style,
                         onEachFeature: onEachFeature
                     }).addTo(map);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Terjadi kesalahan: ', error);
+                }
+            });
+        });
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    let myChart;
+
+    $(document).ready(function() {
+        $('#lihat_progres').click(function() {
+            // Ambil nilai dari dropdown
+            var tahun = $('#tahun_progres').val();
+            var bulan = $('#bulan_progres').val();
+            var jenis = $('#jenis_progres').val();
+            console.log(jenis);
+
+            $.ajax({
+                url: '/padi-get-data-progres',
+                type: 'POST',
+                data: {
+                    tahun: tahun,
+                    bulan: bulan,
+                    jenis: jenis,
+                    _token: $('meta[name="csrf-token"]').attr('content') // Menambahkan CSRF token untuk Laravel
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log('Labels:', response.labels);
+                    console.log('Raw Data:', response.rawData);
+
+                    if (!Array.isArray(response.labels) || !Array.isArray(response.rawData)) {
+                        console.error('Format data tidak sesuai.');
+                        return;
+                    }
+
+                    var labels = response.labels;
+                    var rawData = response.rawData;
+
+                    // Verifikasi bahwa rawData adalah array yang berisi array
+                    if (!rawData.every(Array.isArray)) {
+                        console.error('rawData harus berupa array yang berisi array.');
+                        return;
+                    }
+
+                    // Convert rawData into percentages
+                    var data = rawData.map((dataSet) => {
+                        const total = dataSet.reduce((sum, value) => sum + value, 0);
+                        return dataSet.map((value) => (value / total) * 100);
+                    });
+
+                    let datasets = [];
+                    let jenis = $('#jenis_progres').val();
+                    // Periksa jenis
+                    if (jenis === 'segmen') {
+                        datasets.push(
+                            {
+                                axis: 'y',
+                                label: 'Konsisten',
+                                data: data.map(d => d[0]),
+                                rawData: rawData.map(d => d[0]),
+                                backgroundColor: '#92C98C',
+                                borderColor: '#92C98C',
+                                borderWidth: 1
+                            },
+                            {
+                                axis: 'y',
+                                label: 'Inkonsisten',
+                                data: data.map(d => d[1]),
+                                rawData: rawData.map(d => d[1]),
+                                backgroundColor: '#ED7D79',
+                                borderColor: '#ED7D79',
+                                borderWidth: 1
+                            }
+                        );
+                    } else if (jenis === 'evita') {
+                        datasets.push(
+                            {
+                                axis: 'y',
+                                label: 'Approved',
+                                data: data.map(d => d[0]),
+                                rawData: rawData.map(d => d[0]),
+                                backgroundColor: '#92C98C',
+                                borderColor: '#92C98C',
+                                borderWidth: 1
+                            },
+                            {
+                                axis: 'y',
+                                label: 'Rejected',
+                                data: data.map(d => d[1]),
+                                rawData: rawData.map(d => d[1]),
+                                backgroundColor: '#ED7D79',
+                                borderColor: '#ED7D79',
+                                borderWidth: 1
+                            }
+                        );
+                    } else {
+                        datasets.push(
+                            {
+                                axis: 'y',
+                                label: 'Konsisten',
+                                data: data.map(d => d[0]),
+                                rawData: rawData.map(d => d[0]),
+                                backgroundColor: '#92C98C',
+                                borderColor: '#92C98C',
+                                borderWidth: 1
+                            },
+                            {
+                                axis: 'y',
+                                label: 'Warning',
+                                data: data.map(d => d[1]),
+                                rawData: rawData.map(d => d[1]),
+                                backgroundColor: 'rgba(255, 205, 86, 0.6)',
+                                borderColor: 'rgba(255, 205, 86, 0.6)',
+                                borderWidth: 1
+                            },
+                            {
+                                axis: 'y',
+                                label: 'Inkonsisten',
+                                data: data.map(d => d[2]),
+                                rawData: rawData.map(d => d[2]),
+                                backgroundColor: '#ED7D79',
+                                borderColor: '#ED7D79',
+                                borderWidth: 1
+                            }
+                        );
+                    }
+
+                    const chartData = {
+                        labels: labels,
+                        datasets: datasets
+                    };
+
+                    // Hapus chart yang lama jika ada
+                    if (myChart instanceof Chart) {
+                        myChart.destroy();
+                    }
+
+                    // Buat chart baru
+                    const ctx = document.getElementById('Chart').getContext('2d');
+                    myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: chartData,
+                        options: {
+                            indexAxis: 'y',
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    min: 0, // Set minimum value of x-axis
+                                    max: 100, // Set maximum value of x-axis
+                                    stacked: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + '%';
+                                        },
+                                        font: {
+                                            weight: 'bold',
+                                            color: '#000'
+                                        },
+                                        color: '#000'
+                                    }
+                                },
+                                y: {
+                                    stacked: true,
+                                    ticks: {
+                                        font: {
+                                            weight: 'bold',
+                                            color: '#000'
+                                        },
+                                        color: '#000'
+                                    }
+                                }
+                            },
+                            elements: {
+                                bar: {
+                                    barThickness: 20, // Atur ketebalan bar
+                                    categoryPercentage: 0.8, // Kurangi ini untuk jarak antar bar lebih kecil
+                                }
+                            },
+                            plugins: {
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(tooltipItem) {
+                                            const dataset = tooltipItem.dataset;
+                                            const rawValue = dataset.rawData[tooltipItem.dataIndex];
+                                            const percentage = tooltipItem.raw.toFixed(2) + '%';
+                                            return [
+                                                dataset.label + ': ' + percentage,
+                                                'Nilai: ' + rawValue
+                                            ];
+                                        }
+                                    }
+                                },
+                                legend: {
+                                    labels: {
+                                        font: {
+                                            weight: 'bold',
+                                            color: '#000'
+                                        },
+                                        color: '#000'
+                                    }
+                                }
+                            }
+                        }
+                    });
                 },
                 error: function(xhr, status, error) {
                     console.error('Terjadi kesalahan: ', error);

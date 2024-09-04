@@ -600,12 +600,12 @@ class PadiAmatanController extends Controller
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
         $jenis = $request->input('jenis');
-        $get = ['indeks'];
+        $get = [];
 
         if($jenis == 'subsegmen'){
             $get[] = $jenis . '_K';
-            $get[] = $jenis . '_TK';
             $get[] = $jenis . '_W';
+            $get[] = $jenis . '_TK';
         } else if ($jenis == 'segmen'){
             $get[] = $jenis . '_K';
             $get[] = $jenis . '_TK';
@@ -615,9 +615,37 @@ class PadiAmatanController extends Controller
         }
 
         $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
-                            ->get($get);
+                            ->get(['indeks', ...$get]);
 
-        return response()->json($data);
+        $allKabKota = User::getAllKabKotaWithKeys();
+        $dataWithKeys = $data->mapWithKeys(function ($item) use ($get) {
+                                // Ambil nilai indeks
+                                $indeks = $item->indeks;
+
+                                // Ambil hanya kolom yang diinginkan dari $get
+                                $values = collect($item)->only($get)->toArray();
+
+                                // Ubah pasangan key-value menjadi array yang hanya berisi nilai
+                                $values = array_values($values);
+                                
+                                // Return format [indeks => [get1, get2, get3]]
+                                return [substr(strval($indeks), 6, 4) => $values];
+                            })
+                            ->toArray();
+
+        // Urutkan array berdasarkan key
+        ksort($allKabKota);
+        ksort($dataWithKeys);
+
+        // Ambil hanya nilai dari array yang telah diurutkan
+        $sortedAllKabKota = array_values($allKabKota);
+        $sortedData = array_values($dataWithKeys);
+
+        // dd($dataWithKeys, $allKabKota);
+        return response()->json([
+            'labels' => $sortedAllKabKota,
+            'rawData' => $sortedData,
+        ]);
     }
 
     public function testTerakhir(){

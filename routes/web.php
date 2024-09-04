@@ -70,6 +70,7 @@ Route::get('/padi-get-data-peta', [PadiAmatanController::class, 'getDataPeta']);
 Route::post('/padi-get-data-peta', [PadiAmatanController::class, 'getDataPeta'])->name('padi.get.data.peta');
 
 Route::get('/test-progres', [PadiAmatanController::class, 'testProgres']);
+Route::get('/padi-get-data-progres', [PadiAmatanController::class, 'getDataProgres']);
 Route::post('/padi-get-data-progres', [PadiAmatanController::class, 'getDataProgres'])->name('padi.get.data.progres');
 
 Route::get('/test-terakhir', [PadiAmatanController::class, 'testTerakhir']);

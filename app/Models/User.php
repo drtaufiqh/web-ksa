@@ -49,4 +49,18 @@ class User extends Authenticatable
             ->distinct()
             ->pluck('kode_nama');
     }
+
+    public static function getAllKabKotaWithKeys() {
+        // Misalkan ini adalah koleksi Anda
+        $collection = collect(self::getAllKabKota());
+
+        // Ubah menjadi array asosiatif
+        $kabkotaArray = $collection->mapWithKeys(function ($item) {
+            // Pisahkan ID dan nama kabupaten/kota berdasarkan tanda strip " - "
+            list($id, $name) = explode(' - ', $item);
+            return [$id => $name];
+        })->toArray();
+
+        return $kabkotaArray;
+    }
 }
