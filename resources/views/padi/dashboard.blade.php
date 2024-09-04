@@ -192,6 +192,10 @@
 <!-- Make sure you put this AFTER Leaflet's CSS -->
 <script type="text/javascript" src="assets/js/data/jateng.js"></script>
 <script type="text/javascript">
+    geodata.features.forEach(function(feature) {
+        feature.properties.KONSISTEN_P = 'Tidak ada data';
+    });
+
     var map = L.map('map').setView([-7.150975, 110.1402594], 8);
 
     var LayerKita = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -220,14 +224,15 @@
     info.addTo(map);
 
     function getColor(d) {
-        return d > 50 ? '#800026' :
+        return d == 'Tidak ada data' ? '#666666' :
+               d > 50 ? '#800026' :
                d > 40 ? '#B41C17' :
                d > 30 ? '#CE2C29' :
                d > 20 ? '#ED7D79' :
                d > 10 ? '#EE978D' :
-               d >= 1  ? '#F5C4B6' :
-               d = 1  ?  '#92C98C' :
-                         '#666666';
+               d >= 1 ? '#F5C4B6' :
+               d = 1  ? '#92C98C' :
+                        '#666666';
     }
 
     function style(feature) {
@@ -332,6 +337,8 @@
                 success: function(response) {
                     // Simpan respons JSON ke variabel geodata
                     var geodata = response;
+
+                    console.log(geodata.features[0].properties);
 
                     // Hapus layer geojson yang ada jika ada
                     map.eachLayer(function(layer) {

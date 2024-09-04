@@ -269,7 +269,7 @@
 
             // Lakukan AJAX request untuk mendapatkan data
             $.ajax({
-                url: '/get-filtered-data',
+                url: '/padi-get-filtered-data',
                 method: 'GET',
                 data: {
                     tahun: tahun,

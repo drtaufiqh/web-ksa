@@ -558,12 +558,18 @@ class PadiAmatanController extends Controller
                             ->get(['indeks', 'subsegmen_TK']);
 
         // dd(substr($data[0]->indeks,6,4), $data[0]->indeks);
-        foreach ($geodata['features'] as $key => $feature) {
-            foreach ($data as $datum) {
-                if ($feature['properties']['IDKAB'] == substr($datum->indeks,6,4)) {
-                    // if($datum->indeks == '2024083321') dd($datum->subsegmen_TK);
-                    $geodata['features'][$key]['properties']['KONSISTEN_P'] = $datum->subsegmen_TK;
+        if ($data) {
+            foreach ($geodata['features'] as $key => $feature) {
+                foreach ($data as $datum) {
+                    if ($feature['properties']['IDKAB'] == substr($datum->indeks,6,4)) {
+                        // if($datum->indeks == '2024083321') dd($datum->subsegmen_TK);
+                        $geodata['features'][$key]['properties']['KONSISTEN_P'] = $datum->subsegmen_TK;
+                    }
                 }
+            }
+        } else {
+            foreach ($geodata['features'] as $key => $feature) {
+                $geodata['features'][$key]['properties']['KONSISTEN_P'] = 'Tidak ada data';
             }
         }
 

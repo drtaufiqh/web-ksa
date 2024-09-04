@@ -71,7 +71,7 @@ Route::get('/padi_detail/{id}/{tahun}/{bulan}', [PadiAmatanController::class, 's
 // padi_validasi
 Route::get('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi');
 Route::post('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi_post');
-Route::get('/get-filtered-data', [PadiValidasiController::class, 'getFilteredData'])->middleware('auth');
+Route::get('/padi-get-filtered-data', [PadiValidasiController::class, 'getFilteredData'])->middleware('auth');
 
 // padi_panduan
 Route::get('/padi_panduan', function () {
