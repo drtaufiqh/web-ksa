@@ -286,7 +286,7 @@
                 zoomToFeature(e);
                 L.popup()
                     .setLatLng(e.latlng)
-                    .setContent('<b>' + feature.properties.KABKOT + '</b><br />' + feature.properties.KONSISTEN_P + ' titik')
+                    .setContent('<b>' + feature.properties.KABKOT + '</b><br />' + feature.properties.KONSISTEN_P + ' subsegmen inkonsisten')
                     .openOn(map);
             }
         });

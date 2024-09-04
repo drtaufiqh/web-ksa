@@ -28,7 +28,7 @@
                   <i class="mdi mdi-logout me-2 text-primary"></i> Logout
                 </a>
               </div>
-            </li>        
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
                 <i class="mdi mdi-format-line-spacing"></i>
@@ -60,7 +60,7 @@
                   </div>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item preview-item">
+                <a class="dropdown-item preview-item" href="{{ route('ubinan.lacak') }}">
                   <div class="preview-thumbnail">
                     <div class="preview-icon bg-ubinan">
                       <i class="fa fa-cubes"></i>

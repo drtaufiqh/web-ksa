@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UbinanController;
 use App\Models\PadiAmatan;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
@@ -126,3 +127,10 @@ Route::post('/jagung-get-data-terakhir', [JagungAmatanController::class, 'getDat
 Route::get('/jagung-test-berjalan', [JagungAmatanController::class, 'testBerjalan']);
 Route::get('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDataBerjalan']);
 Route::post('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDataBerjalan'])->name('jagung.get.data.berjalan');
+
+// ubinan
+
+Route::get('/ubinan-lacak', [UbinanController::class, 'showLacak'])->name('ubinan.lacak');
+Route::get('/ubinan-potensial', [UbinanController::class, 'showPotensial'])->name('ubinan.potensial');
+Route::get('/ubinan-unggah', [UbinanController::class, 'showUnggah'])->name('ubinan.unggah');
+Route::get('/ubinan-riwayat', [UbinanController::class, 'showRiwayat'])->name('ubinan.riwayat');
