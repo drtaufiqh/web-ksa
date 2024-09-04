@@ -27,11 +27,6 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/img/logo.png" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <style>
-        #Chart {
-            display: initial; box-sizing: border-box; height: 105vh; width: 800px;font-weight: bold;
-        }
-    </style>
   </head>
   <body>
     <div class="container-scroller">
@@ -152,7 +147,7 @@
                     </div>
                     <div>
                     <div class="row">
-                        <div class="chartBox">
+                        <div id="chartContainer" class="chartBox">
                             <canvas id="Chart" style="display: initial; box-sizing: border-box; height: 105vh; width: 800px;font-weight: bold;"></canvas>
                       </div>
                     </div>
@@ -574,6 +569,14 @@
                         console.error('Format data tidak sesuai.');
                         return;
                     }
+                    // Hapus canvas lama
+                    $('#Chart').remove();
+                    // Tambahkan canvas baru
+                    $('#chartContainer').append('<canvas id="Chart" style="display: initial; box-sizing: border-box; height: 105vh; width: 800px;font-weight: bold;"></canvas>');
+
+                    // Debugging untuk memastikan canvas ditambahkan
+                    console.log($('#chartContainer').html());
+                    console.log(document.getElementById('Chart')); // Pastikan ini tidak bernilai null
 
                     var labels = response.labels;
                     var rawData = response.rawData;
@@ -678,7 +681,8 @@
                     }
 
                     // Buat chart baru
-                    const ctx = document.getElementById('Chart').getContext('2d');
+                    const canvas = document.getElementById('Chart');
+                    const ctx = canvas.getContext('2d');
                     myChart = new Chart(ctx, {
                         type: 'bar',
                         data: chartData,
