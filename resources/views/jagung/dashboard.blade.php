@@ -305,7 +305,6 @@
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<canvas id="Chart"></canvas>
 <script>
   const ctx = document.getElementById('Chart').getContext('2d');
   const labels = [
