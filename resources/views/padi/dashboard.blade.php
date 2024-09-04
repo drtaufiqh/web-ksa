@@ -21,6 +21,7 @@
     <!-- Map Js -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Layout styles -->
     <link rel="stylesheet" href="/assets/css/style.css">
     <!-- End layout styles -->
@@ -35,9 +36,6 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title"> Beranda </h3>
-            </div>
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
               <div class="card">
@@ -57,7 +55,7 @@
                             }
                         @endphp
                         <label for="tahun_peta">Tahun</label>
-                            <select id="tahun_peta" name="tahun_peta" style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                            <select id="tahun_peta" name="tahun_peta" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
                                 @foreach($years as $year)
                                     <option value="{{ $year }}" {{ $currentYear == $year ? 'selected' : '' }}>{{ $year }}</option>
                                 @endforeach
@@ -70,7 +68,7 @@
                             $currentMonth = old('bulan', date('m')); // Gunakan nilai lama jika tersedia
                         @endphp
                         <label for="bulan_peta">Bulan</label>
-                          <select id="bulan_peta" name="bulan_peta" style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                          <select id="bulan_peta" name="bulan_peta" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
                             <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
                             <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
                             <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
@@ -85,17 +83,17 @@
                             <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
                           </select>
                       </div>
-                      <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #87c351;">
+                      <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
                         <i class="fa fa-refresh"></i> Lihat </button>
                     </div>
-                    <div id="map"></div>
+                    <div id="map" style="height: 70vh;background: #fbf8f8;"></div>
                 </div>
                   <div class="card-body">
                     <h4 class="judul-chart"> Progres Tiap Wilayah</h4>
                     <div class="dropdown-chart">
                     <div class="dropdownpadi">
                       <label>Tahun</label>
-                          <select style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">>
+                          <select style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">>
                           <option>2024</option>
                           <option>2023</option>
                           <option>2022</option>
@@ -104,7 +102,7 @@
                     </div>
                     <div class="dropdownpadi">
                       <label>Bulan</label>
-                          <select style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                          <select style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
                           <option>01-Januari</option>
                           <option>02-Februari</option>
                           <option>03-Maret</option>
@@ -121,30 +119,19 @@
                     </div>
                     <div class="dropdownpadi">
                       <label>Segmen</label>
-                          <select style="background-color: #87C351; border: transparent;color: #FFFFFF;font-weight: bold;">
+                          <select style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
                           <option>Subsegmen</option>
                           <option>Segmen</option>
                           <option>Segmen dan Status</option>
                           </select>
                     </div>
+                    <button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
+                        <i class="fa fa-refresh"></i> Lihat </button>
                     </div>
                     <div>
                     <div class="row">
-                      <div class="col-lg-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body">
-                            <h4 class="card-title">Kabupaten Kota</h4>
-                            <canvas id="barChart" style="height: 292px; display: block; box-sizing: border-box; width: 585px;" width="1170" height="585"></canvas>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-lg-6 grid-margin stretch-card">
-                        <div class="card">
-                          <div class="card-body">
-                            <h4 class="card-title">Provinsi</h4>
-                            <canvas id="barChart" style="height: 292px; display: block; box-sizing: border-box; width: 585px;" width="1170" height="585"></canvas>
-                          </div>
-                        </div>
+                        <div class="chartBox">
+                            <canvas id="Chart" style="display: initial; box-sizing: border-box; height: 1000px; width: 800px;font-weight: bold;"></canvas>
                       </div>
                     </div>
                     </div>
@@ -217,7 +204,7 @@
 
     info.update = function(props) {
         this._div.innerHTML = '<h4>Peta Sebaran Konsistensi</h4>' + (props ?
-            '<b>' + props.KABKOT + '</b><br />' + props.KONSISTEN_P + ' titik' :
+            '<b>' + props.KABKOT + '</b><br />' + props.KONSISTEN_P + ' subsegmen inkonsisten' :
             'Dekatkan mouse untuk melihat');
     };
 
@@ -225,7 +212,7 @@
 
     function getColor(d) {
         return d == 'Tidak ada data' ? '#666666' :
-               d > 50 ? '#800026' :
+               d > 50 ? '#850D0C' :
                d > 40 ? '#B41C17' :
                d > 30 ? '#CE2C29' :
                d > 20 ? '#ED7D79' :
@@ -316,7 +303,181 @@
     var legend = L.control({position: 'bottomright'});
 
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<canvas id="Chart"></canvas>
+<script>
+  const ctx = document.getElementById('Chart').getContext('2d');
+  const labels = [
+    "Kabupaten Cilacap",
+    "Kabupaten Banyumas",
+    "Kabupaten Purbalingga",
+    "Kabupaten Banjarnegara",
+    "Kabupaten Kebumen",
+    "Kabupaten Purworejo",
+    "Kabupaten Wonosobo",
+    "Kabupaten Magelang",
+    "Kabupaten Boyolali",
+    "Kabupaten Klaten",
+    "Kabupaten Sukoharjo",
+    "Kabupaten Wonogiri",
+    "Kabupaten Karanganyar",
+    "Kabupaten Sragen",
+    "Kabupaten Grobogan",
+    "Kabupaten Blora",
+    "Kabupaten Rembang",
+    "Kabupaten Pati",
+    "Kabupaten Kudus",
+    "Kabupaten Jepara",
+    "Kabupaten Demak",
+    "Kabupaten Semarang",
+    "Kabupaten Temanggung",
+    "Kabupaten Kendal",
+    "Kabupaten Batang",
+    "Kabupaten Pekalongan",
+    "Kabupaten Pemalang",
+    "Kabupaten Tegal",
+    "Kabupaten Brebes",
+    "Kota Magelang",
+    "Kota Surakarta",
+    "Kota Salatiga",
+    "Kota Semarang",
+    "Kota Pekalongan",
+    "Kota Tegal",
+    "Provinsi Jawa Tengah"
+  ];
+  const rawData = [
+    [65, 28, 18],
+    [59, 48, 38],
+    [80, 40, 70],
+    [81, 19, 29],
+    [56, 86, 66],
+    [55, 27, 77],
+    [40, 90, 20],
+    [60, 50, 30],
+    [65, 28, 18],
+    [59, 48, 38],
+    [80, 40, 70],
+    [81, 19, 29],
+    [56, 86, 66],
+    [55, 27, 77],
+    [40, 90, 20],
+    [60, 50, 30],
+    [65, 28, 18],
+    [59, 48, 38],
+    [80, 40, 70],
+    [81, 19, 29],
+    [56, 86, 66],
+    [55, 27, 77],
+    [40, 90, 20],
+    [60, 50, 30],
+    [65, 28, 18],
+    [59, 48, 38],
+    [80, 40, 70],
+    [81, 19, 29],
+    [56, 86, 66],
+    [55, 27, 77],
+    [40, 90, 20],
+    [60, 50, 30],
+    [55, 27, 77],
+    [40, 90, 20],
+    [60, 50, 30],
+    [6000, 5000, 3000]
+  ];
+  // Convert raw data into percentages
+  const data = rawData.map((dataSet) => {
+    const total = dataSet.reduce((sum, value) => sum + value, 0);
+    return dataSet.map((value) => (value / total) * 100);
+  });
+  const chartData = {
+    labels: labels,
+    datasets: [
+      {
+        axis: 'y',
+        label: 'Konsisten',
+        data: data.map(d => d[0]),
+        rawData: rawData.map(d => d[0]), // Store raw data for tooltips
+        backgroundColor: '#92C98C',
+        borderColor: '#92C98C',
+        borderWidth: 1
+      },
+      {
+        axis: 'y',
+        label: 'Warning',
+        data: data.map(d => d[1]),
+        rawData: rawData.map(d => d[1]), // Store raw data for tooltips
+        backgroundColor: 'rgba(255, 205, 86, 0.6)',
+        borderColor: 'rgba(255, 205, 86, 0.6)',
+        borderWidth: 1
+      },
+      {
+        axis: 'y',
+        label: 'Inkonsisten',
+        data: data.map(d => d[2]),
+        rawData: rawData.map(d => d[2]), // Store raw data for tooltips
+        backgroundColor: '#ED7D79',
+        borderColor: '#ED7D79',
+        borderWidth: 1
+      }
+    ]
+  };
+  new Chart(ctx, {
+    type: 'bar',
+    data: chartData,
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: {
+          beginAtZero: true,
+          stacked: true,
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            },
+            font: {
+              weight: 'bold',
+              color: '#000'  // Set x-axis labels to bold and black
+            },
+            color: '#000' // Color of the x-axis labels
+          }
+        },
+        y: {
+          stacked: true,
+          ticks: {
+            font: {
+              weight: 'bold',
+              color: '#000'  // Set y-axis labels to bold and black
+            },
+            color: '#000' // Color of the y-axis labels
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(tooltipItem) {
+              const dataset = tooltipItem.dataset;
+              const rawValue = dataset.rawData[tooltipItem.dataIndex];
+              const percentage = tooltipItem.raw.toFixed(2) + '%';
+              return [
+                dataset.label + ': ' + percentage,
+                'Nilai: ' + rawValue
+              ];
+            }
+          }
+        },
+        legend: {
+          labels: {
+            font: {
+              weight: 'bold',
+              color: '#000' // Set legend labels to bold and black
+            },
+            color: '#000' // Color of the legend labels
+          }
+        }
+      }
+    }
+  });
+</script>
 <script type="text/javascript">
     $(document).ready(function() {
         $('#lihat_peta').click(function() {
