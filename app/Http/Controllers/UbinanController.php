@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ubinan;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +32,16 @@ class UbinanController extends Controller
         ]);
     }
     public function showRiwayat(){
-        return view("ubinan.riwayat");
+        $allKabKota = User::getAllKabKota();
+        $data = DB::table('ubinans')
+            ->join('users', 'ubinans.kode_kabkota', '=', 'users.kode')
+            ->selectRaw('CONCAT(ubinans.kode_kabkota, " - ", users.nama) as kab_kota, ubinans.kode_kabkota as kode_kabkota, ubinans.tahun, ubinans.bulan, COUNT(*) as baris, MAX(ubinans.updated_at) as last_update')
+            ->groupBy('ubinans.kode_kabkota', 'ubinans.tahun', 'ubinans.bulan', 'users.nama')
+            ->get();
+        return view("ubinan.riwayat", [
+            'data' => $data,
+            'allKabKota' => $allKabKota,
+        ]);
     }
 
     public function import(Request $request){
@@ -191,5 +202,18 @@ class UbinanController extends Controller
         //     unlink($target_file);
         }
         // echo json_encode($message);
+    }
+
+    public function showDetail($id, $tahun, $bulan){
+        // Ambil data detail dari database berdasarkan ID
+        $data = Ubinan::where('kode_kabkota', $id)
+            ->where('tahun', $tahun)
+            ->where('bulan', $bulan)
+            ->get(); // Sesuaikan dengan query Anda
+
+        // Kirimkan data dalam format JSON
+        return response()->json([
+            'data' => $data
+        ]);
     }
 }
