@@ -131,6 +131,9 @@ Route::post('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDat
 // ubinan
 
 Route::get('/ubinan-lacak', [UbinanController::class, 'showLacak'])->name('ubinan.lacak');
+Route::post('/ubinan-lacak-proses', [UbinanController::class, 'proses'])->name('ubinan.lacak.proses');
+Route::get('/ubinan-lacak-proses', [UbinanController::class, 'proses']);
+
 Route::get('/ubinan-potensial', [UbinanController::class, 'showPotensial'])->name('ubinan.potensial');
 
 Route::get('/ubinan-unggah', [UbinanController::class, 'showUnggah'])->name('ubinan.unggah');

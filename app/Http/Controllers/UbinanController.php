@@ -152,7 +152,7 @@ class UbinanController extends Controller
                         'hp_pcs' => $row[$headerIndexes['hp_pcs']],
                         'pms' => $row[$headerIndexes['nama_pms']],
                         'hp_pms' => $row[$headerIndexes['hp_pms']],
-                        'bln' => $row[$headerIndexes['frame_ksa']],
+                        'bln' => $row[$headerIndexes['bulan']],
                         'subround' => $row[$headerIndexes['subround']],
                         'jenis_sampel' => $row[$headerIndexes['jenis_sampel']],
                         'akun' => Auth::user()->email,
@@ -215,5 +215,139 @@ class UbinanController extends Controller
         return response()->json([
             'data' => $data
         ]);
+    }
+
+    public function proses(Request $request){
+        $err = 0;
+        $tabul = $request->input('tabul');
+        $bulansampel = $request->input('bulansampel');
+        $tahunsampel = $request->input('tahunsampel');
+
+        $wil = Auth::user()->kode;
+        if(Auth::user()->role=='prov'){
+            $prov = substr($wil,0,2);
+        } else {
+            $prov = $wil;
+        }
+        switch($bulansampel){
+            case 1:
+                $tabul0 = $tahunsampel.'01';
+                $tabul1 = $tahunsampel.'02';
+                break;
+            case 3:
+                $tabul0 = $tahunsampel.'03';
+                $tabul1 = $tahunsampel.'04';
+                break;
+            case 5:
+                $tabul0 = $tahunsampel.'05';
+                $tabul1 = $tahunsampel.'06';
+                break;
+            case 7:
+                $tabul0 = $tahunsampel.'07';
+                $tabul1 = $tahunsampel.'08';
+                break;
+            case 9:
+                $tabul0 = $tahunsampel.'09';
+                $tabul1 = $tahunsampel.'10';
+                break;
+            case 11:
+                $tabul0 = $tahunsampel.'11';
+                $tabul1 = $tahunsampel.'12';
+                break;
+
+            case 21:
+                $tabul0 = $tahunsampel.'01';
+                $tabul1 = $tahunsampel.'04';
+                break;
+            case 22:
+                $tabul0 = $tahunsampel.'05';
+                $tabul1 = $tahunsampel.'08';
+                break;
+            case 23:
+                $tabul0 = $tahunsampel.'09';
+                $tabul1 = $tahunsampel.'12';
+                break;
+        }
+
+        if($err == 0){
+            $dataSampel = Ubinan::getSampel($tabul0.$prov,$tabul1.$prov);
+            $tabel = 'padi_amatans';
+            $dataAmatan = Ubinan::getData($tabul.$prov,$tabel);
+
+            $count = [];
+            $count[0] = 0;
+            $count[1] = 0;
+            $count[2] = 0;
+            $count[3] = 0;
+            $count[4] = 0;
+            $count[5] = 0;
+
+            if(!empty($dataSampel) && !empty($dataAmatan) ){
+                foreach($dataSampel as $s){
+                    if(ISSET($dataAmatan[$s['kode_segmen']])){
+                        $dataSampel[$s['kode_segmen'].$s['subsegmen']]['amatan'] = $dataAmatan[$s['kode_segmen']][strtolower($s['subsegmen'])];
+                    } else {
+                        $dataSampel[$s['kode_segmen'].$s['subsegmen']]['amatan'] = 0;
+                    }
+                    $dataSampel[$s['kode_segmen'].$s['subsegmen']]['color'] = $this->color($dataSampel[$s['kode_segmen'].$s['subsegmen']]['amatan']);
+                    $dataSampel[$s['kode_segmen'].$s['subsegmen']]['keterangan'] = $this->status($dataSampel[$s['kode_segmen'].$s['subsegmen']]['amatan']);
+
+                    if($dataSampel[$s['kode_segmen'].$s['subsegmen']]['keterangan'] == 'AVAILABLE'){
+                        if($dataSampel[$s['kode_segmen'].$s['subsegmen']]['jenis_sampel'] == 'U'){
+                            $count[0] += 1;
+                        } else {
+                            $count[3] += 1;
+                        }
+                    } else if($dataSampel[$s['kode_segmen'].$s['subsegmen']]['keterangan'] == 'UNAVAILABLE'){
+                        if($dataSampel[$s['kode_segmen'].$s['subsegmen']]['jenis_sampel'] == 'U'){
+                            $count[1] += 1;
+                        } else {
+                            $count[4] += 1;
+                        }
+                    } else if($dataSampel[$s['kode_segmen'].$s['subsegmen']]['keterangan'] == 'NON-ELIGIBLE'){
+                        if($dataSampel[$s['kode_segmen'].$s['subsegmen']]['jenis_sampel'] == 'U'){
+                            $count[2] += 1;
+                        } else {
+                            $count[5] += 1;
+                        }
+                    }
+
+                }
+
+                $message = array(
+                    'status' => true,
+                    'tabul0' => $tabul0,
+                    'amatan' => $dataAmatan,
+                    'sampel' => $dataSampel,
+                    'count' => $count
+                );
+            } else {
+                $message = array(
+                    'status' => false,
+                    'message' => 'Ada minimal salah satu sumber data belum diupload'
+                );
+            }
+        }
+        return json_encode($message);
+    }
+
+    function color($x){
+        if($x==2 || $x==3){
+            return '#abe96c';
+        } else if($x==4){
+            return '#ffc37c';
+        } else {
+            return '#ff5050';
+        }
+    }
+
+    function status($x){
+        if($x==2 || $x==3){
+            return 'AVAILABLE';
+        } else if($x==4){
+            return 'UNAVAILABLE';
+        } else {
+            return 'NON-ELIGIBLE';
+        }
     }
 }
