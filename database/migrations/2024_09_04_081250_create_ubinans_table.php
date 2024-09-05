@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('kec', 256)->nullable();
             $table->string('lokasi', 256)->nullable();
             $table->string('kode_segmen', 9)->nullable();
+            $table->string('kode_kabkota', 4)->nullable();
             $table->string('subsegmen', 2)->nullable();
             $table->string('fase', 2)->nullable();
             $table->string('strata', 2)->nullable();

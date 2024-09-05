@@ -116,7 +116,7 @@
                         <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110A_3301_jagung.xlsx</p>
                     </div>
                     {{-- Submit --}}
-                    <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
+                    <button type="submit" class="btn btn-gradient-primary me-2" style="background: linear-gradient(to right, #3b7d46, #659f3b);">Submit</button>
 
                     {{-- Loading Spinner --}}
                     <div id="loading1" class="text-center" style="display: none;">
