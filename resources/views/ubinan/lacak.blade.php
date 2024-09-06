@@ -40,7 +40,7 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                    <form id="formulir">
+                    <form id="formulir-awal">
                     @csrf
                         <div class="form-group row" id="tahun_g" style="margin-bottom: 0;">
                           <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Tahun Amatan</label>
@@ -319,7 +319,7 @@
         $('#pesanContainer').html(
             '<div id="tombolModal" style="text-align:center">'+
                 '<div id="pesan" style="text-align:center"></div>'+
-                '<button id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
+                '<button type="button" id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
             '</div>'
         );
     }
@@ -334,7 +334,7 @@
         $('#pesanContainer').html(
             '<div id="tombolModal" style="text-align:center">'+
                 '<div id="pesan" style="text-align:center"></div>'+
-                '<button id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
+                '<button type="button" id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
             '</div>'
         );
     }
@@ -485,8 +485,7 @@
                                     '</thead>'+
                                     '<tbody id="bodyTable"></tbody>'+
                                 '</table>'+
-                            '</div>'+
-                            '<button class="btn" onclick="unduh()" style="background-color:#006F9E;color:#ffffff;position:fixed;right:5px;bottom:5px;"><i class="fas fa-download"></i> Unduh</button>'
+                            '</div>'
                         );
                         for(x in d.sampel){
                             $('#bodyTable').append(

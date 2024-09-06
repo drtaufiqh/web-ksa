@@ -136,6 +136,8 @@ Route::post('/ubinan-lacak-proses', [UbinanController::class, 'proses'])->name('
 Route::get('/ubinan-lacak-proses', [UbinanController::class, 'proses']);
 Route::post('/ubinan/petani/getBySubsegmen/{segmen}/{sub}', [PetaniController::class, 'getBySubsegmen']);
 Route::get('/ubinan/petani/getBySubsegmen/{segmen}/{sub}', [PetaniController::class, 'getBySubsegmen']);
+Route::post('/ubinan/petani/insertPetani', [PetaniController::class, 'insertPetani']);
+Route::get('/ubinan/petani/insertPetani', [PetaniController::class, 'insertPetani']);
 
 Route::get('/ubinan-potensial', [UbinanController::class, 'showPotensial'])->name('ubinan.potensial');
 
