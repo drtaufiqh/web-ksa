@@ -66,4 +66,42 @@ class PetaniController extends Controller
         );
         return json_encode($message);
     }
+
+    public function deletePetani(Request $request){
+        $id = $request->input('id');
+        $kode_segmen = $request->input('kode_segmen');
+        $subsegmen = $request->input('subsegmen');
+
+        if (empty($id)) {
+            // Fetch data by subsegmen
+            $cekData = Petani::where('kode_segmen', $kode_segmen)
+                              ->where('subsegmen', $subsegmen)
+                              ->first();
+
+            if ($cekData) {
+                // Delete by ID from fetched data
+                $cekData->delete();
+                $response = ['message' => 'Data successfully deleted'];
+            } else {
+                $response = ['message' => 'No data found to delete'];
+            }
+        } else {
+            // Delete by ID
+            $petani = Petani::find($id);
+
+            if ($petani) {
+                $petani->delete();
+                $response = ['message' => 'Data successfully deleted'];
+            } else {
+                $response = ['message' => 'No data found to delete'];
+            }
+        }
+
+        $message = array(
+            'status' => true,
+            'message' => 'Proses penghapusan berhasil'
+        );
+
+        return json_encode($message);
+    }
 }

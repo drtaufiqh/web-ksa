@@ -138,6 +138,8 @@ Route::post('/ubinan/petani/getBySubsegmen/{segmen}/{sub}', [PetaniController::c
 Route::get('/ubinan/petani/getBySubsegmen/{segmen}/{sub}', [PetaniController::class, 'getBySubsegmen']);
 Route::post('/ubinan/petani/insertPetani', [PetaniController::class, 'insertPetani']);
 Route::get('/ubinan/petani/insertPetani', [PetaniController::class, 'insertPetani']);
+Route::post('/ubinan/petani/deletePetani', [PetaniController::class, 'deletePetani']);
+Route::get('/ubinan/petani/deletePetani', [PetaniController::class, 'deletePetani']);
 
 Route::get('/ubinan-potensial', [UbinanController::class, 'showPotensial'])->name('ubinan.potensial');
 
