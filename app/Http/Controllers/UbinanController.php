@@ -356,4 +356,177 @@ class UbinanController extends Controller
             return 'NON-ELIGIBLE';
         }
     }
+
+    public function cadangan(Request $request){
+        $err = 0;
+        $tabul = $request->input('tabul');
+        $bulansampel = $request->input('bulansampel');
+        $tahunsampel = $request->input('tahunsampel');
+
+        $wil = Auth::user()->kode;
+        if(Auth::user()->role=='prov'){
+            $prov = substr($wil,0,2);
+        } else {
+            $prov = $wil;
+        }
+        // dd($bulansampel, $tahunsampel, $tabul);
+        switch($bulansampel){
+            case 1:
+                $tabul0 = $tahunsampel.'01';
+                $tabul1 = $tahunsampel.'02';
+                break;
+            case 3:
+                $tabul0 = $tahunsampel.'03';
+                $tabul1 = $tahunsampel.'04';
+                $tabul2 = $tahunsampel.'01';
+                $tabul3 = $tahunsampel.'02';
+                break;
+            case 5:
+                $tabul0 = $tahunsampel.'05';
+                $tabul1 = $tahunsampel.'06';
+                break;
+            case 7:
+                $tabul0 = $tahunsampel.'07';
+                $tabul1 = $tahunsampel.'08';
+                $tabul2 = $tahunsampel.'05';
+                $tabul3 = $tahunsampel.'06';
+                break;
+            case 9:
+                $tabul0 = $tahunsampel.'09';
+                $tabul1 = $tahunsampel.'10';
+                break;
+            case 11:
+                $tabul0 = $tahunsampel.'11';
+                $tabul1 = $tahunsampel.'12';
+                $tabul2 = $tahunsampel.'09';
+                $tabul3 = $tahunsampel.'10';
+                break;
+        }
+
+        if($err == 0){
+            if($bulansampel==1 || $bulansampel==5 || $bulansampel ==9){
+                $dataSampel = Ubinan::getSampel($tabul0.$prov,$tabul1.$prov);
+            } else {
+                $dataSampel = Ubinan::getSampelSubround($tabul0.$prov,$tabul1.$prov,$tabul2.$prov,$tabul3.$prov);
+            }
+            $tabel = 'padi_amatans';
+            $dataAmatan = Ubinan::getData($tabul.$prov,$tabel);
+
+            $segmen = [];//segmen yang ada fase 2 dan 3
+            $elig = [];//data yang eligible, diluar sampel
+            $count = [];
+            $count[0] = 0;
+            $count[1] = 0;
+            $count[2] = 0;
+            $count[3] = 0;
+            $count[4] = 0;
+
+            if(!empty($dataSampel) && !empty($dataAmatan) ){
+                //tambahin aja subsegmen ....
+                $row = 0;
+                foreach($dataAmatan as $a){
+                    $subseg = 'x1';
+                    if(ISSET($dataSampel[$a['kode_segmen']])){
+                        $subseg = strtolower($dataSampel[$a['kode_segmen']]['subsegmen']);
+                    }
+                    if(($a['a1'] == 2 || $a['a1'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'A1'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'A1',
+                            'amatan' => $a['a1'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['a2'] == 2 || $a['a2'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'A2'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'A2',
+                            'amatan' => $a['a2'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['a3'] == 2 || $a['a3'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'A3'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'A3',
+                            'amatan' => $a['a3'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['b1'] == 2 || $a['b1'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'B1'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'B1',
+                            'amatan' => $a['b1'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['b2'] == 2 || $a['b2'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'B2'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'B2',
+                            'amatan' => $a['b2'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['b3'] == 2 || $a['b3'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'B3'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'B3',
+                            'amatan' => $a['b3'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['c1'] == 2 || $a['c1'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'C1'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'C1',
+                            'amatan' => $a['c1'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['c2'] == 2 || $a['c2'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'C2'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'C2',
+                            'amatan' => $a['c2'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                    if(($a['c3'] == 2 || $a['c3'] == 3) && !ISSET($dataSampel[$a['kode_segmen'].'C3'])){
+                        $segmen[$row] = array(
+                            'kode_segmen' => $a['kode_segmen'],
+                            'subsegmen' => 'C3',
+                            'amatan' => $a['c3'],
+                            'kel' => $a['kel'],
+                        );
+                        $row++;
+                    }
+                }
+
+                $message = array(
+                    'status' => true,
+                    'tabul0' => $tabul0,
+                    'amatan' => $dataAmatan,
+                    'sampel' => $dataSampel,
+                    'segmen' => $segmen,
+                    'count' => $count
+                );
+            } else {
+                $message = array(
+                    'status' => false,
+                    'message' => 'Ada minimal salah satu sumber data belum diupload'
+                );
+            }
+        }
+        return json_encode($message);
+    }
 }

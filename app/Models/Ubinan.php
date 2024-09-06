@@ -65,6 +65,80 @@ class Ubinan extends Model
         return $arr;
     }
 
+    public static function getSampelSubround($indeks0, $indeks1, $indeks2, $indeks3){
+        $arr = [];
+
+        // Fetch data based on 'indeks0'
+        $data0 = Ubinan::where('indeks', 'like', $indeks0 . '%')->get();
+        foreach ($data0 as $row) {
+            $key = $row->kode_segmen . $row->subsegmen;
+            $arr[$key] = [
+                'kode_segmen' => $row->kode_segmen,
+                'subsegmen' => $row->subsegmen,
+                'lokasi' => $row->lokasi,
+                'strata' => $row->strata,
+                'nks' => $row->nks,
+                'pcs' => $row->pcs,
+                'pms' => $row->pms,
+                'bln' => $row->bln,
+                'jenis_sampel' => $row->jenis_sampel
+            ];
+        }
+
+        // Fetch data based on 'indeks1'
+        $data1 = Ubinan::where('indeks', 'like', $indeks1 . '%')->get();
+        foreach ($data1 as $row) {
+            $key = $row->kode_segmen . $row->subsegmen;
+            $arr[$key] = [
+                'kode_segmen' => $row->kode_segmen,
+                'subsegmen' => $row->subsegmen,
+                'lokasi' => $row->lokasi,
+                'strata' => $row->strata,
+                'nks' => $row->nks,
+                'pcs' => $row->pcs,
+                'pms' => $row->pms,
+                'bln' => $row->bln,
+                'jenis_sampel' => $row->jenis_sampel
+            ];
+        }
+
+        // Fetch data based on 'indeks2'
+        $data2 = Ubinan::where('indeks', 'like', $indeks2 . '%')->get();
+        foreach ($data2 as $row) {
+            $key = $row->kode_segmen . $row->subsegmen;
+            $arr[$key] = [
+                'kode_segmen' => $row->kode_segmen,
+                'subsegmen' => $row->subsegmen,
+                'lokasi' => $row->lokasi,
+                'strata' => $row->strata,
+                'nks' => $row->nks,
+                'pcs' => $row->pcs,
+                'pms' => $row->pms,
+                'bln' => $row->bln,
+                'jenis_sampel' => $row->jenis_sampel
+            ];
+        }
+
+        // Fetch data based on 'indeks3'
+        $data3 = Ubinan::where('indeks', 'like', $indeks3 . '%')->get();
+        foreach ($data3 as $row) {
+            $key = $row->kode_segmen . $row->subsegmen;
+            $arr[$key] = [
+                'kode_segmen' => $row->kode_segmen,
+                'subsegmen' => $row->subsegmen,
+                'lokasi' => $row->lokasi,
+                'strata' => $row->strata,
+                'nks' => $row->nks,
+                'pcs' => $row->pcs,
+                'pms' => $row->pms,
+                'bln' => $row->bln,
+                'jenis_sampel' => $row->jenis_sampel
+            ];
+        }
+
+        return $arr;
+    }
+
     public static function getData($indeks, $tabel) {
         // Mengambil data berdasarkan indeks
         $data = DB::table($tabel)
