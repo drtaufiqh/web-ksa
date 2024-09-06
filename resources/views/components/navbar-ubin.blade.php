@@ -112,6 +112,12 @@
               </div>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{{ route('ubinan.kelola') }}">
+                <span class="menu-title">Kelola Data Petani</span>
+                <i class="fa fa-vcard-o"></i>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{{ route('ubinan.panduan') }}">
                 <span class="menu-title">Panduan</span>
                 <i class="fa fa-book"></i>

@@ -34,6 +34,9 @@ class UbinanController extends Controller
             'currentYear' => $currentYear,
         ]);
     }
+    public function showKelola(){
+        return view("ubinan.kelola");
+    }
     public function showRiwayat(){
         $allKabKota = User::getAllKabKota();
         $data = DB::table('ubinans')

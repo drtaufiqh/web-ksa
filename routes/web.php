@@ -143,6 +143,8 @@ Route::get('/ubinan/petani/deletePetani', [PetaniController::class, 'deletePetan
 
 Route::get('/ubinan-potensial', [UbinanController::class, 'showPotensial'])->name('ubinan.potensial');
 
+Route::get('/ubinan-kelola', [UbinanController::class, 'showKelola'])->name('ubinan.kelola');
+
 Route::get('/ubinan-unggah', [UbinanController::class, 'showUnggah'])->name('ubinan.unggah');
 Route::post('/ubinan/upload', [UbinanController::class, 'import'])->name('ubinan.upload');
 
