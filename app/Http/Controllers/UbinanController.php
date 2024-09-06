@@ -19,6 +19,9 @@ class UbinanController extends Controller
     public function showPotensial(){
         return view("ubinan.potensial");
     }
+    public function showPanduan(){
+        return view("ubinan.panduan");
+    }
     public function showUnggah(){
         // Ambil tahun terkecil dari database
         $minYear = Ubinan::min('tahun') ?? Carbon::now()->year;

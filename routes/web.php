@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PetaniController;
 use App\Http\Controllers\UbinanController;
 use App\Models\PadiAmatan;
 use Illuminate\Support\Facades\Route;
@@ -133,6 +134,8 @@ Route::post('/jagung-get-data-berjalan', [JagungAmatanController::class, 'getDat
 Route::get('/ubinan-lacak', [UbinanController::class, 'showLacak'])->name('ubinan.lacak');
 Route::post('/ubinan-lacak-proses', [UbinanController::class, 'proses'])->name('ubinan.lacak.proses');
 Route::get('/ubinan-lacak-proses', [UbinanController::class, 'proses']);
+Route::post('/ubinan/petani/getBySubsegmen/{segmen}/{sub}', [PetaniController::class, 'getBySubsegmen']);
+Route::get('/ubinan/petani/getBySubsegmen/{segmen}/{sub}', [PetaniController::class, 'getBySubsegmen']);
 
 Route::get('/ubinan-potensial', [UbinanController::class, 'showPotensial'])->name('ubinan.potensial');
 
@@ -141,3 +144,5 @@ Route::post('/ubinan/upload', [UbinanController::class, 'import'])->name('ubinan
 
 Route::get('/ubinan-riwayat', [UbinanController::class, 'showRiwayat'])->name('ubinan.riwayat');
 Route::get('/ubinan_detail/{id}/{tahun}/{bulan}', [UbinanController::class, 'showDetail']);
+
+Route::get('/ubinan-panduan', [UbinanController::class, 'showPanduan'])->name('ubinan.panduan');

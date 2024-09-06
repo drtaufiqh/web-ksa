@@ -23219,6 +23219,7 @@ code {
   text-transform: capitalize;
   font-family: "ubuntu-medium", sans-serif;
   font-size: 1.125rem;
+  text-align: center;
 }
 .card .card-subtitle {
   font-family: "ubuntu-regular", sans-serif;
@@ -26462,5 +26463,32 @@ dl li {
   color: #FFFF;
   font-weight: bold;
   margin: 0.5rem;
+  text-align:center;
+}
+
+.modal-header {
+  background-color: #5e5741;
+  color: white;
+}
+
+/* Adjust label and input to be inline */
+.form-group {
+  display: flex;
+  align-items: center;
+}
+
+.form-group label {
+  flex: 0 0 150px; /* Set fixed width for the label */
+  margin-bottom: 0; /* Remove bottom margin */
+}
+
+.form-group input, .form-group textarea {
+  flex: 1; /* Make input take the rest of the available space */
+}
+
+/* Style the submit button */
+.btn-primary {
+  background-color: #87c351;
+  border-color: #87c351;
 }
 /*# sourceMappingURL=maps/style.css.map */

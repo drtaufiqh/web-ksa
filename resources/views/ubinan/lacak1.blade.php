@@ -116,7 +116,7 @@
                     <div id="hasilValidasi"></div>
                   <form class="forms-sample">
 
-                    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                             <div class="modal-header" id="headerModal">
@@ -295,20 +295,7 @@
             } else {
                 $('#pesanContainer').html(pesanKosong);
             }
-            // Tampilkan modal
-            $('#editModal').modal({backdrop:'static', keyboard:false});
-            $('#editModal').on('hidden.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-                $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-            });
-            $('#editModal').on('show.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-            });
-            $('#editModal').on('hide.bs.modal', function (e) {
-                if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                    e.preventDefault();
-                }
-            });
+            $('#exampleModal').modal({backdrop:'static', keyboard:false});
         });
     }
 
@@ -421,100 +408,185 @@
             $('#pesan').html('');
             var data = {tabul: tabul, bulansampel: bulansampel, tahunsampel: tahunsampel};
             console.log('masuk else');
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type : "post",
-                url  : base_url+'ubinan-lacak-proses',
-                data : data,
-                success : function(data) {
-                    $('#loading1').hide();
-                    let d = JSON.parse(data);
-                    // tmp_data = d.sampel;
-                    if(d.status){
-                        $('#hasilValidasi').html(
-                            '<table class="table table-bordered table-sm" style="margin-top:5px">'+
-                                '<thead class="thead-light">'+
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     }
+            // });
+            // $.ajax({
+            //     type : "post",
+            //     url  : base_url+'ubinan-lacak-proses',
+            //     data : data,
+            //     success : function(data) {
+            //         $('#loading1').hide();
+            //         let d = JSON.parse(data);
+            //         // tmp_data = d.sampel;
+            //         if(d.status){
+            //             $('#hasilValidasi').html(
+            //                 '<table class="table table-bordered table-sm" style="margin-top:5px">'+
+            //                     '<thead class="thead-light">'+
+            //                         '<tr>'+
+            //                             '<th style="text-align:center">Keterangan</th>'+
+            //                             '<th style="text-align:center">Fase</th>'+
+            //                             '<th style="text-align:center">Subsegmen Utama</th>'+
+            //                             '<th style="text-align:center">Subsegmen Cadangan</th>'+
+            //                         '</tr>'+
+            //                     '</thead>'+
+            //                     '<tbody>'+
+            //                         '<tr>'+
+            //                             '<td>Available</td>'+
+            //                             '<td>2-Vegetatif Akhir <br> 3-Generatif</td>'+
+            //                             '<td><b>'+d.count[0]+'</b></td>'+
+            //                             '<td><b>'+d.count[3]+'</b></td>'+
+            //                         '</tr>'+
+            //                         '<tr>'+
+            //                             '<td>Unavailable</td>'+
+            //                             '<td>4-Panen</td>'+
+            //                             '<td><b>'+d.count[1]+'</b></td>'+
+            //                             '<td><b>'+d.count[4]+'</b></td>'+
+            //                         '</tr>'+
+            //                         '<tr>'+
+            //                             '<td>Non-eligible</td>'+
+            //                             '<td>Fase lainnya</td>'+
+            //                             '<td><b>'+d.count[2]+'</b></td>'+
+            //                             '<td><b>'+d.count[5]+'</b></td>'+
+            //                         '</tr>'+
+            //                     '</tbody>'+
+            //                 '</table>'+
+            //                 '<div style="overflow-x:scroll">'+
+            //                     '<table id="tabelHasil" class="display compact">'+
+            //                         '<thead>'+
+            //                             '<tr>'+
+            //                                 '<th>Kode Segmen</th>'+
+            //                                 '<th>Subsegmen</th>'+
+            //                                 '<th>Nilai Amatan</th>'+
+            //                                 '<th>NKS</th>'+
+            //                                 '<th>Strata</th>'+
+            //                                 '<th>Bulan</th>'+
+            //                                 '<th>Jenis Sampel</th>'+
+            //                                 '<th>Keterangan</th>'+
+            //                                 '<th style="display:none">PCS</th>'+
+            //                                 '<th style="display:none">PMS</th>'+
+            //                                 '<th>Petani</th>'+
+            //                             '</tr>'+
+            //                         '</thead>'+
+            //                         '<tbody id="bodyTable"></tbody>'+
+            //                     '</table>'+
+            //                 '</div>'+
+            //                 '<button class="btn" onclick="unduh()" style="background-color:#006F9E;color:#ffffff;position:fixed;right:5px;bottom:5px;"><i class="fas fa-download"></i> Unduh</button>'
+            //             );
+            //             for(x in d.sampel){
+            //                 $('#bodyTable').append(
+            //                     '<tr>'+
+            //                         '<td>'+d.sampel[x]['kode_segmen']+'</td>'+
+            //                         '<td>'+d.sampel[x]['subsegmen']+'</td>'+
+            //                         '<td style="background-color:'+d.sampel[x]['color']+'">'+d.sampel[x]['amatan']+'</td>'+
+            //                         '<td>'+d.sampel[x]['nks']+'</td>'+
+            //                         '<td>'+d.sampel[x]['strata']+'</td>'+
+            //                         '<td>'+d.sampel[x]['bln']+'</td>'+
+            //                         '<td>'+d.sampel[x]['jenis_sampel']+'</td>'+
+            //                         '<td style="background-color:'+d.sampel[x]['color']+'">'+d.sampel[x]['keterangan']+'</td>'+
+            //                         '<td style="display:none">'+d.sampel[x]['pcs']+'</td>'+
+            //                         '<td style="display:none">'+d.sampel[x]['pms']+'</td>'+
+            //                         '<td onclick="infoPetani('+d.sampel[x]['kode_segmen']+',\''+d.sampel[x]['subsegmen']+'\')">' +
+            //                             '<button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;" data-toggle="modal" data-target="#editModal">' +
+            //                                 '<i class="fa fa-edit"></i> Edit' +
+            //                             '</button>'+
+            //                         '</td>'+
+            //                     '</tr>'
+            //                 )
+            //             }
+            //             $('#tabelHasil').DataTable({
+            //                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+            //             });
+            //         } else {
+            //             $('#hasilValidasi').html('<h4>'+d.message+'</h4>');
+            //         }
+            //     }
+            // });
+            $.getJSON(base_url+'ubinan-lacak-proses?tabul='+tabul+'&bulansampel='+bulansampel+'&tahunsampel='+tahunsampel, function(data) {
+                $('#loading1').hide();
+                let d = data; // Tidak perlu menggunakan JSON.parse karena data sudah berupa JSON
+                if(d.status){
+                    $('#hasilValidasi').html(
+                        '<table class="table table-bordered table-sm" style="margin-top:5px">'+
+                            '<thead class="thead-light">'+
+                                '<tr>'+
+                                    '<th style="text-align:center">Keterangan</th>'+
+                                    '<th style="text-align:center">Fase</th>'+
+                                    '<th style="text-align:center">Subsegmen Utama</th>'+
+                                    '<th style="text-align:center">Subsegmen Cadangan</th>'+
+                                '</tr>'+
+                            '</thead>'+
+                            '<tbody>'+
+                                '<tr>'+
+                                    '<td>Available</td>'+
+                                    '<td>2-Vegetatif Akhir <br> 3-Generatif</td>'+
+                                    '<td><b>'+d.count[0]+'</b></td>'+
+                                    '<td><b>'+d.count[3]+'</b></td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td>Unavailable</td>'+
+                                    '<td>4-Panen</td>'+
+                                    '<td><b>'+d.count[1]+'</b></td>'+
+                                    '<td><b>'+d.count[4]+'</b></td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td>Non-eligible</td>'+
+                                    '<td>Fase lainnya</td>'+
+                                    '<td><b>'+d.count[2]+'</b></td>'+
+                                    '<td><b>'+d.count[5]+'</b></td>'+
+                                '</tr>'+
+                            '</tbody>'+
+                        '</table>'+
+                        '<div style="overflow-x:scroll">'+
+                            '<table id="tabelHasil" class="display compact">'+
+                                '<thead>'+
                                     '<tr>'+
-                                        '<th style="text-align:center">Keterangan</th>'+
-                                        '<th style="text-align:center">Fase</th>'+
-                                        '<th style="text-align:center">Subsegmen Utama</th>'+
-                                        '<th style="text-align:center">Subsegmen Cadangan</th>'+
+                                        '<th>Kode Segmen</th>'+
+                                        '<th>Subsegmen</th>'+
+                                        '<th>Nilai Amatan</th>'+
+                                        '<th>NKS</th>'+
+                                        '<th>Strata</th>'+
+                                        '<th>Bulan</th>'+
+                                        '<th>Jenis Sampel</th>'+
+                                        '<th>Keterangan</th>'+
+                                        '<th style="display:none">PCS</th>'+
+                                        '<th style="display:none">PMS</th>'+
+                                        '<th>Petani</th>'+
                                     '</tr>'+
                                 '</thead>'+
-                                '<tbody>'+
-                                    '<tr>'+
-                                        '<td>Available</td>'+
-                                        '<td>2-Vegetatif Akhir <br> 3-Generatif</td>'+
-                                        '<td><b>'+d.count[0]+'</b></td>'+
-                                        '<td><b>'+d.count[3]+'</b></td>'+
-                                    '</tr>'+
-                                    '<tr>'+
-                                        '<td>Unavailable</td>'+
-                                        '<td>4-Panen</td>'+
-                                        '<td><b>'+d.count[1]+'</b></td>'+
-                                        '<td><b>'+d.count[4]+'</b></td>'+
-                                    '</tr>'+
-                                    '<tr>'+
-                                        '<td>Non-eligible</td>'+
-                                        '<td>Fase lainnya</td>'+
-                                        '<td><b>'+d.count[2]+'</b></td>'+
-                                        '<td><b>'+d.count[5]+'</b></td>'+
-                                    '</tr>'+
-                                '</tbody>'+
+                                '<tbody id="bodyTable"></tbody>'+
                             '</table>'+
-                            '<div style="overflow-x:scroll">'+
-                                '<table id="tabelHasil" class="display compact">'+
-                                    '<thead>'+
-                                        '<tr>'+
-                                            '<th>Kode Segmen</th>'+
-                                            '<th>Subsegmen</th>'+
-                                            '<th>Nilai Amatan</th>'+
-                                            '<th>NKS</th>'+
-                                            '<th>Strata</th>'+
-                                            '<th>Bulan</th>'+
-                                            '<th>Jenis Sampel</th>'+
-                                            '<th>Keterangan</th>'+
-                                            '<th style="display:none">PCS</th>'+
-                                            '<th style="display:none">PMS</th>'+
-                                            '<th>Petani</th>'+
-                                        '</tr>'+
-                                    '</thead>'+
-                                    '<tbody id="bodyTable"></tbody>'+
-                                '</table>'+
-                            '</div>'+
-                            '<button class="btn" onclick="unduh()" style="background-color:#006F9E;color:#ffffff;position:fixed;right:5px;bottom:5px;"><i class="fas fa-download"></i> Unduh</button>'
-                        );
-                        for(x in d.sampel){
-                            $('#bodyTable').append(
-                                '<tr>'+
-                                    '<td>'+d.sampel[x]['kode_segmen']+'</td>'+
-                                    '<td>'+d.sampel[x]['subsegmen']+'</td>'+
-                                    '<td style="background-color:'+d.sampel[x]['color']+'">'+d.sampel[x]['amatan']+'</td>'+
-                                    '<td>'+d.sampel[x]['nks']+'</td>'+
-                                    '<td>'+d.sampel[x]['strata']+'</td>'+
-                                    '<td>'+d.sampel[x]['bln']+'</td>'+
-                                    '<td>'+d.sampel[x]['jenis_sampel']+'</td>'+
-                                    '<td style="background-color:'+d.sampel[x]['color']+'">'+d.sampel[x]['keterangan']+'</td>'+
-                                    '<td style="display:none">'+d.sampel[x]['pcs']+'</td>'+
-                                    '<td style="display:none">'+d.sampel[x]['pms']+'</td>'+
-                                    '<td onclick="infoPetani('+d.sampel[x]['kode_segmen']+',\''+d.sampel[x]['subsegmen']+'\')">' +
-                                        '<button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;" data-toggle="modal" data-target="#editModal" data-backdrop="static" data-keyboard="false">' +
-                                            '<i class="fa fa-edit"></i> Edit' +
-                                        '</button>'+
-                                    '</td>'+
-                                '</tr>'
-                            )
-                        }
-                        $('#tabelHasil').DataTable({
-                            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
-                        });
-                    } else {
-                        $('#hasilValidasi').html('<h4>'+d.message+'</h4>');
+                        '</div>'+
+                        '<button class="btn" onclick="unduh()" style="background-color:#006F9E;color:#ffffff;position:fixed;right:5px;bottom:5px;"><i class="fas fa-download"></i> Unduh</button>'
+                    );
+                    for(x in d.sampel){
+                        $('#bodyTable').append(
+                            '<tr>'+
+                                '<td>'+d.sampel[x]['kode_segmen']+'</td>'+
+                                '<td>'+d.sampel[x]['subsegmen']+'</td>'+
+                                '<td style="background-color:'+d.sampel[x]['color']+'">'+d.sampel[x]['amatan']+'</td>'+
+                                '<td>'+d.sampel[x]['nks']+'</td>'+
+                                '<td>'+d.sampel[x]['strata']+'</td>'+
+                                '<td>'+d.sampel[x]['bln']+'</td>'+
+                                '<td>'+d.sampel[x]['jenis_sampel']+'</td>'+
+                                '<td style="background-color:'+d.sampel[x]['color']+'">'+d.sampel[x]['keterangan']+'</td>'+
+                                '<td style="display:none">'+d.sampel[x]['pcs']+'</td>'+
+                                '<td style="display:none">'+d.sampel[x]['pms']+'</td>'+
+                                '<td onclick="infoPetani('+d.sampel[x]['kode_segmen']+',\''+d.sampel[x]['subsegmen']+'\')">' +
+                                    '<button type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.2rem;background: #87c351;" data-toggle="modal" data-target="#editModal">' +
+                                        '<i class="fa fa-edit"></i> Edit' +
+                                    '</button>'+
+                                '</td>'+
+                            '</tr>'
+                        )
                     }
+                    $('#tabelHasil').DataTable({
+                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+                    });
+                } else {
+                    $('#hasilValidasi').html('<h4>'+d.message+'</h4>');
                 }
             });
         }
@@ -529,21 +601,7 @@
         tmp_hp = '';
         $('#formContainer').html('');
         $('#pesanContainer').html('');
-        $('#editModal').hide();
-        $('#editModal').modal('hide');
-        $('.modal-backdrop').remove();  // Hapus elemen backdrop
-        $('#editModal').on('hidden.bs.modal', function () {
-            $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-            $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-        });
-        $('#editModal').on('show.bs.modal', function () {
-            $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-        });
-        $('#editModal').on('hide.bs.modal', function (e) {
-            if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                e.preventDefault();
-            }
-        });
+        $('#exampleModal').modal('hide');
     }
 </script>
   </body>
