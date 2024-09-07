@@ -154,3 +154,5 @@ Route::get('/ubinan-riwayat', [UbinanController::class, 'showRiwayat'])->name('u
 Route::get('/ubinan_detail/{id}/{tahun}/{bulan}', [UbinanController::class, 'showDetail']);
 
 Route::get('/ubinan-panduan', [UbinanController::class, 'showPanduan'])->name('ubinan.panduan');
+
+Route::get('/ubinan/petani/getAll', [PetaniController::class, 'getAll']);

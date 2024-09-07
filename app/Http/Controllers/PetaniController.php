@@ -104,4 +104,23 @@ class PetaniController extends Controller
 
         return json_encode($message);
     }
+
+    public function getAll()
+    {
+        $data = Petani::all(); // Mengambil semua data dari model Petani
+
+        if ($data->count() > 0) {
+            $message = [
+                'status' => true,
+                'data' => $data
+            ];
+        } else {
+            $message = [
+                'status' => false,
+                'message' => 'Data petani belum ada'
+            ];
+        }
+
+        return response()->json($message);
+    }
 }

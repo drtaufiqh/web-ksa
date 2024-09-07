@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id(); // id (Primary key)
             $table->string('kode_segmen', 9)->nullable(); // kode_segmen (Index)
             $table->string('subsegmen', 2)->nullable(); // subsegmen (Index)
-            $table->string('nik', 16)->nullable(); // nik
+            $table->string('nik', 20)->nullable(); // nik
             $table->string('nama', 200)->nullable(); // nama
             $table->text('alamat')->nullable(); // alamat
             $table->string('hp', 15)->nullable(); // hp
