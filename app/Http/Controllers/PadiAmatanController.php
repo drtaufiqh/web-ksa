@@ -752,4 +752,202 @@ class PadiAmatanController extends Controller
         // dd($data);
         return response()->json($data);
     }
+
+    public function getDataCapaian(Request $request)
+    {
+        $jenisCapaian = $request->input('jenis_capaian');
+        $wilayahCapaian = $request->input('wilayah_capaian');
+
+        // Validasi input
+        if (is_null($jenisCapaian) || is_null($wilayahCapaian)) {
+            return response()->json(['error' => 'Invalid input'], 400);
+        }
+
+        // Ambil data berdasarkan jenis capaian dan wilayah
+        $data1 = $this->fetchDataForChart1($jenisCapaian, $wilayahCapaian);
+        $data2 = $this->fetchDataForChart2($jenisCapaian, $wilayahCapaian);
+
+        return response()->json([
+            'chart1' => $data1,
+            'chart2' => $data2
+        ]);
+    }
+
+/**
+     * Mengambil data untuk chart.
+     *
+     * @param  string  $jenisCapaian
+     * @param  string  $wilayahCapaian
+     * @return array
+     */
+    private function fetchDataForChart1($jenisCapaian, $wilayahCapaian){
+
+        $tahun = Carbon::now()->year;
+        $kode_kabkota = $wilayahCapaian;
+        if ($kode_kabkota == '3300') $kode_kabkota = '';
+        $jenis = $jenisCapaian;
+        $get = [];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_W';
+            $get[] = $jenis . '_TK';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        // Mengambil data dengan tahun dan bulan terbesar
+        $data = PadiValidasi::where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->get(['indeks', ...$get])->first();
+
+        // Jika data ditemukan
+        if ($data) {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [
+                        $data->subsegmen_K ?? 0,
+                        $data->subsegmen_W ?? 0,
+                        $data->subsegmen_TK ?? 0
+                    ]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [
+                        $data->segmen_K ?? 0,
+                        $data->segmen_TK ?? 0
+                    ]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [
+                        $data->evita_A ?? 0,
+                        $data->evita_R ?? 0
+                    ]
+                ];
+            }
+        } else {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [0,0,0]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [0,0]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [0,0]
+                ];
+            }
+        }
+    }
+    /**
+         * Mengambil data untuk chart.
+         *
+         * @param  string  $jenisCapaian
+         * @param  string  $wilayahCapaian
+         * @return array
+         */
+    private function fetchDataForChart2($jenisCapaian, $wilayahCapaian){
+        $tahun = Carbon::now()->year;
+        $kode_kabkota = $wilayahCapaian;
+        if ($kode_kabkota == '3300') $kode_kabkota = '';
+        $jenis = $jenisCapaian;
+        $get = [];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+            // Mengambil data dengan tahun dan bulan terbesar
+            $data = PadiValidasi::select(
+                DB::raw('SUM('.$get[0].') as total_count0'),
+                DB::raw('SUM('.$get[1].') as total_count1'),
+                DB::raw('SUM('.$get[2].') as total_count2'),
+            )
+            ->where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->first();
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            // Mengambil data dengan tahun dan bulan terbesar
+            $data = PadiValidasi::select(
+                DB::raw('SUM('.$get[0].') as total_count0'),
+                DB::raw('SUM('.$get[1].') as total_count1'),
+            )
+            ->where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->first();
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+            // Mengambil data dengan tahun dan bulan terbesar
+            $data = PadiValidasi::select(
+                DB::raw('SUM('.$get[0].') as total_count0'),
+                DB::raw('SUM('.$get[1].') as total_count1'),
+            )
+            ->where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->first();
+        }
+
+        // Jika data ditemukan
+        if ($data) {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [
+                        $data->total_count0 ?? 0,
+                        $data->total_count1 ?? 0,
+                        $data->total_count2 ?? 0
+                    ]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [
+                        $data->total_count0 ?? 0,
+                        $data->total_count1 ?? 0
+                    ]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [
+                        $data->total_count0 ?? 0,
+                        $data->total_count1 ?? 0
+                    ]
+                ];
+            }
+        } else {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [0,0,0]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [0,0]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [0,0]
+                ];
+            }
+        }
+    }
 }

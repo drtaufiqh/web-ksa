@@ -157,7 +157,7 @@
                         @php
                             $currentMonth = old('jenis_progres', 'subsegmen'); // Gunakan nilai lama jika tersedia
                         @endphp
-                      <label for="jenis_progres">Segmen</label>
+                      <label for="jenis_progres"></label>
                           <select id="jenis_progres" name="jenis_progres" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
                             <option value="subsegmen">Subsegmen</option>
                             <option value="segmen">Segmen</option>
@@ -173,6 +173,41 @@
                             <canvas id="Chart" style="display: initial; box-sizing: border-box; height: 105vh; width: 800px;font-weight: bold;"></canvas>
                       </div>
                     </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="card-body">
+                            <h4 class="judul-chart"> Capaian Validasi </h4>
+                            <div class="dropdown-chart">
+                                <div class="dropdownpadi">
+                                    <select id="jenis_capaian" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                                        <option value="subsegmen">Subsegmen</option>
+                                        <option value="segmen">Segmen</option>
+                                        <option value="evita">Segmen dan Status</option>
+                                    </select>
+                                </div>
+                                <div class="dropdownpadi">
+                                    <select id="wilayah_capaian" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                                        <option value="3399">Pilih Wilayah</option><option value="3300">Jawa Tengah</option><option value="3301">3301 - Cilacap</option><option value="3302">3302 - Banyumas</option><option value="3303">3303 - Purbalingga</option><option value="3304">3304 - Banjarnegara</option><option value="3305">3305 - Kebumen</option><option value="3306">3306 - Purworejo</option><option value="3307">3307 - Wonosobo</option><option value="3308">3308 - Magelang</option><option value="3309">3309 - Boyolali</option><option value="3310">3310 - Klaten</option><option value="3311">3311 - Sukoharjo</option><option value="3312">3312 - Wonogiri</option><option value="3313">3313 - Karanganyar</option><option value="3314">3314 - Sragen</option><option value="3315">3315 - Grobogan</option><option value="3316">3316 - Blora</option><option value="3317">3317 - Rembang</option><option value="3318">3318 - Pati</option><option value="3319">3319 - Kudus</option><option value="3320">3320 - Jepara</option><option value="3321">3321 - Demak</option><option value="3322">3322 - Semarang</option><option value="3323">3323 - Temanggung</option><option value="3324">3324 - Kendal</option><option value="3325">3325 - Batang</option><option value="3326">3326 - Pekalongan</option><option value="3327">3327 - Pemalang</option><option value="3328">3328 - Tegal</option><option value="3329">3329 - Brebes</option><option value="3371">3371 - Kota Magelang</option><option value="3372">3372 - Kota Surakarta</option><option value="3373">3373 - Kota Salatiga</option><option value="3374">3374 - Kota Semarang</option><option value="3375">3375 - Kota Pekalongan</option><option value="3376">3376 - Kota Tegal</option></select>
+                                    </select>
+                                </div>
+                                <button type="button" id="lihat_capaian" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
+                                <i class="fa fa-refresh"></i> Lihat </button>
+                            </div>
+                        <div id="capaian" class="col-lg-6 grid-margin stretch-card">
+                            <div class="card">
+                                <h4 class="card-title">Bulan Terakhir</h4>
+                                <div class="doughnutjs-wrapper d-flex justify-content-center">
+                                    <canvas id="pieChart" style="height: 200px; display: block; box-sizing: border-box; width: 200px;" ></canvas>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <h4 class="card-title">Tahun Berjalan</h4>
+                                <div class="doughnutjs-wrapper d-flex justify-content-center">
+                                    <canvas id="pieChart2" style="height: 200px; display: block; box-sizing: border-box; width: 200px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                   </div>
                 </div>
@@ -440,6 +475,7 @@
     $(document).ready(function() {
         $('#map').hide();
         $('#Chart').hide();
+        $('#capaian').hide();
         $('#lihat_peta').click(function() {
             $('#map').show();
             // Ambil nilai dari dropdown
@@ -727,4 +763,109 @@
             });
         });
     });
+</script>
+
+<script>
+    // Ambil konteks chart
+    const cty = document.getElementById('pieChart').getContext('2d');
+    const ctz = document.getElementById('pieChart2').getContext('2d');
+
+    // Inisialisasi chart dengan data kosong
+    let pieChart = new Chart(cty, {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Data Konsistensi',
+                data: [],
+                backgroundColor: [
+                    '#92C98C',
+                    'rgba(255, 205, 86, 0.6)',
+                    '#ED7D79'
+                ],
+                borderColor: [
+                    '#92C98C',
+                    'rgba(255, 205, 86, 0.6)',
+                    '#ED7D79'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            weight: 'bold'
+                        },
+                        color: '#000'
+                    }
+                }
+            }
+        }
+    });
+
+    let pieChart2 = new Chart(ctz, {
+        type: 'pie',
+        data: {
+            labels: [],
+            datasets: [{
+                label: 'Data Konsistensi',
+                data: [],
+                backgroundColor: [
+                    '#92C98C',
+                    'rgba(255, 205, 86, 0.6)',
+                    '#ED7D79'
+                ],
+                borderColor: [
+                    '#92C98C',
+                    'rgba(255, 205, 86, 0.6)',
+                    '#ED7D79'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            weight: 'bold'
+                        },
+                        color: '#000'
+                    }
+                }
+            }
+        }
+    });
+
+    // Event listener untuk tombol
+    document.getElementById('lihat_capaian').addEventListener('click', function() {
+        $('#capaian').show();
+        const jenisCapaian = document.getElementById('jenis_capaian').value;
+        const wilayahCapaian = document.getElementById('wilayah_capaian').value;
+
+        // Lakukan permintaan AJAX
+        fetch(`/padi-get-data-capaian?jenis_capaian=${jenisCapaian}&wilayah_capaian=${wilayahCapaian}`)
+            .then(response => response.json())
+            .then(data => {
+                // Misalnya data dari server adalah { chart1: { labels: [...], data: [...] }, chart2: { labels: [...], data: [...] } }
+                const chartData1 = data.chart1;
+                const chartData2 = data.chart2;
+
+                // Update pieChart
+                pieChart.data.labels = chartData1.labels;
+                pieChart.data.datasets[0].data = chartData1.data;
+                pieChart.update();
+
+                // Update pieChart2
+                pieChart2.data.labels = chartData2.labels;
+                pieChart2.data.datasets[0].data = chartData2.data;
+                pieChart2.update();
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
 </script>

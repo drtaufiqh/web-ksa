@@ -72,6 +72,7 @@ Route::get('/padi-get-data-peta', [PadiAmatanController::class, 'getDataPeta']);
 Route::post('/padi-get-data-peta', [PadiAmatanController::class, 'getDataPeta'])->name('padi.get.data.peta');
 Route::post('/padi-get-data-peta-sebaran', [PadiAmatanController::class, 'getDataPetaSebaran'])->name('padi.get.data.peta.sebaran');
 Route::get('/padi-get-data-peta-sebaran', [PadiAmatanController::class, 'getDataPetaSebaran']);
+Route::get('/padi-get-data-capaian', [PadiAmatanController::class, 'getDataCapaian']);
 
 Route::get('/test-progres', [PadiAmatanController::class, 'testProgres']);
 Route::get('/padi-get-data-progres', [PadiAmatanController::class, 'getDataProgres']);
