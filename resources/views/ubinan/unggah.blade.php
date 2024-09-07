@@ -116,13 +116,17 @@
                           <option value="C">C - Cadangan</option>
                         </select>
                       </div>
+
                       {{-- File --}}
                       <div class="form-group">
                           <label>File upload</label>
-                          <input type="file" name="file" class="form-control" accept=".xls,.xlsx,.csv" required>
-                          <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Format penamaan file harus : tahunbulanA_kodekabupaten_jagung.xlsx</p>
-                          <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110A_3301_jagung.xlsx</p>
+                          <div style="width: 100%">
+                            <input type="file" name="file" class="form-control" accept=".xlsx,.csv" required>
+                            <p style="margin: 0;font-size: 0.8rem;color: #b9b7b7;">Format penamaan file harus : tahunbulanJenis_kodekabupaten_ubinan.xlsx</p>
+                            <p style="margin: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110U_3301_ubinan.xlsx</p>
+                          </div>
                       </div>
+
                       {{-- Submit --}}
                       <button type="submit" class="btn btn-gradient-primary me-2" style="background: linear-gradient(to right, #696b4c, #b9af49);">Submit</button>
 

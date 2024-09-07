@@ -111,29 +111,28 @@
 
                         {{-- pilih --}}
                         <div class="form-group">
-                            <label for="kolom">Kolom yang akan diupload (Pemrosesan data membutuhkan waktu 1 menit/bulan)</label>
-                            <select class="form-control" id="kolom" name="kolom">
-                                <option value="n" selected> bulan terpilih saja (n) - [1 Menit]</option>
-                                <option value="n-1"> dengan 1 bulan sebelumnya (n, n-1) - [2 Menit]</option>
-                                <option value="n-2"> dengan 2 bulan sebelumnya (n, n-1, n-2) - [3 Menit]</option>
-                                <option value="n-3"> dengan 3 bulan sebelumnya (n, n-1, n-2, n-3) - [4 Menit]</option>
-                            </select>
+                            <label for="kolom">Kolom Upload</label>
+                            <div style="width: 100%">
+                                <select class="form-control" id="kolom" name="kolom">
+                                    <option value="n" selected> bulan terpilih saja (n) - [1 Menit]</option>
+                                    <option value="n-1"> dengan 1 bulan sebelumnya (n, n-1) - [2 Menit]</option>
+                                    <option value="n-2"> dengan 2 bulan sebelumnya (n, n-1, n-2) - [3 Menit]</option>
+                                    <option value="n-3"> dengan 3 bulan sebelumnya (n, n-1, n-2, n-3) - [4 Menit]</option>
+                                </select>
+                                <p style="margin: 0;font-size: 0.8rem;color: #b9b7b7;">(Pemrosesan data membutuhkan waktu 1 menit/bulan)</p>
+                            </div>
                         </div>
 
                         {{-- File --}}
                         <div class="form-group">
                             <label>File upload</label>
-                            {{-- <input type="file" name="img[]" class="file-upload-default">
-                            <div class="input-group col-xs-12">
-                            <input type="text" class="form-control file-upload-info" disabled="" placeholder="Upload File">
-                            <span class="input-group-append">
-                                <button class="file-upload-browse btn btn-gradient-primary py-3" type="button">Upload</button>
-                            </span>
-                            </div> --}}
-                            <input type="file" name="file" class="form-control" accept=".xls,.xlsx,.csv" required>
-                            <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Format penamaan file harus : tahunbulanA_kodekabupaten_jagung.xlsx</p>
-                            <p style="margin-bottom: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110A_3301_jagung.xlsx</p>
+                            <div style="width: 100%">
+                                <input type="file" name="file" class="form-control" accept=".xlsx,.csv" required>
+                                <p style="margin: 0;font-size: 0.8rem;color: #b9b7b7;">Format penamaan file harus : tahunbulanA_kodekabupaten_padi.xlsx</p>
+                                <p style="margin: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110A_3301_padi.xlsx</p>
+                            </div>
                         </div>
+
                         {{-- Submit --}}
                         <button type="submit" class="btn btn-gradient-primary me-2">Submit</button>
 
