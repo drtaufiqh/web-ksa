@@ -592,6 +592,38 @@ class PadiAmatanController extends Controller
         return json_encode($geodata);
     }
 
+    public function getDataPetaSebaran(Request $request) {
+        $tahun = $request->input('tahun_peta');
+        $bulan = $request->input('bulan_peta');
+        $fase = $request->input('fase');
+        $geodata = $request->input('geodata');
+        $geodata = json_decode($geodata,true);
+
+        // dd($geodata);
+
+        $data = PadiAmatan::countFase($tahun . $bulan, $fase);
+
+        // dd(substr($data[0]->indeks,6,4), $data[0]->indeks);
+        if ($data) {
+            foreach ($geodata['features'] as $key => $feature) {
+                foreach ($data as $datum) {
+                    if ($feature['properties']['IDKAB'] == $datum->kode_kabkota) {
+                        // if($datum->indeks == '2024083321') dd($datum->subsegmen_TK);
+                        $geodata['features'][$key]['properties']['KONSISTEN_P'] = $datum->total_semua;
+                    }
+                }
+            }
+        } else {
+            foreach ($geodata['features'] as $key => $feature) {
+                $geodata['features'][$key]['properties']['KONSISTEN_P'] = 'Tidak ada data';
+            }
+        }
+
+        // dd($geodata);
+        // return response()->json($geodata);
+        return json_encode($geodata);
+    }
+
     public function testProgres(){
         return view('padi.test-progres');
     }
@@ -627,7 +659,7 @@ class PadiAmatanController extends Controller
 
                                 // Ubah pasangan key-value menjadi array yang hanya berisi nilai
                                 $values = array_values($values);
-                                
+
                                 // Return format [indeks => [get1, get2, get3]]
                                 return [substr(strval($indeks), 6, 4) => $values];
                             })

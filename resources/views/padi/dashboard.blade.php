@@ -40,7 +40,13 @@
               <div class="col-12 grid-margin stretch-card">
               <div class="card">
                   <div class="card-body">
-                    <h4 class="judul-chart"> Peta Konsistensi Perwilayah (Subsegmen)</h4>
+                    <div class="dropdownpadi" style="color: #3b5740;background-color: #def4ca;">
+                        <label>Peta</label>
+                        <select id="petaSelect" style="background-color: #def4ca; border: transparent;color: #3b5740;font-weight: bold;">
+                            <option value="sebaran">Sebaran Fase Amatan</option>
+                            <option value="konsistensi">Konsistensi Perwilayah (subsegmen)</option>
+                        </select>
+                    </div>
                     <div class="dropdown-chart">
                         <div class="dropdownpadi">
                             {{-- Tahun --}}
@@ -82,6 +88,22 @@
                                 <option value="12" {{ $currentMonth == '12' ? 'selected' : '' }}>12 - Desember</option>
                             </select>
                         </div>
+
+                        <div class="dropdownpadi" id="faseAmatan">
+                            <label for="fase">Fase Amatan</label>
+                            <select id="fase" name="fase" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                                <option value="1">01-Vegetatif Awal</option>
+                                <option value="2">02-Vegetatif Akhir</option>
+                                <option value="3">03-Generatif</option>
+                                <option value="4">04-Panen</option>
+                                <option value="5">05-Persiapan Lahan</option>
+                                <option value="6">06-Puso</option>
+                                <option value="7">07-Lahan Pertanian Bukan Padi</option>
+                                <option value="8">08-Bukan Lahan Pertanian</option>
+                                <option value="12">12-Tidak Bisa Diamati</option>
+                            </select>
+                        </div>
+
                       <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
                         <i class="fa fa-refresh"></i> Lihat </button>
                     </div>
@@ -187,11 +209,32 @@
     <script src="/assets/js/file-upload.js"></script>
     <script src="/assets/js/typeahead.js"></script>
     <script src="/assets/js/select2.js"></script>
-    <script src="/assets/js/dropdown.js"></script>
     <!-- End custom js for this page -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </body>
 </html>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var petaSelect = document.getElementById('petaSelect');
+        var faseAmatan = document.getElementById('faseAmatan');
+
+        // Fungsi untuk menampilkan/menyembunyikan faseAmatan
+        function toggleFaseAmatan() {
+            if (petaSelect.value === 'konsistensi') {
+                faseAmatan.style.display = 'none';
+            } else {
+                faseAmatan.style.display = 'block';
+            }
+        }
+
+        // Jalankan fungsi saat elemen dropdown berubah
+        petaSelect.addEventListener('change', toggleFaseAmatan);
+
+        // Jalankan fungsi saat halaman dimuat
+        toggleFaseAmatan();
+    });
+</script>
 
 <!-- Make sure you put this AFTER Leaflet's CSS -->
 <script type="text/javascript" src="assets/js/data/jateng.js"></script>
@@ -210,6 +253,14 @@
     });
     map.addLayer(LayerKita);
 
+    function getJudul(){
+        if($('#petaSelect').val() == "konsistensi"){
+            return 'Peta Konsistensi'
+        } else {
+            return 'Peta Sebaran Fase Amatan'
+        }
+    }
+
     // Control that shows state info on hover
     var info = L.control();
 
@@ -220,8 +271,8 @@
     };
 
     info.update = function(props) {
-        this._div.innerHTML = '<h4>Peta Sebaran Konsistensi</h4>' + (props ?
-            '<b>' + props.KABKOT + '</b><br />' + props.KONSISTEN_P + ' subsegmen inkonsisten' :
+        this._div.innerHTML = '<h4>' + getJudul() + '</h4>' + (props ?
+            '<b>' + props.KABKOT + '</b><br />' + props.KONSISTEN_P + getSatuan() :
             'Dekatkan mouse untuk melihat');
     };
 
@@ -247,6 +298,29 @@
             dashArray: '3',
             fillOpacity: 0.7,
             fillColor: getColor(feature.properties.KONSISTEN_P)
+        };
+    }
+
+    function getColorSebaran(d) {
+        return d == 'Tidak ada data' ? '#666666' :
+               d > 100 ? '#a67b5b' :
+               d > 80 ? '#af9559' :
+               d > 60 ? '#d0c49a' :
+               d > 40 ? '#b3b78f' :
+               d > 20 ? '#6e9775' :
+               d >= 1 ? '#407154' :
+               d = 1  ? '#104730' :
+                        '#666666';
+    }
+
+    function styleSebaran(feature) {
+        return {
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7,
+            fillColor: getColorSebaran(feature.properties.KONSISTEN_P)
         };
     }
 
@@ -278,6 +352,14 @@
         map.fitBounds(e.target.getBounds());
     }
 
+    function getSatuan(){
+        if($('#petaSelect').val() == "konsistensi"){
+            return ' subsegmen inkonsisten'
+        } else {
+            return ' subsegmen'
+        }
+    }
+
     function onEachFeature(feature, layer) {
         layer.on({
             mouseover: highlightFeature,
@@ -286,7 +368,7 @@
                 zoomToFeature(e);
                 L.popup()
                     .setLatLng(e.latlng)
-                    .setContent('<b>' + feature.properties.KABKOT + '</b><br />' + feature.properties.KONSISTEN_P + ' subsegmen inkonsisten')
+                    .setContent('<b>' + feature.properties.KABKOT + '</b><br />' + feature.properties.KONSISTEN_P + getSatuan())
                     .openOn(map);
             }
         });
@@ -297,14 +379,35 @@
         onEachFeature: onEachFeature
     }).addTo(map);
 
-    map.attributionControl.addAttribution('Konsistensi Data Padi')
+    function addAttribution(){
+        map.attributionControl.removeAttribution('Konsistensi Data Padi')
+        map.attributionControl.removeAttribution('Sebaran Data Padi')
 
-    var legend = L.control({position: 'bottomleft'});
-            legend.onAdd = function (map) {
-                var div = L.DomUtil.create('div', 'info legend'),
-                    grades = [0, 10, 20, 30, 40, 50],
-                    labels = [];
+        if ($('#petaSelect').val() == "konsistensi"){
+            map.attributionControl.addAttribution('Konsistensi Data Padi')
+        } else {
+            map.attributionControl.addAttribution('Sebaran Data Padi')
+        }
+    }
 
+    // Simpan referensi legend di luar fungsi, sehingga bisa diakses nanti untuk dihapus
+    var legend;
+
+    function addLegend() {
+        // Jika legend sudah ada, hapus terlebih dahulu
+        if (legend) {
+            map.removeControl(legend);
+        }
+
+        // Buat legend baru
+        legend = L.control({position: 'bottomleft'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'info legend'),
+                grades = [0, 10, 20, 30, 40, 50],
+                labels = [];
+
+            if ($('#petaSelect').val() == "konsistensi"){
+                // Tambahkan isi legend sesuai dengan kebutuhan Anda
                 div.innerHTML =
                 '<i style="background:#92C98C"></i> 0 <br/>'+
                 '<i style="background:#F5C4B6"></i> 1 - 10 <br/>'+
@@ -313,200 +416,56 @@
                 '<i style="background:#CE2C29"></i> 31 - 40 <br/>'+
                 '<i style="background:#B41C17"></i> 41 - 50 <br/>'+
                 '<i style="background:#850D0C"></i> 50+ <br/>';
-                return div;
-            };
-            legend.addTo(map);
+            } else {
+                // Tambahkan isi legend sesuai dengan kebutuhan Anda
+                div.innerHTML =
+                    '<i style="background:#a67b5b"></i> 0 <br/>' +
+                    '<i style="background:#af9559"></i> 1 - 20 <br/>' +
+                    '<i style="background:#d0c49a"></i> 21 - 40 <br/>' +
+                    '<i style="background:#b3b78f"></i> 41 - 60 <br/>' +
+                    '<i style="background:#6e9775"></i> 61 - 80 <br/>' +
+                    '<i style="background:#407154"></i> 81 - 100 <br/>' +
+                    '<i style="background:#104730"></i> 100 + <br/>';
+            }
 
-    var legend = L.control({position: 'bottomright'});
+            return div;
+        };
+
+        // Tambahkan legend baru ke peta
+        legend.addTo(map);
+    }
 
 </script>
-{{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  const ctx = document.getElementById('Chart').getContext('2d');
-  var labels = [
-    "Kabupaten Cilacap",
-    "Kabupaten Banyumas",
-    "Kabupaten Purbalingga",
-    "Kabupaten Banjarnegara",
-    "Kabupaten Kebumen",
-    "Kabupaten Purworejo",
-    "Kabupaten Wonosobo",
-    "Kabupaten Magelang",
-    "Kabupaten Boyolali",
-    "Kabupaten Klaten",
-    "Kabupaten Sukoharjo",
-    "Kabupaten Wonogiri",
-    "Kabupaten Karanganyar",
-    "Kabupaten Sragen",
-    "Kabupaten Grobogan",
-    "Kabupaten Blora",
-    "Kabupaten Rembang",
-    "Kabupaten Pati",
-    "Kabupaten Kudus",
-    "Kabupaten Jepara",
-    "Kabupaten Demak",
-    "Kabupaten Semarang",
-    "Kabupaten Temanggung",
-    "Kabupaten Kendal",
-    "Kabupaten Batang",
-    "Kabupaten Pekalongan",
-    "Kabupaten Pemalang",
-    "Kabupaten Tegal",
-    "Kabupaten Brebes",
-    "Kota Magelang",
-    "Kota Surakarta",
-    "Kota Salatiga",
-    "Kota Semarang",
-    "Kota Pekalongan",
-    "Kota Tegal",
-    "Provinsi Jawa Tengah"
-  ];
-  var rawData = [
-    [65, 28, 18],
-    [59, 48, 38],
-    [80, 40, 70],
-    [81, 19, 29],
-    [56, 86, 66],
-    [55, 27, 77],
-    [40, 90, 20],
-    [60, 50, 30],
-    [65, 28, 18],
-    [59, 48, 38],
-    [80, 40, 70],
-    [81, 19, 29],
-    [56, 86, 66],
-    [55, 27, 77],
-    [40, 90, 20],
-    [60, 50, 30],
-    [65, 28, 18],
-    [59, 48, 38],
-    [80, 40, 70],
-    [81, 19, 29],
-    [56, 86, 66],
-    [55, 27, 77],
-    [40, 90, 20],
-    [60, 50, 30],
-    [65, 28, 18],
-    [59, 48, 38],
-    [80, 40, 70],
-    [81, 19, 29],
-    [56, 86, 66],
-    [55, 27, 77],
-    [40, 90, 20],
-    [60, 50, 30],
-    [55, 27, 77],
-    [40, 90, 20],
-    [60, 50, 30],
-    [6000, 5000, 3000]
-  ];
-  // Convert raw data into percentages
-  const data = rawData.map((dataSet) => {
-    const total = dataSet.reduce((sum, value) => sum + value, 0);
-    return dataSet.map((value) => (value / total) * 100);
-  });
-  const chartData = {
-    labels: labels,
-    datasets: [
-      {
-        axis: 'y',
-        label: 'Konsisten',
-        data: data.map(d => d[0]),
-        rawData: rawData.map(d => d[0]), // Store raw data for tooltips
-        backgroundColor: '#92C98C',
-        borderColor: '#92C98C',
-        borderWidth: 1
-      },
-      {
-        axis: 'y',
-        label: 'Warning',
-        data: data.map(d => d[1]),
-        rawData: rawData.map(d => d[1]), // Store raw data for tooltips
-        backgroundColor: 'rgba(255, 205, 86, 0.6)',
-        borderColor: 'rgba(255, 205, 86, 0.6)',
-        borderWidth: 1
-      },
-      {
-        axis: 'y',
-        label: 'Inkonsisten',
-        data: data.map(d => d[2]),
-        rawData: rawData.map(d => d[2]), // Store raw data for tooltips
-        backgroundColor: '#ED7D79',
-        borderColor: '#ED7D79',
-        borderWidth: 1
-      }
-    ]
-  };
-  new Chart(ctx, {
-    type: 'bar',
-    data: chartData,
-    options: {
-      indexAxis: 'y',
-      scales: {
-        x: {
-          beginAtZero: true,
-          stacked: true,
-          ticks: {
-            callback: function(value) {
-              return value + '%';
-            },
-            font: {
-              weight: 'bold',
-              color: '#000'  // Set x-axis labels to bold and black
-            },
-            color: '#000' // Color of the x-axis labels
-          }
-        },
-        y: {
-          stacked: true,
-          ticks: {
-            font: {
-              weight: 'bold',
-              color: '#000'  // Set y-axis labels to bold and black
-            },
-            color: '#000' // Color of the y-axis labels
-          }
-        }
-      },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function(tooltipItem) {
-              const dataset = tooltipItem.dataset;
-              const rawValue = dataset.rawData[tooltipItem.dataIndex];
-              const percentage = tooltipItem.raw.toFixed(2) + '%';
-              return [
-                dataset.label + ': ' + percentage,
-                'Nilai: ' + rawValue
-              ];
-            }
-          }
-        },
-        legend: {
-          labels: {
-            font: {
-              weight: 'bold',
-              color: '#000' // Set legend labels to bold and black
-            },
-            color: '#000' // Color of the legend labels
-          }
-        }
-      }
-    }
-  });
-</script> --}}
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#map').hide();
+        $('#Chart').hide();
         $('#lihat_peta').click(function() {
+            $('#map').show();
             // Ambil nilai dari dropdown
             var tahun = $('#tahun_peta').val();
             var bulan = $('#bulan_peta').val();
+            var fase = $('#fase').val();
+            var petaSelect = $("#petaSelect").val();
+
+            // Variabel untuk URL endpoint yang berbeda berdasarkan tipe peta
+            let url_post;
+
+            // Cek pilihan di dropdown petaSelect
+            if (petaSelect == 'sebaran') {
+                url_post = '/padi-get-data-peta-sebaran'; // URL untuk Sebaran Fase Amatan
+            } else if (petaSelect == 'konsistensi') {
+                url_post = '/padi-get-data-peta'; // URL untuk Konsistensi Perwilayah
+            }
+            console.log(url_post);
 
             $.ajax({
-                url: '/padi-get-data-peta',
+                url: url_post,
                 type: 'POST',
                 data: {
                     tahun_peta: tahun,
                     bulan_peta: bulan,
+                    fase: fase,
                     geodata: JSON.stringify(geodata),
                     _token: $('meta[name="csrf-token"]').attr('content') // Menambahkan CSRF token untuk Laravel
                 },
@@ -524,11 +483,23 @@
                         }
                     });
 
-                    // Tambahkan layer geojson baru
-                    geojson = L.geoJson(geodata, {
-                        style: style,
-                        onEachFeature: onEachFeature
-                    }).addTo(map);
+                    // Cek pilihan di dropdown petaSelect
+                    if (petaSelect == 'sebaran') {
+                        // Tambahkan layer geojson baru
+                        geojson = L.geoJson(geodata, {
+                            style: styleSebaran,
+                            onEachFeature: onEachFeature
+                        }).addTo(map);
+                    } else if (petaSelect == 'konsistensi') {
+                        // Tambahkan layer geojson baru
+                        geojson = L.geoJson(geodata, {
+                            style: style,
+                            onEachFeature: onEachFeature
+                        }).addTo(map);
+                    }
+
+                    addAttribution();
+                    addLegend();
                 },
                 error: function(xhr, status, error) {
                     console.error('Terjadi kesalahan: ', error);
@@ -545,6 +516,7 @@
 
     $(document).ready(function() {
         $('#lihat_progres').click(function() {
+            $('#Chart').show();
             // Ambil nilai dari dropdown
             var tahun = $('#tahun_progres').val();
             var bulan = $('#bulan_progres').val();
