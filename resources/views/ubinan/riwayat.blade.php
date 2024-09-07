@@ -127,8 +127,6 @@
                         </div>
                     </div>
 
-                    <button type="button" class="btn btn-gradient-primary btn-icon-text"style="background: linear-gradient(to right, #3b7d46, #659f3b);">
-                    <i class="fa fa-download"></i> Unduh </button>
                   </div>
                 </div>
               </div>
@@ -174,7 +172,42 @@
             var table = $('#datatable').DataTable({
                 "pageLength": 10,
                 "lengthMenu": [5, 10, 20, 50],
-                "compact": true
+                "compact": true,
+                dom: 'lfrtpB',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="fa fa-download"></i> Unduh ',
+                        className: "btn btn-gradient-primary btn-icon-text mt-1",
+                        title: function() {
+                            var kabkota = $('#kabkota-select option:selected').text();
+                            return 'Riwayat Unggah Ubinan ' + kabkota;
+                        },
+                        filename: function() {
+                            var kabkota = $('#kabkota-select option:selected').text();
+                            return 'Riwayat Unggah Ubinan ' + kabkota;
+                        },
+                        init: function(api, node, config) {
+                            $(node).css({
+                                'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                            });
+                        }
+                    },
+                    {
+                        extend: 'copy',
+                        text: '<i class="fa fa-copy"></i> Salin ',
+                        className: "btn btn-gradient-primary btn-icon-text mt-1",
+                        title: function() {
+                            var kabkota = $('#kabkota-select option:selected').text();
+                            return 'Riwayat Unggah Ubinan ' + kabkota;
+                        },
+                        init: function(api, node, config) {
+                            $(node).css({
+                                'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                            });
+                        }
+                    }
+                ],
             });
 
             // DataTable instance for modal
@@ -184,7 +217,34 @@
                 "lengthMenu": [5, 10, 20, 50],
                 "bDestroy": true, // Allow re-initialization
                 "searching": true,
-                "info": true
+                "info": true,
+                "compact": true,
+                dom: 'lfrtpB',
+                buttons: [
+                    {
+                        extend: 'excel',
+                        text: '<i class="fa fa-download"></i> Unduh ',
+                        className: "btn btn-gradient-primary btn-icon-text mt-1 p-3",
+                        title: 'Padi Sampel Ubinan',
+                        filename: 'Padi Sampel Ubinan',
+                        init: function(api, node, config) {
+                            $(node).css({
+                                'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                            });
+                        }
+                    },
+                    {
+                        extend: 'copy',
+                        text: '<i class="fa fa-copy"></i> Salin ',
+                        className: "btn btn-gradient-primary btn-icon-text mt-1 p-3",
+                        title: 'Amatan Ubinan',
+                        init: function(api, node, config) {
+                            $(node).css({
+                                'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                            });
+                        }
+                    }
+                ],
             });
 
             $('#kabkota-select').on('change', function () {
@@ -250,5 +310,11 @@
         });
 
     </script>
+    <!-- DataTables Buttons JS -->
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
   </body>
 </html>
