@@ -187,14 +187,35 @@
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
                         var kabkota = $('#kabkota-select option:selected').text();
-                        return 'Data Amatan ' + kabkota + ' - ' + bulan + '/' + tahun;
+                        return 'Validasi Amatan Jagung ' + kabkota + ' - ' + bulan + '/' + tahun;
                     },
                     filename: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
                         var kabkota = $('#kabkota-select option:selected').text();
-                        return 'Data_Amatan_' + kabkota + '_' + bulan + '_' + tahun;
+                        return 'Validasi Amatan Jagung ' + kabkota + ' ' + bulan + ' ' + tahun;
                     },
+                    init: function(api, node, config) {
+                        $(node).css({
+                            'background': 'linear-gradient(to right, #3b7d46, #659f3b)',
+                        });
+                    }
+                },
+                {
+                    extend: 'copy',
+                    text: '<i class="fa fa-copy"></i> Salin ',
+                    className: "btn btn-gradient-primary btn-icon-text mt-1",
+                    title: function() {
+                        var tahun = $('#tahun').val();
+                        var bulan = $('#bulan').val();
+                        var kabkota = $('#kabkota-select option:selected').text();
+                        return 'Validasi Amatan Jagung ' + kabkota + ' ' + bulan + ' ' + tahun;
+                    },
+                    init: function(api, node, config) {
+                        $(node).css({
+                            'background': 'linear-gradient(to right, #3b7d46, #659f3b)',
+                        });
+                    }
                 }
             ],
             "ajax": null, // Disable initial AJAX call
@@ -205,7 +226,7 @@
                 { "data": "hasil_b1" },
                 { "data": "hasil_b2" },
                 { "data": "status" },
-                { "data": "status" }
+                { "data": "evita" }
             ],
             "createdRow": function (row, data, dataIndex) {
             // Array dengan kolom hasil

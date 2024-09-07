@@ -194,14 +194,25 @@
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
                         var kabkota = $('#kabkota-select option:selected').text();
-                        return 'Data Amatan ' + kabkota + ' - ' + bulan + '/' + tahun;
+                        return 'Validasi Amatan Padi ' + kabkota + ' - ' + bulan + '/' + tahun;
                     },
                     filename: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
                         var kabkota = $('#kabkota-select option:selected').text();
-                        return 'Data_Amatan_' + kabkota + '_' + bulan + '_' + tahun;
+                        return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
                     },
+                },
+                {
+                    extend: 'copy',
+                    text: '<i class="fa fa-copy"></i> Salin ',
+                    className: "btn btn-gradient-primary btn-icon-text mt-1",
+                    title: function() {
+                        var tahun = $('#tahun').val();
+                        var bulan = $('#bulan').val();
+                        var kabkota = $('#kabkota-select option:selected').text();
+                        return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
+                    }
                 }
             ],
             "ajax": null, // Disable initial AJAX call
