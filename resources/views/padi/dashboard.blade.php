@@ -286,7 +286,7 @@
                d > 20 ? '#ED7D79' :
                d > 10 ? '#EE978D' :
                d >= 1 ? '#F5C4B6' :
-               d = 1  ? '#92C98C' :
+               d == 0  ? '#92C98C' :
                         '#666666';
     }
 
@@ -303,13 +303,13 @@
 
     function getColorSebaran(d) {
         return d == 'Tidak ada data' ? '#666666' :
-               d > 100 ? '#a67b5b' :
-               d > 80 ? '#af9559' :
-               d > 60 ? '#d0c49a' :
-               d > 40 ? '#b3b78f' :
-               d > 20 ? '#6e9775' :
-               d >= 1 ? '#407154' :
-               d = 1  ? '#104730' :
+               d > 100 ? '#043015' :
+               d > 80 ? '#00441b' :
+               d > 60 ? '#006d2c' :
+               d > 40 ? '#3fa65b' :
+               d > 20 ? '#7ad692' :
+               d >= 1 ? '#bee6b9' :
+               d == 0  ? '#ddefdb' :
                         '#666666';
     }
 
@@ -419,13 +419,13 @@
             } else {
                 // Tambahkan isi legend sesuai dengan kebutuhan Anda
                 div.innerHTML =
-                    '<i style="background:#a67b5b"></i> 0 <br/>' +
-                    '<i style="background:#af9559"></i> 1 - 20 <br/>' +
-                    '<i style="background:#d0c49a"></i> 21 - 40 <br/>' +
-                    '<i style="background:#b3b78f"></i> 41 - 60 <br/>' +
-                    '<i style="background:#6e9775"></i> 61 - 80 <br/>' +
-                    '<i style="background:#407154"></i> 81 - 100 <br/>' +
-                    '<i style="background:#104730"></i> 100 + <br/>';
+                    '<i style="background:#ddefdb"></i> 0 <br/>' +
+                    '<i style="background:#bee6b9"></i> 1 - 20 <br/>' +
+                    '<i style="background:#7ad692"></i> 21 - 40 <br/>' +
+                    '<i style="background:#3fa65b"></i> 41 - 60 <br/>' +
+                    '<i style="background:#006d2c"></i> 61 - 80 <br/>' +
+                    '<i style="background:#00441b"></i> 81 - 100 <br/>' +
+                    '<i style="background:#043015"></i> 100 + <br/>';
             }
 
             return div;
