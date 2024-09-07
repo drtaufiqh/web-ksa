@@ -228,7 +228,7 @@
                 { "data": "hasil_c2" },
                 { "data": "hasil_c3" },
                 { "data": "status" },
-                { "data": "status" }
+                { "data": "evita" }
             ],
             "createdRow": function (row, data, dataIndex) {
             // Array dengan kolom hasil
