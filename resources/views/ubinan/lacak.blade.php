@@ -261,8 +261,8 @@
     var pesanAda =
         '<div id="tombolModal" style="text-align:center">'+
             '<div id="pesan" style="text-align:center"></div>'+
-            '<button type="button" id="ubah_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah()">Ubah</button>'+
-            '<button type="button" id="hapus_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus()">Hapus</button>'+
+            '<button type="button" id="ubah_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah()"><i class="fa fa-edit"></i> Edit </button>'+
+            '<button type="button" id="hapus_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus()"><i class="fa fa-trash-o"></i> Hapus </button>'+
         '</div>';
 
     function unduh(){
