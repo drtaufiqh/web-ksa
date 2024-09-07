@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GambarController;
 use App\Http\Controllers\PetaniController;
 use App\Http\Controllers\UbinanController;
 use App\Models\PadiAmatan;
@@ -47,6 +48,7 @@ Route::get('/padi_dashboard', [PadiAmatanController::class, 'showDashboard'])->m
 Route::get('/padi_kondef', function () {
     return view('padi.kondef');
 })->middleware('auth')->name('padi_kondef');
+Route::get('/unduh-padi', [GambarController::class, 'unduhPadi'])->middleware('auth');
 
 // padi_unggah
 Route::get('/padi_unggah', [PadiAmatanController::class, 'showUploadForm'])->middleware('auth')->name('padi_unggah');
@@ -85,6 +87,7 @@ Route::get('/jagung_dashboard', [JagungAmatanController::class, 'showDashboard']
 Route::get('/jagung_kondef', function () {
     return view('jagung.kondef');
 })->middleware('auth')->name('jagung_kondef');
+Route::get('/unduh-jagung', [GambarController::class, 'unduhJagung'])->middleware('auth');
 
 // jagung_unggah
 Route::get('/jagung_unggah', [JagungAmatanController::class, 'showUploadForm'])->middleware('auth')->name('jagung_unggah');

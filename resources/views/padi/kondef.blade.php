@@ -37,8 +37,9 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <img style="height:100%;width:100%" id="image" src="https://webapps.bps.go.id/jateng/mbadiba/assets/img/rule3300_padi.png">
-                  <button type="button" class="btn btn-gradient-primary btn-icon-text">
-                  <i class="fa fa-download"></i> Unduh </button>
+                  <a href="/unduh-padi" class="btn btn-gradient-primary btn-icon-text">
+                      <i class="fa fa-download"></i> Unduh
+                  </a>
                 </div>
               </div>
             </div>
