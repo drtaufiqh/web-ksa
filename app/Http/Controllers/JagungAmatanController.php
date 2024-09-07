@@ -460,20 +460,45 @@ class JagungAmatanController extends Controller
         return json_encode($geodata);
     }
 
-    public function testProgres(){
-        return view('jagung.test-progres');
+    public function getDataPetaSebaran(Request $request) {
+        $tahun = $request->input('tahun_peta');
+        $bulan = $request->input('bulan_peta');
+        $fase = $request->input('fase');
+        $geodata = $request->input('geodata');
+        $geodata = json_decode($geodata,true);
+
+        $data = JagungAmatan::countFase($tahun . $bulan, $fase);
+
+        // dd(substr($data[0]->indeks,6,4), $data[0]->indeks);
+        if ($data) {
+            foreach ($geodata['features'] as $key => $feature) {
+                foreach ($data as $datum) {
+                    if ($feature['properties']['IDKAB'] == $datum->kode_kabkota) {
+                        // if($datum->indeks == '2024083321') dd($datum->subsegmen_TK);
+                        $geodata['features'][$key]['properties']['KONSISTEN_P'] = $datum->total_semua;
+                    }
+                }
+            }
+        } else {
+            foreach ($geodata['features'] as $key => $feature) {
+                $geodata['features'][$key]['properties']['KONSISTEN_P'] = 'Tidak ada data';
+            }
+        }
+
+        return json_encode($geodata);
     }
 
     public function getDataProgres(Request $request) {
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
         $jenis = $request->input('jenis');
-        $get = ['indeks'];
+        $get = [];
 
+        // dd($tahun, $bulan, $jenis);
         if($jenis == 'subsegmen'){
             $get[] = $jenis . '_K';
-            $get[] = $jenis . '_TK';
             $get[] = $jenis . '_W';
+            $get[] = $jenis . '_TK';
         } else if ($jenis == 'segmen'){
             $get[] = $jenis . '_K';
             $get[] = $jenis . '_TK';
@@ -483,13 +508,59 @@ class JagungAmatanController extends Controller
         }
 
         $data = JagungValidasi::where('indeks', 'like', $tahun . $bulan . "%")
-                            ->get($get);
+                            ->get(['indeks', ...$get]);
 
-        return response()->json($data);
-    }
+        $allKabKota = User::getAllKabKotaWithKeys();
+        $dataWithKeys = $data->mapWithKeys(function ($item) use ($get) {
+                                // Ambil nilai indeks
+                                $indeks = $item->indeks;
 
-    public function testTerakhir(){
-        return view('jagung.test-terakhir');
+                                // Ambil hanya kolom yang diinginkan dari $get
+                                $values = collect($item)->only($get)->toArray();
+
+                                // Ubah pasangan key-value menjadi array yang hanya berisi nilai
+                                $values = array_values($values);
+
+                                // Return format [indeks => [get1, get2, get3]]
+                                return [substr(strval($indeks), 6, 4) => $values];
+                            })
+                            ->toArray();
+
+        // dd($dataWithKeys, $allKabKota);
+
+        // Ambil semua kunci dari $a dan $b
+        $allKeys = array_unique(array_merge(array_keys($allKabKota), array_keys($dataWithKeys)));
+        // dd($allKeys);
+
+        foreach ($allKeys as $value) {
+            if(in_array($value, array_keys($allKabKota))) {
+                $allKabKota_modif[$value] = $allKabKota[$value];
+            } else {
+                $allKabKota_modif[$value] = 0;
+            }
+        }
+        foreach ($allKeys as $value) {
+            if(in_array($value, array_keys($dataWithKeys))) {
+                $dataWithKeys_modif[$value] = $dataWithKeys[$value];
+            } else {
+                $dataWithKeys_modif[$value] = ($jenis == 'subsegmen') ? [0,0,0] : [0,0];
+            }
+        }
+        // dd($allKeys, $dataWithKeys_modif);
+
+        // Urutkan array berdasarkan key
+        ksort($allKabKota_modif);
+        ksort($dataWithKeys_modif);
+
+        // Ambil hanya nilai dari array yang telah diurutkan
+        $sortedAllKabKota = array_values($allKabKota_modif);
+        $sortedData = array_values($dataWithKeys_modif);
+
+        // dd($sortedData, $sortedAllKabKota);
+        return response()->json([
+            'labels' => $sortedAllKabKota,
+            'rawData' => $sortedData,
+        ]);
     }
 
     public function getDataTerakhir(Request $request) {
@@ -530,10 +601,6 @@ class JagungAmatanController extends Controller
         return response()->json($data);
     }
 
-    public function testBerjalan(){
-        return view('jagung.test-berjalan');
-    }
-
     public function getDataBerjalan(Request $request) {
         $tahun = Carbon::now()->year;
         $kode_kabkota = $request->input('kabkota');
@@ -559,5 +626,203 @@ class JagungAmatanController extends Controller
 
         // dd($data);
         return response()->json($data);
+    }
+
+    public function getDataCapaian(Request $request)
+    {
+        $jenisCapaian = $request->input('jenis_capaian');
+        $wilayahCapaian = $request->input('wilayah_capaian');
+
+        // Validasi input
+        if (is_null($jenisCapaian) || is_null($wilayahCapaian)) {
+            return response()->json(['error' => 'Invalid input'], 400);
+        }
+
+        // Ambil data berdasarkan jenis capaian dan wilayah
+        $data1 = $this->fetchDataForChart1($jenisCapaian, $wilayahCapaian);
+        $data2 = $this->fetchDataForChart2($jenisCapaian, $wilayahCapaian);
+
+        return response()->json([
+            'chart1' => $data1,
+            'chart2' => $data2
+        ]);
+    }
+
+/**
+     * Mengambil data untuk chart.
+     *
+     * @param  string  $jenisCapaian
+     * @param  string  $wilayahCapaian
+     * @return array
+     */
+    private function fetchDataForChart1($jenisCapaian, $wilayahCapaian){
+
+        $tahun = Carbon::now()->year;
+        $kode_kabkota = $wilayahCapaian;
+        if ($kode_kabkota == '3300') $kode_kabkota = '';
+        $jenis = $jenisCapaian;
+        $get = [];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_W';
+            $get[] = $jenis . '_TK';
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+        }
+
+        // Mengambil data dengan tahun dan bulan terbesar
+        $data = JagungValidasi::where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->get(['indeks', ...$get])->first();
+
+        // Jika data ditemukan
+        if ($data) {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [
+                        $data->subsegmen_K ?? 0,
+                        $data->subsegmen_W ?? 0,
+                        $data->subsegmen_TK ?? 0
+                    ]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [
+                        $data->segmen_K ?? 0,
+                        $data->segmen_TK ?? 0
+                    ]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [
+                        $data->evita_A ?? 0,
+                        $data->evita_R ?? 0
+                    ]
+                ];
+            }
+        } else {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [0,0,0]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [0,0]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [0,0]
+                ];
+            }
+        }
+    }
+    /**
+         * Mengambil data untuk chart.
+         *
+         * @param  string  $jenisCapaian
+         * @param  string  $wilayahCapaian
+         * @return array
+         */
+    private function fetchDataForChart2($jenisCapaian, $wilayahCapaian){
+        $tahun = Carbon::now()->year;
+        $kode_kabkota = $wilayahCapaian;
+        if ($kode_kabkota == '3300') $kode_kabkota = '';
+        $jenis = $jenisCapaian;
+        $get = [];
+
+        if($jenis == 'subsegmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            $get[] = $jenis . '_W';
+            // Mengambil data dengan tahun dan bulan terbesar
+            $data = JagungValidasi::select(
+                DB::raw('SUM('.$get[0].') as total_count0'),
+                DB::raw('SUM('.$get[1].') as total_count1'),
+                DB::raw('SUM('.$get[2].') as total_count2'),
+            )
+            ->where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->first();
+        } else if ($jenis == 'segmen'){
+            $get[] = $jenis . '_K';
+            $get[] = $jenis . '_TK';
+            // Mengambil data dengan tahun dan bulan terbesar
+            $data = JagungValidasi::select(
+                DB::raw('SUM('.$get[0].') as total_count0'),
+                DB::raw('SUM('.$get[1].') as total_count1'),
+            )
+            ->where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->first();
+        } else {
+            $get[] = $jenis . '_A';
+            $get[] = $jenis . '_R';
+            // Mengambil data dengan tahun dan bulan terbesar
+            $data = JagungValidasi::select(
+                DB::raw('SUM('.$get[0].') as total_count0'),
+                DB::raw('SUM('.$get[1].') as total_count1'),
+            )
+            ->where('indeks', 'like', $tahun . "%")
+            ->where('indeks', 'like', "%" . $kode_kabkota)
+            ->first();
+        }
+
+        // Jika data ditemukan
+        if ($data) {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [
+                        $data->total_count0 ?? 0,
+                        $data->total_count1 ?? 0,
+                        $data->total_count2 ?? 0
+                    ]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [
+                        $data->total_count0 ?? 0,
+                        $data->total_count1 ?? 0
+                    ]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [
+                        $data->total_count0 ?? 0,
+                        $data->total_count1 ?? 0
+                    ]
+                ];
+            }
+        } else {
+            if($jenis == 'subsegmen'){
+                return [
+                    'labels' => ['Konsisten', 'Warning', 'Inkonsisten'],
+                    'data' => [0,0,0]
+                ];
+            } else if ($jenis == 'segmen'){
+                return [
+                    'labels' => ['Konsisten', 'Inkonsisten'],
+                    'data' => [0,0]
+                ];
+            } else {
+                return [
+                    'labels' => ['Approved', 'Rejected'],
+                    'data' => [0,0]
+                ];
+            }
+        }
     }
 }

@@ -543,23 +543,6 @@ class PadiAmatanController extends Controller
         return $hasil;
     }
 
-    // public function getDataPeta(Request $request)
-    // {
-    //     $tahun = $request->input('tahun');
-    //     $bulan = $request->input('bulan');
-
-    //     $data = PadiValidasi::where('indeks', 'like', $tahun . $bulan . "%")
-    //                           ->get(['indeks', 'subsegmen_TK']);
-
-    //     return view('padi.test-peta', [
-    //         'data' => $data
-    //     ]);
-    // }
-
-    public function testPeta(){
-        return view('padi.test-peta');
-    }
-
     public function getDataPeta(Request $request) {
         $tahun = $request->input('tahun_peta');
         $bulan = $request->input('bulan_peta');
@@ -624,10 +607,6 @@ class PadiAmatanController extends Controller
         return json_encode($geodata);
     }
 
-    public function testProgres(){
-        return view('padi.test-progres');
-    }
-
     public function getDataProgres(Request $request) {
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
@@ -665,23 +644,41 @@ class PadiAmatanController extends Controller
                             })
                             ->toArray();
 
+        // dd($dataWithKeys, $allKabKota);
+
+        // Ambil semua kunci dari $a dan $b
+        $allKeys = array_unique(array_merge(array_keys($allKabKota), array_keys($dataWithKeys)));
+        // dd($allKeys);
+
+        foreach ($allKeys as $value) {
+            if(in_array($value, array_keys($allKabKota))) {
+                $allKabKota_modif[$value] = $allKabKota[$value];
+            } else {
+                $allKabKota_modif[$value] = 0;
+            }
+        }
+        foreach ($allKeys as $value) {
+            if(in_array($value, array_keys($dataWithKeys))) {
+                $dataWithKeys_modif[$value] = $dataWithKeys[$value];
+            } else {
+                $dataWithKeys_modif[$value] = ($jenis == 'subsegmen') ? [0,0,0] : [0,0];
+            }
+        }
+        // dd($allKeys, $dataWithKeys_modif);
+
         // Urutkan array berdasarkan key
-        ksort($allKabKota);
-        ksort($dataWithKeys);
+        ksort($allKabKota_modif);
+        ksort($dataWithKeys_modif);
 
         // Ambil hanya nilai dari array yang telah diurutkan
-        $sortedAllKabKota = array_values($allKabKota);
-        $sortedData = array_values($dataWithKeys);
+        $sortedAllKabKota = array_values($allKabKota_modif);
+        $sortedData = array_values($dataWithKeys_modif);
 
-        // dd($dataWithKeys, $allKabKota);
+        // dd($sortedData, $sortedAllKabKota);
         return response()->json([
             'labels' => $sortedAllKabKota,
             'rawData' => $sortedData,
         ]);
-    }
-
-    public function testTerakhir(){
-        return view('padi.test-terakhir');
     }
 
     public function getDataTerakhir(Request $request) {
@@ -720,10 +717,6 @@ class PadiAmatanController extends Controller
 
         // dd($data);
         return response()->json($data);
-    }
-
-    public function testBerjalan(){
-        return view('padi.test-berjalan');
     }
 
     public function getDataBerjalan(Request $request) {

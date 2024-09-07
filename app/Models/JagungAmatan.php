@@ -42,4 +42,19 @@ class JagungAmatan extends Model
 
         return $query->get();
     }
+    public static function countFase($tabul, $fase){
+        // Menggunakan query builder untuk menghitung banyaknya record
+        // dari a1, a2, a3, lalu group by 'kode_kabkota'
+        return self::select('kode_kabkota', \DB::raw('
+                    (
+                        SUM(CASE WHEN a1 = '.$fase.' THEN 1 ELSE 0 END) +
+                        SUM(CASE WHEN a2 = '.$fase.' THEN 1 ELSE 0 END) +
+                        SUM(CASE WHEN b1 = '.$fase.' THEN 1 ELSE 0 END) +
+                        SUM(CASE WHEN b2 = '.$fase.' THEN 1 ELSE 0 END)
+                    ) as total_semua
+                '))
+                ->where('tabul', $tabul)
+                ->groupBy('kode_kabkota')
+                ->get();
+    }
 }
