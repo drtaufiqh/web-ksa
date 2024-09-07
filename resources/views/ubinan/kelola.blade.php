@@ -193,7 +193,7 @@
 
         var pesanKosong =
             '<div id="tombolModal" style="text-align:center">'+
-                '<img id="image" src="'+base_url+'/assets/img/farmer.png" style="height:100px;margin-bottom:5px">'+
+                '<img id="image" src="'+base_url+'assets/img/farmer.png" style="height:100px;margin-bottom:5px">'+
             '</div>';
 
         function unduh(){
@@ -210,7 +210,7 @@
             $('#pesanContainer').html(
                 '<div id="tombolModal" style="text-align:center">'+
                     '<div id="pesan" style="text-align:center"></div>'+
-                    '<button id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
+                    '<button id="submit_btn"type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
                 '</div>'
             );
             $('#editModal').modal({backdrop:'static', keyboard:false});
@@ -239,7 +239,7 @@
             $('#pesanContainer').html(
                 '<div id="tombolModal" style="text-align:center">'+
                     '<div id="pesan" style="text-align:center"></div>'+
-                    '<button id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
+                    '<button id="submit_btn"type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
                 '</div>'
             );
             $('#editModal').modal({backdrop:'static', keyboard:false});
@@ -384,8 +384,8 @@
                                 '<td>'+data['data'][y]['hp']+'</td>'+
                                 '<td>'+data['data'][y]['alamat']+'</td>'+
                                 '<td>'+
-                                    '<button id="ubah_btn" class="btn btn-sm btn-warning" onclick="ubah('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false">Ubah</button>'+
-                                    '<button id="hapus_btn" class="btn btn-sm btn-danger" onclick="hapus('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false">Hapus</button>'+
+                                    '<button id="ubah_btn" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-edit"></i> Edit </button>'+
+                                    '<button id="hapus_btn" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i> Hapus </button>'+
                                 '</td>'+
                             '</tr>'
                         );

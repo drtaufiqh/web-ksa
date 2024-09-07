@@ -225,7 +225,7 @@
 
     var pesanKosong =
         '<div id="tombolModal" style="text-align:center">'+
-            '<img id="image" src="'+base_url+'/assets/img/farmer.png" style="height:100px;margin-bottom:5px">'+
+            '<img id="image" src="'+base_url+'assets/img/farmer.png" style="height:100px;margin-bottom:5px">'+
             '<p id="pesan">Data Petani belum ada</p>'+
             '<button id="tambah_btn" class="btn btn-sm btn-primary" onclick="tambah()">Tambah</button>'+
         '</div>';
@@ -261,8 +261,8 @@
     var pesanAda =
         '<div id="tombolModal" style="text-align:center">'+
             '<div id="pesan" style="text-align:center"></div>'+
-            '<button type="button" id="ubah_btn" class="btn btn-sm btn-warning" onclick="ubah()">Ubah</button>'+
-            '<button type="button" id="hapus_btn" class="btn btn-sm btn-danger" onclick="hapus()">Hapus</button>'+
+            '<button type="button" id="ubah_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah()">Ubah</button>'+
+            '<button type="button" id="hapus_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus()">Hapus</button>'+
         '</div>';
 
     function unduh(){
@@ -319,7 +319,7 @@
         $('#pesanContainer').html(
             '<div id="tombolModal" style="text-align:center">'+
                 '<div id="pesan" style="text-align:center"></div>'+
-                '<button type="button" id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
+                '<button type="button" id="submit_btn" type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
             '</div>'
         );
     }
@@ -334,7 +334,7 @@
         $('#pesanContainer').html(
             '<div id="tombolModal" style="text-align:center">'+
                 '<div id="pesan" style="text-align:center"></div>'+
-                '<button type="button" id="submit_btn" class="btn btn-sm btn-primary" onclick="submitData()">Submit</button>'+
+                '<button type="button" id="submit_btn"type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
             '</div>'
         );
     }
