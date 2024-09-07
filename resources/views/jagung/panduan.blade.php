@@ -30,16 +30,15 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper" style="background: linear-gradient(to right, #f4ffc8, #ddf3ca);">
-            <div class="page-header" style="background-color: #3b5740">
+            <div class="page-header" style="background-color: #3b5740;">
               <h3 class="page-title"> Panduan Teknis </h3>
             </div>
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
-                  <img style="height:50%;width:100%" id="image" src="/assets/img/imgleft.png">
-                  <button type="button" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #3b7d46, #659f3b);">
-                  <i class="fa fa-download"></i> Unduh </button>
+                      <!-- Scrollable PDF preview container -->
+                        <iframe src="/assets/panduan.pdf" width="100%" height="500px"></iframe>
                   </div>
                 </div>
               </div>
