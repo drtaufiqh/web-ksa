@@ -39,6 +39,7 @@
             <div class="row">
               <div class="col-12 grid-margin stretch-card">
               <div class="card">
+                @if (Auth::user()->role == 'prov')
                   <div class="card-body">
                     <div class="dropdownpadi" style="color: #3b5740;background-color: #def4ca;">
                         <label>Peta</label>
@@ -109,6 +110,7 @@
                     </div>
                     <div id="map" style="height: 70vh;background: #fbf8f8;"></div>
                 </div>
+                @endif
                   <div class="card-body">
                     <h4 class="judul-chart"> Progres Tiap Wilayah</h4>
                     <div class="dropdown-chart">

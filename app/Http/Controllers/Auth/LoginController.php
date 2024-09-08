@@ -46,7 +46,7 @@ class LoginController extends Controller
             // Jika ada data yang cocok
             if ($petani->count() > 0) {
                 // Simpan pesan notifikasi ke session
-                session()->flash('notification', 'Ada data petani yang akan jatuh tempo dalam 7 hari.');
+                session()->flash('notification', 'Ada subsegmen yang akan panen kurang dari seminggu lagi.');
             }
 
             // Redirect ke halaman yang seharusnya
