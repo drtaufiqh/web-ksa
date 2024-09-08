@@ -14,10 +14,28 @@ class UbinanController extends Controller
 {
     //
     public function showLacak(){
-        return view("ubinan.lacak");
+        // Ambil tahun terkecil dari database
+        $minYear = Ubinan::min('tahun') ?? Carbon::now()->year;
+
+        // Tahun sekarang
+        $currentYear = Carbon::now()->addHours(7)->year;
+
+        return view("ubinan.lacak",  [
+            'minYear' => $minYear-1,
+            'currentYear' => $currentYear,
+        ]);
     }
     public function showPotensial(){
-        return view("ubinan.potensial");
+        // Ambil tahun terkecil dari database
+        $minYear = Ubinan::min('tahun') ?? Carbon::now()->year;
+
+        // Tahun sekarang
+        $currentYear = Carbon::now()->addHours(7)->year;
+
+        return view("ubinan.potensial",  [
+            'minYear' => $minYear-1,
+            'currentYear' => $currentYear,
+        ]);
     }
     public function showPanduan(){
         return view("ubinan.panduan");

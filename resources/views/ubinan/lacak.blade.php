@@ -42,15 +42,27 @@
                   <div class="card-body">
                     <form id="formulir-awal">
                     @csrf
+                        {{-- Tahun --}}
+                        @php
+                            $years = [];
+                            $currentYear = $currentYear ?? Carbon::now()->year; // Menggunakan tahun sekarang jika tidak ada
+                            $minYear = $minYear ?? 2020; // Menyediakan tahun default jika tidak ada dari database
+
+                            // Generate array tahun dari tahun sekarang ke tahun terkecil
+                            for ($year = $currentYear; $year >= $minYear; $year--) {
+                                $years[] = $year;
+                            }
+                        @endphp
+                        
                         <div class="form-group row" id="tahun_g" style="margin-bottom: 0;">
-                          <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Tahun Amatan</label>
-                          <div class="col-sm">
-                            <select type="text" class="form-control" id="tahun_i">
-                                <?php for($tahun=date('Y'); $tahun>=2021; $tahun--){
-                                    echo '<option value="'.$tahun.'">'.$tahun.'</option>';
-                                } ?>
-                            </select>
-                          </div>
+                            <label for="tahun_i" class="col-sm-3 col-form-label">Tahun Amatan</label>
+                            <div class="col-sm">
+                                <select type="text" class="form-control" id="tahun_i">
+                                    @foreach($years as $year)
+                                        <option value="{{ $year }}">{{ $year }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="form-group row" id="bulan_g" style="margin-bottom: 0;">
@@ -74,13 +86,13 @@
                         </div>
 
                         <div class="form-group row" id="tahunsampel_g" style="margin-bottom: 0;">
-                            <label for="exampleInputMobile" class="col-sm-3 col-form-label">Tahun Sampel</label>
+                            <label for="tahunsampel_i" class="col-sm-3 col-form-label">Tahun Sampel</label>
                             <div class="col-sm">
-                              <select type="text" class="form-control" id="tahunsampel_i">
-                                <?php for($tahun=date('Y'); $tahun>=2021; $tahun--){
-                                    echo '<option value="'.$tahun.'">'.$tahun.'</option>';
-                                } ?>
-                              </select>
+                                <select type="text" class="form-control" id="tahunsampel_i">
+                                    @foreach($years as $year)
+                                        <option value="{{ $year }}">{{ $year }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
