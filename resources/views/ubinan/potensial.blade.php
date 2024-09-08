@@ -238,7 +238,7 @@
                             // '<h5>Inkonsisten = '+d.count[1]+' subsegmen | '+d.count[4]+' segmen</h5>'+
                             // '<p>Keterangan: data sebelah kiri (BPPT) vs data sebelah kanan (Pro)</p>'+
                             '<div style="overflow-x:scroll">'+
-                                '<table id="tabelHasil" class="display compact">'+
+                                '<table id="tabelHasil" class="table table-striped" style="border: 1px solid #ebedf2;">'+
                                     '<thead>'+
                                         '<tr>'+
                                             '<th>Kode Segmen</th>'+
@@ -262,7 +262,57 @@
                             )
                         }
                         $('#tabelHasil').DataTable({
-                            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+                            "pageLength": 10, // Jumlah default baris per halaman
+                            "lengthMenu": [[5,10,25,50,100,-1],[5, 10, 25, 50, 100, 'All']], // Opsi jumlah baris per halaman
+                            "order": [[ 0, "asc" ]], // Urutkan berdasarkan kolom pertama secara ascending
+                            "compact": true,
+                            dom: 'lfrtpB',
+                            buttons: [
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-download"></i> Unduh ',
+                                    className: "btn btn-gradient-primary btn-icon-text mt-1",
+                                    title: function() {
+                                        var tahun = $('#tahun_i').val();
+                                        var bulan = $('#bulan_i').val();
+                                        var tahunsampel = $('#tahunsampel_i').val();
+                                        var bulansampel = $('#bulansampel_i option:selected').text();
+                                        var kabkota = '{{ Auth::user()->kode }}';
+                                        return 'Padi Potensial Ubinan ' + bulansampel + ' ' + tahunsampel + ' ' + kabkota + ' Berdasarkan Amatan ' + bulan + ' ' + tahun;
+                                    },
+                                    filename: function() {
+                                        var tahun = $('#tahun_i').val();
+                                        var bulan = $('#bulan_i').val();
+                                        var tahunsampel = $('#tahunsampel_i').val();
+                                        var bulansampel = $('#bulansampel_i option:selected').text();
+                                        var kabkota = '{{ Auth::user()->kode }}';
+                                        return 'Padi Potensial Ubinan ' + bulansampel + ' ' + tahunsampel + ' ' + kabkota + ' Berdasarkan Amatan ' + bulan + ' ' + tahun;
+                                    },
+                                    init: function(api, node, config) {
+                                        $(node).css({
+                                            'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                                        });
+                                    }
+                                },
+                                {
+                                    extend: 'copy',
+                                    text: '<i class="fa fa-copy"></i> Salin ',
+                                    className: "btn btn-gradient-primary btn-icon-text mt-1",
+                                    title: function() {
+                                        var tahun = $('#tahun_i').val();
+                                        var bulan = $('#bulan_i').val();
+                                        var tahunsampel = $('#tahunsampel_i').val();
+                                        var bulansampel = $('#bulansampel_i option:selected').text();
+                                        var kabkota = '{{ Auth::user()->kode }}';
+                                        return 'Padi Potensial Ubinan ' + bulansampel + ' ' + tahunsampel + ' ' + kabkota + ' Berdasarkan Amatan ' + bulan + ' ' + tahun;
+                                    },
+                                    init: function(api, node, config) {
+                                        $(node).css({
+                                            'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                                        });
+                                    }
+                                }
+                            ],
                         });
                     } else {
                         $('#hasilValidasi').html('<h4>'+d.message+'</h4>');
@@ -277,5 +327,11 @@
         $('#exampleModal').modal('hide');
     }
 </script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
   </body>
 </html>
