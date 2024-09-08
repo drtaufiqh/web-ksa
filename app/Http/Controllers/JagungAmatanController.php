@@ -23,7 +23,7 @@ class JagungAmatanController extends Controller
         $minYear = JagungAmatan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->addHours(7)->year;
+        $currentYear = Carbon::now()->year;
 
         // Kirim tahun terkecil dan tahun sekarang ke view
         return view('jagung.dashboard', [
@@ -37,7 +37,7 @@ class JagungAmatanController extends Controller
         $minYear = JagungAmatan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->addHours(7)->year;
+        $currentYear = Carbon::now()->year;
 
         // Kirim tahun terkecil dan tahun sekarang ke view
         return view('jagung.unggah', [
@@ -134,7 +134,7 @@ class JagungAmatanController extends Controller
                 'pcs' => $pcs,
                 'status' => $status,
                 'akun' => Auth::user()->email,
-                'updated_at' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
         }
 
@@ -439,6 +439,11 @@ class JagungAmatanController extends Controller
         $geodata = $request->input('geodata');
         $geodata = json_decode($geodata,true);
 
+        $wil = Auth::user()->kode;
+        if ($wil != '3300') {
+            return 'No Akses';
+        }
+
         $data = JagungValidasi::where('indeks', 'like', $tahun . $bulan . "%")
                             ->get(['indeks', 'subsegmen_TK']);
 
@@ -466,6 +471,11 @@ class JagungAmatanController extends Controller
         $fase = $request->input('fase');
         $geodata = $request->input('geodata');
         $geodata = json_decode($geodata,true);
+
+        $wil = Auth::user()->kode;
+        if ($wil != '3300') {
+            return 'No Akses';
+        }
 
         $data = JagungAmatan::countFase($tahun . $bulan, $fase);
 
@@ -563,75 +573,14 @@ class JagungAmatanController extends Controller
         ]);
     }
 
-    public function getDataTerakhir(Request $request) {
-        $tahun = Carbon::now()->year;
-        $bulan = Carbon::now()->month;
-        $kode_kabkota = $request->input('kabkota');
-        $jenis = $request->input('jenis');
-        $get = ['indeks'];
-
-        if($jenis == 'subsegmen'){
-            $get[] = $jenis . '_K';
-            $get[] = $jenis . '_TK';
-            $get[] = $jenis . '_W';
-        } else if ($jenis == 'segmen'){
-            $get[] = $jenis . '_K';
-            $get[] = $jenis . '_TK';
-        } else {
-            $get[] = $jenis . '_A';
-            $get[] = $jenis . '_R';
-        }
-
-        // Mendapatkan tahun terbesar
-        $maxTahun = JagungValidasi::select(DB::raw('MAX(SUBSTRING(indeks, 1, 4)) as max_tahun'))
-        ->pluck('max_tahun')
-        ->first() ?? $tahun;
-
-        // Mendapatkan bulan terbesar untuk tahun terbesar
-        $maxBulan = JagungValidasi::where(DB::raw('SUBSTRING(indeks, 1, 4)'), $maxTahun)
-            ->select(DB::raw('MAX(SUBSTRING(indeks, 5, 2)) as max_bulan'))
-            ->pluck('max_bulan')
-            ->first() ?? $bulan;
-
-        // Mengambil data dengan tahun dan bulan terbesar
-        $data = JagungValidasi::where('indeks', 'like', $maxTahun . $maxBulan . $kode_kabkota . "%")
-        ->get($get);
-
-        // dd($data);
-        return response()->json($data);
-    }
-
-    public function getDataBerjalan(Request $request) {
-        $tahun = Carbon::now()->year;
-        $kode_kabkota = $request->input('kabkota');
-        $jenis = $request->input('jenis');
-        $get = ['indeks'];
-
-        if($jenis == 'subsegmen'){
-            $get[] = $jenis . '_K';
-            $get[] = $jenis . '_TK';
-            $get[] = $jenis . '_W';
-        } else if ($jenis == 'segmen'){
-            $get[] = $jenis . '_K';
-            $get[] = $jenis . '_TK';
-        } else {
-            $get[] = $jenis . '_A';
-            $get[] = $jenis . '_R';
-        }
-
-        // Mengambil data dengan tahun dan bulan terbesar
-        $data = JagungValidasi::where('indeks', 'like', $tahun . "%")
-            ->where('indeks', 'like', "%" . $kode_kabkota)
-            ->get($get);
-
-        // dd($data);
-        return response()->json($data);
-    }
-
     public function getDataCapaian(Request $request)
     {
         $jenisCapaian = $request->input('jenis_capaian');
-        $wilayahCapaian = $request->input('wilayah_capaian');
+
+        $wilayahCapaian = Auth::user()->kode;
+        if ($wilayahCapaian == '3300') {
+            $wilayahCapaian = $request->input('wilayah_capaian');
+        }
 
         // Validasi input
         if (is_null($jenisCapaian) || is_null($wilayahCapaian)) {

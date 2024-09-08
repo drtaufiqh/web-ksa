@@ -23,7 +23,7 @@ class PadiAmatanController extends Controller
         $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->addHours(7)->year;
+        $currentYear = Carbon::now()->year;
 
         // Kirim tahun terkecil dan tahun sekarang ke view
         return view('padi.dashboard', [
@@ -37,7 +37,7 @@ class PadiAmatanController extends Controller
         $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->addHours(7)->year;
+        $currentYear = Carbon::now()->year;
 
         // Kirim tahun terkecil dan tahun sekarang ke view
         return view('padi.unggah', [
@@ -268,7 +268,7 @@ class PadiAmatanController extends Controller
                 'pcs' => $pcs,
                 'status' => $status,
                 'akun' => Auth::user()->email,
-                'updated_at' => Carbon::now()->addHours(7)->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
             ];
         }
 
