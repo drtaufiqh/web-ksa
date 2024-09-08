@@ -189,6 +189,10 @@
                     '<label for="hp_i">No HP</label>'+
                     '<input type="text" class="form-control" id="hp_i">'+
                 '</div>'+
+                '<div class="form-group" id="tanggal_g">'+
+                    '<label for="tanggal_i">Perkiraan Panen</label>'+
+                    '<input type="date" class="form-control" id="tanggal_i">'+
+                '</div>'+
             '</form>';
 
         var pesanKosong =
@@ -237,6 +241,7 @@
             $('#nama_i').val(tmp_data[y]['nama']);
             $('#alamat_i').val(tmp_data[y]['alamat']);
             $('#hp_i').val(tmp_data[y]['hp']);
+            $('#tanggal_i').val(tmp_data[y]['tanggal']);
             $('#pesanContainer').html(
                 '<div id="tombolModal" style="text-align:center">'+
                     '<div id="pesan" style="text-align:center"></div>'+
@@ -305,6 +310,7 @@
             var tmp_nama = $('#nama_i').val();
             var tmp_alamat = $('#alamat_i').val();
             var tmp_hp = $('#hp_i').val();
+            var tmp_tanggal = $('#tanggal_i').val();
 
             if(tmp_segmen.length != 9){
                 error = 1;
@@ -330,7 +336,7 @@
                 pesan = 'Nama minimal 3 karakter';
             }
             if(error == 0){
-                var data = {kode_segmen: tmp_segmen, subsegmen: tmp_sub, nik: tmp_nik, nama: tmp_nama, alamat: tmp_alamat, hp: tmp_hp};
+                var data = {kode_segmen: tmp_segmen, subsegmen: tmp_sub, nik: tmp_nik, nama: tmp_nama, alamat: tmp_alamat, hp: tmp_hp, tanggal: tmp_tanggal};
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -365,6 +371,7 @@
                                 '<tr>'+
                                     '<th>Segmen</th>'+
                                     '<th>Subsegmen</th>'+
+                                    '<th>Estimasi Panen</th>'+
                                     '<th style="display:none">NIK</th>'+
                                     '<th>Nama</th>'+
                                     '<th>HP</th>'+
@@ -380,6 +387,7 @@
                             '<tr>'+
                                 '<td>'+data['data'][y]['kode_segmen']+'</td>'+
                                 '<td>'+data['data'][y]['subsegmen']+'</td>'+
+                                '<td>'+data['data'][y]['tanggal']+'</td>'+
                                 '<td style="display:none">'+data['data'][y]['nik']+'</td>'+
                                 '<td>'+data['data'][y]['nama']+'</td>'+
                                 '<td>'+data['data'][y]['hp']+'</td>'+

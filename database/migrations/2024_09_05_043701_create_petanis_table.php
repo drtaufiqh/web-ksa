@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('alamat')->nullable(); // alamat
             $table->string('hp', 15)->nullable(); // hp
             $table->string('ktp', 22)->nullable(); // ktp
+            $table->date('tanggal')->nullable();  // tanggal
             $table->tinyInteger('status')->nullable(); // status (int(2))
             $table->timestamp('last_update')->useCurrent()->nullable(); // last_update
             $table->string('akun', 20)->nullable(); // akun

@@ -34,6 +34,7 @@ class PetaniController extends Controller
         $nama = $request->input('nama');
         $alamat = $request->input('alamat');
         $hp = $request->input('hp');
+        $tanggal = $request->input('tanggal');
 
         $newData = array(
             'kode_segmen' => $kode_segmen,
@@ -42,6 +43,7 @@ class PetaniController extends Controller
             'nama' => $nama,
             'alamat' => $alamat,
             'hp' => $hp,
+            'tanggal' => $tanggal,
             'status' => 1,
             'last_update' => date("Y-m-d H:i:s"),
             'akun' => Auth::user()->email

@@ -53,7 +53,7 @@
                                 $years[] = $year;
                             }
                         @endphp
-                        
+
                         <div class="form-group row" id="tahun_g" style="margin-bottom: 0;">
                             <label for="tahun_i" class="col-sm-3 col-form-label">Tahun Amatan</label>
                             <div class="col-sm">
@@ -201,6 +201,7 @@
         var tmp_nama = '';
         var tmp_alamat = '';
         var tmp_hp = '';
+        var tmp_tanggal = '';
     </script>
 <script>
     // moment.locale('id');
@@ -232,6 +233,10 @@
             '<div class="form-group" id="hp_g">'+
                 '<label for="hp_i">No HP</label>'+
                 '<input type="text" class="form-control" id="hp_i">'+
+            '</div>'+
+            '<div class="form-group" id="tanggal_g">'+
+                '<label for="tanggal_i">Perkiraan Panen</label>'+
+                '<input type="date" class="form-control" id="tanggal_i">'+
             '</div>'+
         '</form>';
 
@@ -297,6 +302,10 @@
                 '<label >No HP</label>'+
                 '<p id="f" class="m-0 p-0"></p>'+
             '</div>'+
+            '<div class="form-group">'+
+                '<label >Perkiraan Panen</label>'+
+                '<p id="g" class="m-0 p-0"></p>'+
+            '</div>'+
         '</form>';
 
     var pesanAda =
@@ -327,6 +336,7 @@
                 tmp_nik = data['data'][0]['nik'];
                 tmp_alamat = data['data'][0]['alamat'];
                 tmp_hp = data['data'][0]['hp'];
+                tmp_tanggal = data['data'][0]['tanggal'];
                 $('#formContainer').html(formAda);
                 $('#pesanContainer').html(pesanAda);
                 $('#a').html(': '+tmp_segmen);
@@ -335,6 +345,7 @@
                 $('#d').html(': '+tmp_nik);
                 $('#e').html(': '+tmp_alamat);
                 $('#f').html(': '+tmp_hp);
+                $('#g').html(': '+tmp_tanggal);
             } else {
                 $('#pesanContainer').html(pesanKosong);
             }
@@ -374,6 +385,7 @@
         $('#nama_i').val(tmp_nama);
         $('#alamat_i').val(tmp_alamat);
         $('#hp_i').val(tmp_hp);
+        $('#tanggal_i').val(tmp_tanggal);
         $('#pesanContainer').html(
             '<div id="tombolModal" style="text-align:center">'+
                 '<div id="pesan" style="text-align:center"></div>'+
@@ -408,6 +420,7 @@
         tmp_nama = $('#nama_i').val();
         tmp_alamat = $('#alamat_i').val();
         tmp_hp = $('#hp_i').val();
+        tmp_tanggal = $('#tanggal_i').val();
 
         if(tmp_alamat.length < 10){
             error = 1;
@@ -418,7 +431,7 @@
             pesan = 'Nama minimal 3 karakter';
         }
         if(error == 0){
-            var data = {kode_segmen: tmp_segmen, subsegmen: tmp_sub, nik: tmp_nik, nama: tmp_nama, alamat: tmp_alamat, hp: tmp_hp};
+            var data = {kode_segmen: tmp_segmen, subsegmen: tmp_sub, nik: tmp_nik, nama: tmp_nama, alamat: tmp_alamat, hp: tmp_hp, tanggal: tmp_tanggal};
             $.ajax({
                 type : "post",
                 url  : base_url+'ubinan/petani/insertPetani',
@@ -433,6 +446,7 @@
                     $('#d').html(': '+tmp_nik);
                     $('#e').html(': '+tmp_alamat);
                     $('#f').html(': '+tmp_hp);
+                    $('#g').html(': '+tmp_tanggal);
                     $('#pesan').html(
                         '<h5 style="color:green">'+d.message+'</h5>'
                     );
@@ -619,6 +633,7 @@
         tmp_nama = '';
         tmp_alamat = '';
         tmp_hp = '';
+        tmp_tanggal = '';
         $('#formContainer').html('');
         $('#pesanContainer').html('');
         // $('#editModal').hide();
