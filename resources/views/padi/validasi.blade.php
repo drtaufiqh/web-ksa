@@ -201,13 +201,19 @@
                     title: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
-                        var kabkota = $('#kabkota-select option:selected').text();
+                        var kabkota = '{{ Auth::user()->kode }}';
+                        if (isprov) {
+                            kabkota = $('#kabkota-select').val();
+                        }
                         return 'Validasi Amatan Padi ' + kabkota + ' - ' + bulan + '/' + tahun;
                     },
                     filename: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
-                        var kabkota = $('#kabkota-select option:selected').text();
+                        var kabkota = '{{ Auth::user()->kode }}';
+                        if (isprov) {
+                            kabkota = $('#kabkota-select').val();
+                        }
                         return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
                     },
                 },
@@ -218,7 +224,10 @@
                     title: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
-                        var kabkota = $('#kabkota-select option:selected').text();
+                        var kabkota = '{{ Auth::user()->kode }}';
+                        if (isprov) {
+                            kabkota = $('#kabkota-select').val();
+                        }
                         return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
                     }
                 }
@@ -284,7 +293,7 @@
             // Ambil nilai dari form
             var tahun = $('#tahun').val();
             var bulan = $('#bulan').val();
-            var kabkota = '';
+            var kabkota = '{{ Auth::user()->kode }}';
             if (isprov) {
                 kabkota = $('#kabkota-select').val();
             }

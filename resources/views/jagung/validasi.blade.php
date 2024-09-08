@@ -92,6 +92,7 @@
                             </select>
                         </div>
 
+                        @if (Auth::user()->role == 'prov')
                         <!-- Dropdown untuk memilih kab/kota -->
                         <div class="form-group">
                             <label for="kabkota-select">Wilayah Amatan</label>
@@ -103,6 +104,7 @@
                                 @endforeach
                             </select>
                         </div>
+                        @endif
 
                         <!-- Tombol Lihat -->
                         <button type="button" id="lihat-btn" class="btn btn-gradient-primary btn-icon-text"style="padding:0.5rem;background: #87c351;margin-bottom:2rem">
@@ -168,6 +170,12 @@
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
+        var isprov = false;
+        @if (Auth::user()->role == 'prov')
+            isprov = true;
+        @endif
+    </script>
+    <script>
     $(document).ready(function () {
         // Initialize DataTable
         var table = $('#datatable').DataTable({
@@ -186,13 +194,19 @@
                     title: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
-                        var kabkota = $('#kabkota-select option:selected').text();
+                        var kabkota = '{{ Auth::user()->kode }}';
+                        if (isprov) {
+                            kabkota = $('#kabkota-select').val();
+                        }
                         return 'Validasi Amatan Jagung ' + kabkota + ' - ' + bulan + '/' + tahun;
                     },
                     filename: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
-                        var kabkota = $('#kabkota-select option:selected').text();
+                        var kabkota = '{{ Auth::user()->kode }}';
+                        if (isprov) {
+                            kabkota = $('#kabkota-select').val();
+                        }
                         return 'Validasi Amatan Jagung ' + kabkota + ' ' + bulan + ' ' + tahun;
                     },
                     init: function(api, node, config) {
@@ -208,7 +222,10 @@
                     title: function() {
                         var tahun = $('#tahun').val();
                         var bulan = $('#bulan').val();
-                        var kabkota = $('#kabkota-select option:selected').text();
+                        var kabkota = '{{ Auth::user()->kode }}';
+                        if (isprov) {
+                            kabkota = $('#kabkota-select').val();
+                        }
                         return 'Validasi Amatan Jagung ' + kabkota + ' ' + bulan + ' ' + tahun;
                     },
                     init: function(api, node, config) {
@@ -274,7 +291,10 @@
             // Ambil nilai dari form
             var tahun = $('#tahun').val();
             var bulan = $('#bulan').val();
-            var kabkota = $('#kabkota-select').val();
+            var kabkota = '{{ Auth::user()->kode }}';
+            if (isprov) {
+                kabkota = $('#kabkota-select').val();
+            }
 
             // Lakukan AJAX request untuk mendapatkan data
             $.ajax({
