@@ -29,13 +29,19 @@ class LoginController extends Controller
             // Jika berhasil login, regenerate session
             $request->session()->regenerate();
 
+            $wil = Auth::user()->kode;
+            if ($wil == '3300') {
+                $wil = '33';
+            }
             // Ambil tanggal saat ini
             $today = now()->startOfDay(); // Mulai dari awal hari
             // Tambah 7 hari
             $sevenDaysLater = $today->copy()->addDays(7);
 
             // Cek data yang tanggalnya antara hari ini dan 7 hari ke depan
-            $petani = Petani::whereBetween('tanggal', [$today->format('Y-m-d'), $sevenDaysLater->format('Y-m-d')])->get();
+            $petani = Petani::where('kode_segmen', 'like', $wil . '%')
+                ->whereBetween('tanggal', [$today->format('Y-m-d'), $sevenDaysLater->format('Y-m-d')])
+                ->get();
 
             // Jika ada data yang cocok
             if ($petani->count() > 0) {
