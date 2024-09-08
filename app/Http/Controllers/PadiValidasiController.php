@@ -45,7 +45,7 @@ class PadiValidasiController extends Controller
 
     //     return view('padi.validasi', [
     //         'allKabKota' => User::getAllKabKota(),
-    //         'currentYear' => Carbon::now()->addHours(7)->year,
+    //         'currentYear' => Carbon::now()->year,
     //         'hasil' => $hasil,
     //         'selected_tahun' => $tahun,
     //         'selected_bulan' => $bulan,
@@ -55,7 +55,9 @@ class PadiValidasiController extends Controller
 
     
     public function showValidasi(){
-        $data = PadiAmatan::all();
+        $wil = Auth::user()->kode;
+        if ($wil == '3300') $wil = '33';
+        $data = PadiAmatan::where('kode_kabkota', 'like', $wil . '%');
         // $data = PadiAmatan::paginate(10);
         $allKabKota = User::getAllKabKota();
         $tahun = Carbon::now()->year;
@@ -68,7 +70,7 @@ class PadiValidasiController extends Controller
         //     ->get();
         return view('padi.validasi', [
             'data' => $data,
-            'currentYear' => Carbon::now()->addHours(7)->year,
+            'currentYear' => Carbon::now()->year,
             'allKabKota' => $allKabKota,
             'selected_tahun' => $tahun,
             'selected_bulan' => $bulan,
@@ -79,26 +81,27 @@ class PadiValidasiController extends Controller
     public function getFilteredData(Request $request) {
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
-        $kabkota = $request->input('kabkota');
-    
+        $kabkota = Auth::user()->kode;
+        if ($kabkota == '3300') $kabkota = $request->input('kabkota');
+
         $query = DB::table('padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
-    
+
         if ($tahun) {
             $query->where('tahun', $tahun);
         }
-    
+
         if ($bulan) {
             $query->where('bulan', $bulan);
         }
-    
+
         if ($kabkota && $kabkota !== '3300') {
             $query->where('kode_kabkota', $kabkota);
         }
-    
+
         $data = $query->get();
-    
+
         return response()->json($data);
-    }    
+    }
 
     function proses($wil=null,$tabul0=null,$tabul1=null,$output='array', Request $request) // output = 'json'
     {
@@ -152,7 +155,7 @@ class PadiValidasiController extends Controller
                 $evita = [];
                 $evita['A'] = 0;
                 $evita['R'] = 0;
-                
+
                 $status = [];
                 $status['A'] = 0;
                 $status['R'] = 0;
@@ -171,7 +174,7 @@ class PadiValidasiController extends Controller
                     }
 
                     $count_seg = 0;
-                    foreach ($jenis_subsegmen as $jenis){                            
+                    foreach ($jenis_subsegmen as $jenis){
                         $var = 'hasil'.$jenis;
                         if($data1[$i][$var] == 'K'){
                             $count_subsegmen['K'] += 1;
@@ -187,7 +190,7 @@ class PadiValidasiController extends Controller
                     } else {
                         $count_segmen['TK'] += 1;
                     }
-                    
+
                     if($data1[$i]['status'] == 'Approved'){
                         $status['A'] += 1;
                     }
@@ -204,7 +207,7 @@ class PadiValidasiController extends Controller
                 $count_segmen['Total'] = $count_segmen['K']+$count_segmen['TK'];
                 $evita['Total'] = $evita['A']+$evita['R'];
                 $status['R'] = $count_segmen['Total'] - $status['A'];
-                
+
                 $dataVal = array (
                     'indeks' => $tabul1.$wil,
                     'subsegmen_K' => $count_subsegmen['K'],

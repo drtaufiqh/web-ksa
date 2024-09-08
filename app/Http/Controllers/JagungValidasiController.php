@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Auth;
 class JagungValidasiController extends Controller
 {
     public function showValidasi(){
-        $data = JagungAmatan::all();
+        $wil = Auth::user()->kode;
+        if ($wil == '3300') $wil = '33';
+        $data = JagungAmatan::where('kode_kabkota', 'like', $wil . '%');
         $allKabKota = User::getAllKabKota();
         $tahun = Carbon::now()->year;
         $bulan = date('m');
@@ -22,7 +24,7 @@ class JagungValidasiController extends Controller
 
         return view('jagung.validasi', [
             'data' => $data,
-            'currentYear' => Carbon::now()->addHours(7)->year,
+            'currentYear' => Carbon::now()->year,
             'allKabKota' => $allKabKota,
             'selected_tahun' => $tahun,
             'selected_bulan' => $bulan,
@@ -33,24 +35,25 @@ class JagungValidasiController extends Controller
     public function getFilteredData(Request $request) {
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
-        $kabkota = $request->input('kabkota');
-    
+        $kabkota = Auth::user()->kode;
+        if ($kabkota == '3300') $kabkota = $request->input('kabkota');
+
         $query = DB::table('jagung_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
-    
+
         if ($tahun) {
             $query->where('tahun', $tahun);
         }
-    
+
         if ($bulan) {
             $query->where('bulan', $bulan);
         }
-    
+
         if ($kabkota && $kabkota !== '3300') {
             $query->where('kode_kabkota', $kabkota);
         }
-    
+
         $data = $query->get();
-    
+
         return response()->json($data);
-    }    
+    }
 }
