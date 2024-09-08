@@ -371,7 +371,7 @@
                                 '<tr>'+
                                     '<th>Segmen</th>'+
                                     '<th>Subsegmen</th>'+
-                                    '<th>Estimasi Panen</th>'+
+                                    '<th>Perkiraan Panen</th>'+
                                     '<th style="display:none">NIK</th>'+
                                     '<th>Nama</th>'+
                                     '<th>HP</th>'+
@@ -401,7 +401,45 @@
                     }
 
                     $('#tabelRaw').DataTable({
-                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+                        "pageLength": 10, // Jumlah default baris per halaman
+                        "lengthMenu": [[5,10,25,50,100,-1],[5, 10, 25, 50, 100, 'All']], // Opsi jumlah baris per halaman
+                        "order": [[ 0, "asc" ]], // Urutkan berdasarkan kolom pertama secara ascending
+                        "compact": true,
+                        dom: 'lfrtpB',
+                        buttons: [
+                            {
+                                extend: 'excel',
+                                text: '<i class="fa fa-download"></i> Unduh ',
+                                className: "btn btn-gradient-primary btn-icon-text mt-1",
+                                title: function() {
+                                    var kabkota = '{{ Auth::user()->kode }}';
+                                    return 'Data Petani ' + kabkota;
+                                },
+                                filename: function() {
+                                    var kabkota = '{{ Auth::user()->kode }}';
+                                    return 'Data Petani ' + kabkota;
+                                },
+                                init: function(api, node, config) {
+                                    $(node).css({
+                                        'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                                    });
+                                }
+                            },
+                            {
+                                extend: 'copy',
+                                text: '<i class="fa fa-copy"></i> Salin ',
+                                className: "btn btn-gradient-primary btn-icon-text mt-1",
+                                title: function() {
+                                    var kabkota = '{{ Auth::user()->kode }}';
+                                    return 'Data Petani ' + kabkota;
+                                },
+                                init: function(api, node, config) {
+                                    $(node).css({
+                                        'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                                    });
+                                }
+                            }
+                        ],
                     });
                 } else {
                     $('#hasil').html(pesanKosong);
@@ -439,5 +477,11 @@
             });
         });
     </script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
   </body>
 </html>
