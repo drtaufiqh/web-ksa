@@ -49,7 +49,7 @@ class PetaniController extends Controller
         if ($wil != '3300' && $wil != substr($kode_segmen,0,4)){
             $message = array(
                 'status' => false,
-                'message' => 'Tidak bisa insert kabupaten sebelah.',
+                'message' => 'Tidak bisa insert kabupaten/kota sebelah.',
             );
             return json_encode($message);
         }
@@ -91,6 +91,15 @@ class PetaniController extends Controller
         $id = $request->input('id');
         $kode_segmen = $request->input('kode_segmen');
         $subsegmen = $request->input('subsegmen');
+
+        $wil = Auth::user()->kode;
+        if ($wil != '3300' && $wil != substr($kode_segmen,0,4)){
+            $message = array(
+                'status' => false,
+                'message' => 'Tidak bisa hapus kabupaten/kota sebelah.',
+            );
+            return json_encode($message);
+        }
 
         if (empty($id)) {
             // Fetch data by subsegmen
