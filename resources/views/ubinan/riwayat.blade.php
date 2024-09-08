@@ -188,11 +188,17 @@
                         text: '<i class="fa fa-download"></i> Unduh ',
                         className: "btn btn-gradient-primary btn-icon-text mt-1",
                         title: function() {
-                            var kabkota = $('#kabkota-select option:selected').text();
+                            var kabkota = '{{ Auth::user()->kode }}';
+                            if (isprov) {
+                                kabkota = $('#kabkota-select').val();
+                            }
                             return 'Riwayat Unggah Ubinan ' + kabkota;
                         },
                         filename: function() {
-                            var kabkota = $('#kabkota-select option:selected').text();
+                            var kabkota = '{{ Auth::user()->kode }}';
+                            if (isprov) {
+                                kabkota = $('#kabkota-select').val();
+                            }
                             return 'Riwayat Unggah Ubinan ' + kabkota;
                         },
                         init: function(api, node, config) {
@@ -206,7 +212,10 @@
                         text: '<i class="fa fa-copy"></i> Salin ',
                         className: "btn btn-gradient-primary btn-icon-text mt-1",
                         title: function() {
-                            var kabkota = $('#kabkota-select option:selected').text();
+                            var kabkota = '{{ Auth::user()->kode }}';
+                            if (isprov) {
+                                kabkota = $('#kabkota-select').val();
+                            }
                             return 'Riwayat Unggah Ubinan ' + kabkota;
                         },
                         init: function(api, node, config) {
