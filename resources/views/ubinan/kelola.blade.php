@@ -89,7 +89,7 @@
                     </div> --}}
 
                     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-dialog" role="document">
                             <div class="modal-content">
                             <div class="modal-header" id="headerModal">
                                 <h5 class="modal-title" id="judulModal">Petani</h5>
@@ -165,29 +165,29 @@
 
         var formKosong =
             '<form id="formulir">'+
-                '<div class="form-inline" id="segmen_g">'+
-                    '<label style="width:25%">Segmen</label>'+
-                    '<input type="text" class="form-control" id="segmen_i" style="width:75%">'+
+                '<div class="form-group" id="segmen_g">'+
+                    '<label for="segmen_i">Segmen</label>'+
+                    '<input type="text" class="form-control" id="segmen_i">'+
                 '</div>'+
-                '<div class="form-inline" id="subsegmen_g">'+
-                    '<label style="width:25%">Subsegmen</label>'+
-                    '<input type="text" class="form-control" id="subsegmen_i" style="width:75%">'+
+                '<div class="form-group" id="subsegmen_g">'+
+                    '<label for="subsegmen_i">Subsegmen</label>'+
+                    '<input type="text" class="form-control" id="subsegmen_i">'+
                 '</div>'+
-                '<div class="form-inline" id="nama_g">'+
-                    '<label style="width:25%">Nama</label>'+
-                    '<input type="text" class="form-control" id="nama_i" style="width:75%">'+
+                '<div class="form-group" id="nama_g">'+
+                    '<label for="nama_i">Nama</label>'+
+                    '<input type="text" class="form-control" id="nama_i">'+
                 '</div>'+
-                '<div class="form-inline" id="nik_g">'+
-                    '<label style="width:25%">NIK</label>'+
-                    '<input type="text" class="form-control" id="nik_i" style="width:75%">'+
+                '<div class="form-group" id="nik_g">'+
+                    '<label for="nik_i">NIK</label>'+
+                    '<input type="text" class="form-control" id="nik_i">'+
                 '</div>'+
-                '<div class="form-inline" id="alamat_g">'+
-                    '<label style="width:25%">Alamat</label>'+
-                    '<input type="text" class="form-control" id="alamat_i" style="width:75%">'+
+                '<div class="form-group" id="alamat_g">'+
+                    '<label for="alamat_i">Alamat</label>'+
+                    '<input type="text" class="form-control" id="alamat_i">'+
                 '</div>'+
-                '<div class="form-inline" id="hp_g">'+
-                    '<label style="width:25%">No HP</label>'+
-                    '<input type="text" class="form-control" id="hp_i" style="width:75%">'+
+                '<div class="form-group" id="hp_g">'+
+                    '<label for="hp_i">No HP</label>'+
+                    '<input type="text" class="form-control" id="hp_i">'+
                 '</div>'+
             '</form>';
 
@@ -211,7 +211,7 @@
             $('#pesanContainer').html(
                 '<div id="tombolModal" style="text-align:center">'+
                     '<div id="pesan" style="text-align:center"></div>'+
-                    '<button id="submit_btn"type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
+                    '<button id="submit_btn" type="button" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
                 '</div>'
             );
             // $('#editModal').modal({backdrop:'static', keyboard:false});
