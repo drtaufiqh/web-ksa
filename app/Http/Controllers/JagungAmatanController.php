@@ -50,7 +50,7 @@ class JagungAmatanController extends Controller
         set_time_limit(4 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
 
         $wil = Auth::user()->kode;
-        
+
         // Validasi file
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:xls,xlsx,csv',
@@ -81,12 +81,12 @@ class JagungAmatanController extends Controller
         $tabul_sesudah = TahunBulan::getTabulSesudah($tabul);
         $tabul_n_1 =TahunBulan::getTabulSebelum($tabul);
         $wilFile = substr($fileName, 8, 4);
-        $jenis = substr($fileName, 13, 4);
+        $jenis = substr($fileName, 13, 6);
 
         if ($wil != $wilFile) {
             return back()->withErrors(['input' => 'Pastikan format file sesuai dengan kabupaten/kota!'])->withInput();
         }
-        if ($jenis != 'padi') {
+        if ($jenis != 'jagung') {
             return back()->withErrors(['input' => 'Pastikan format file sesuai!'])->withInput();
         }
 
