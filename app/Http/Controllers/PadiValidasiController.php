@@ -53,11 +53,11 @@ class PadiValidasiController extends Controller
     //     ]);
     // }
 
-    
+
     public function showValidasi(){
         $wil = Auth::user()->kode;
         if ($wil == '3300') $wil = '33';
-        $data = PadiAmatan::where('kode_kabkota', 'like', $wil . '%');
+        $data = PadiAmatan::where('kode_kabkota', 'like', $wil . '%')->get();
         // $data = PadiAmatan::paginate(10);
         $allKabKota = User::getAllKabKota();
         $tahun = Carbon::now()->year;

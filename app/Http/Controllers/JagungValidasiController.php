@@ -16,7 +16,7 @@ class JagungValidasiController extends Controller
     public function showValidasi(){
         $wil = Auth::user()->kode;
         if ($wil == '3300') $wil = '33';
-        $data = JagungAmatan::where('kode_kabkota', 'like', $wil . '%');
+        $data = JagungAmatan::where('kode_kabkota', 'like', $wil . '%')->get();
         $allKabKota = User::getAllKabKota();
         $tahun = Carbon::now()->year;
         $bulan = date('m');

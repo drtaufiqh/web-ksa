@@ -10,6 +10,15 @@ class PetaniController extends Controller
 {
     //
     public function getBySubsegmen($segmen, $sub){
+        $wil = Auth::user()->kode;
+        if ($wil != '3300' && $wil != substr($segmen,0,4)){
+            $message = array(
+                'status' => false,
+                'segmen' => $segmen,
+                'sub' => $sub
+            );
+            echo json_encode($message);
+        }
         $data = Petani::fetchBySubsegmen($segmen,$sub);
         if(count($data)>0){
             $message = array(
@@ -35,6 +44,15 @@ class PetaniController extends Controller
         $alamat = $request->input('alamat');
         $hp = $request->input('hp');
         $tanggal = $request->input('tanggal');
+
+        $wil = Auth::user()->kode;
+        if ($wil != '3300' && $wil != substr($kode_segmen,0,4)){
+            $message = array(
+                'status' => false,
+                'message' => 'Tidak bisa insert kabupaten sebelah.',
+            );
+            return json_encode($message);
+        }
 
         $newData = array(
             'kode_segmen' => $kode_segmen,
@@ -109,7 +127,11 @@ class PetaniController extends Controller
 
     public function getAll()
     {
-        $data = Petani::all(); // Mengambil semua data dari model Petani
+        $wil = Auth::user()->kode;
+        if ($wil == '3300') $wil = '33';
+        $data = Petani::where('kode_segmen', 'like', $wil . '%')->get(); // Mengambil semua data dari model Petani
+
+        // dd($data);
 
         if ($data->count() > 0) {
             $message = [
