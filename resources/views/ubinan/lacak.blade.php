@@ -121,7 +121,7 @@
                             <div class="modal-content">
                             <div class="modal-header" id="headerModal">
                                 <h5 class="modal-title" id="judulModal"></h5>
-                                <button id="close_btn" type="button" class="close" aria-label="Close" onclick="cancel()">
+                                <button id="close_btn" type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cancel()">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -296,19 +296,19 @@
                 $('#pesanContainer').html(pesanKosong);
             }
             // Tampilkan modal
-            $('#editModal').modal({backdrop:'static', keyboard:false});
-            $('#editModal').on('hidden.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-                $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-            });
-            $('#editModal').on('show.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-            });
-            $('#editModal').on('hide.bs.modal', function (e) {
-                if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                    e.preventDefault();
-                }
-            });
+            // $('#editModal').modal({backdrop:'static', keyboard:false});
+            // $('#editModal').on('hidden.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
+            //     $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
+            // });
+            // $('#editModal').on('show.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
+            // });
+            // $('#editModal').on('hide.bs.modal', function (e) {
+            //     if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
+            //         e.preventDefault();
+            //     }
+            // });
         });
     }
 
@@ -528,21 +528,21 @@
         tmp_hp = '';
         $('#formContainer').html('');
         $('#pesanContainer').html('');
-        $('#editModal').hide();
-        $('#editModal').modal('hide');
-        $('.modal-backdrop').remove();  // Hapus elemen backdrop
-        $('#editModal').on('hidden.bs.modal', function () {
-            $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-            $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-        });
-        $('#editModal').on('show.bs.modal', function () {
-            $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-        });
-        $('#editModal').on('hide.bs.modal', function (e) {
-            if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                e.preventDefault();
-            }
-        });
+        // $('#editModal').hide();
+        // $('#editModal').modal('hide');
+        // $('.modal-backdrop').remove();  // Hapus elemen backdrop
+        // $('#editModal').on('hidden.bs.modal', function () {
+        //     $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
+        //     $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
+        // });
+        // $('#editModal').on('show.bs.modal', function () {
+        //     $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
+        // });
+        // $('#editModal').on('hide.bs.modal', function (e) {
+        //     if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
+        //         e.preventDefault();
+        //     }
+        // });
     }
 </script>
   </body>

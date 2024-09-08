@@ -93,7 +93,7 @@
                             <div class="modal-content">
                             <div class="modal-header" id="headerModal">
                                 <h5 class="modal-title" id="judulModal">Petani</h5>
-                                <button id="close_btn" type="button" class="close" aria-label="Close" onclick="cancel()">
+                                <button id="close_btn" type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="cancel()">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
@@ -194,6 +194,7 @@
         var pesanKosong =
             '<div id="tombolModal" style="text-align:center">'+
                 '<img id="image" src="'+base_url+'assets/img/farmer.png" style="height:100px;margin-bottom:5px">'+
+                '<div style="text-align:center">Data Petani belum ada</div>'+
             '</div>';
 
         function unduh(){
@@ -213,19 +214,19 @@
                     '<button id="submit_btn"type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
                 '</div>'
             );
-            $('#editModal').modal({backdrop:'static', keyboard:false});
-            $('#editModal').on('hidden.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-                $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-            });
-            $('#editModal').on('show.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-            });
-            $('#editModal').on('hide.bs.modal', function (e) {
-                if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                    e.preventDefault();
-                }
-            });
+            // $('#editModal').modal({backdrop:'static', keyboard:false});
+            // $('#editModal').on('hidden.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
+            //     $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
+            // });
+            // $('#editModal').on('show.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
+            // });
+            // $('#editModal').on('hide.bs.modal', function (e) {
+            //     if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
+            //         e.preventDefault();
+            //     }
+            // });
         }
 
         function ubah(y){
@@ -242,19 +243,19 @@
                     '<button id="submit_btn"type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
                 '</div>'
             );
-            $('#editModal').modal({backdrop:'static', keyboard:false});
-            $('#editModal').on('hidden.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-                $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-            });
-            $('#editModal').on('show.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-            });
-            $('#editModal').on('hide.bs.modal', function (e) {
-                if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                    e.preventDefault();
-                }
-            });
+            // $('#editModal').modal({backdrop:'static', keyboard:false});
+            // $('#editModal').on('hidden.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
+            //     $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
+            // });
+            // $('#editModal').on('show.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
+            // });
+            // $('#editModal').on('hide.bs.modal', function (e) {
+            //     if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
+            //         e.preventDefault();
+            //     }
+            // });
         }
 
         function hapus(y){
@@ -274,19 +275,19 @@
                         $('#pesanContainer').html(
                             '<h5 style="color:green">'+d.message+'</h5>'
                         );
-                        $('#editModal').modal({backdrop:'static', keyboard:false});
-                        $('#editModal').on('hidden.bs.modal', function () {
-                            $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-                            $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-                        });
-                        $('#editModal').on('show.bs.modal', function () {
-                            $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-                        });
-                        $('#editModal').on('hide.bs.modal', function (e) {
-                            if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                                e.preventDefault();
-                            }
-                        });
+                        // $('#editModal').modal({backdrop:'static', keyboard:false});
+                        // $('#editModal').on('hidden.bs.modal', function () {
+                        //     $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
+                        //     $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
+                        // });
+                        // $('#editModal').on('show.bs.modal', function () {
+                        //     $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
+                        // });
+                        // $('#editModal').on('hide.bs.modal', function (e) {
+                        //     if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
+                        //         e.preventDefault();
+                        //     }
+                        // });
                         flag = 1;
                     },
                     error: function(xhr, status, error) {
@@ -403,21 +404,21 @@
         function cancel(){
             $('#formContainer').html('');
             $('#pesanContainer').html('');
-            $('#editModal').hide();
-            $('#editModal').modal('hide');
-            $('.modal-backdrop').remove();  // Hapus elemen backdrop
-            $('#editModal').on('hidden.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
-                $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
-            });
-            $('#editModal').on('show.bs.modal', function () {
-                $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
-            });
-            $('#editModal').on('hide.bs.modal', function (e) {
-                if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
-                    e.preventDefault();
-                }
-            });
+            // $('#editModal').hide();
+            // $('#editModal').modal('hide');
+            // $('.modal-backdrop').remove();  // Hapus elemen backdrop
+            // $('#editModal').on('hidden.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Hapus backdrop yang mungkin tertinggal
+            //     $('body').removeClass('modal-open');  // Pastikan class modal-open dihapus dari body
+            // });
+            // $('#editModal').on('show.bs.modal', function () {
+            //     $('.modal-backdrop').remove();  // Bersihkan backdrop sebelum membuka modal lagi
+            // });
+            // $('#editModal').on('hide.bs.modal', function (e) {
+            //     if (e.target !== this) {  // Pastikan hanya modal yang dapat ditutup secara eksplisit
+            //         e.preventDefault();
+            //     }
+            // });
             if(flag==1) location.reload();
         }
     </script>
