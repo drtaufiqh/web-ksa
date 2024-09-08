@@ -382,19 +382,38 @@
                             '<tbody id="bodyRaw"></tbody>'+
                         '</table>'
                     );
+
+                    var today = new Date();
+                    var yesterday = new Date();
+                    yesterday.setDate(today.getDate() - 1);
+                    var sevenDaysLater = new Date();
+                    sevenDaysLater.setDate(today.getDate() + 7);
+
                     for(y in data['data']){
+                        var estimateDate = new Date(data['data'][y]['tanggal']);
+                        var style = '';
+
+                        if (estimateDate >= yesterday && estimateDate <= sevenDaysLater) {
+                            style = 'background-color: #ffcccc;';
+                        }
+
+                        var contactUrl = 'https://wa.me/' + data['data'][y]['hp'];
+
                         $('#bodyRaw').append(
-                            '<tr>'+
+                            '<tr>' +
                                 '<td>'+data['data'][y]['kode_segmen']+'</td>'+
                                 '<td>'+data['data'][y]['subsegmen']+'</td>'+
-                                '<td>'+data['data'][y]['tanggal']+'</td>'+
+                                '<td style="' + style + '">'+data['data'][y]['tanggal']+'</td>'+
                                 '<td style="display:none">'+data['data'][y]['nik']+'</td>'+
                                 '<td>'+data['data'][y]['nama']+'</td>'+
                                 '<td>'+data['data'][y]['hp']+'</td>'+
                                 '<td>'+data['data'][y]['alamat']+'</td>'+
                                 '<td>'+
-                                    '<button id="ubah_btn" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-edit"></i> Edit </button>'+
-                                    '<button id="hapus_btn" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i> Hapus </button>'+
+                                    '<div class="col">'+
+                                        '<button id="ubah_btn" type="button" class="mx-1 btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-edit"></i> Edit </button>'+
+                                        '<button id="hapus_btn" type="button" class="mx-1 btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i> Hapus </button>'+
+                                        '<a href="' + contactUrl + '" class="mx-1 btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #007bff; color: white;" target="_blank"><i class="fa fa-envelope"></i> Hubungi </a>' +
+                                    '</div>'+
                                 '</td>'+
                             '</tr>'
                         );
@@ -403,7 +422,7 @@
                     $('#tabelRaw').DataTable({
                         "pageLength": 10, // Jumlah default baris per halaman
                         "lengthMenu": [[5,10,25,50,100,-1],[5, 10, 25, 50, 100, 'All']], // Opsi jumlah baris per halaman
-                        "order": [[ 0, "asc" ]], // Urutkan berdasarkan kolom pertama secara ascending
+                        "order": [[ 2, "asc" ]], // Urutkan berdasarkan kolom pertama secara ascending
                         "compact": true,
                         dom: 'lfrtpB',
                         buttons: [

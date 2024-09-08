@@ -10,6 +10,14 @@
             <span class="mdi mdi-menu"></span>
           </button>
           <ul class="navbar-nav navbar-nav-right">
+            <li>
+                <!-- Notifikasi -->
+                @if (session('notification'))
+                    <div class="alert alert-danger m-1">
+                        {{ session('notification') }} <a href="{{ route('ubinan.kelola') }}">Lihat di sini</a>
+                    </div>
+                @endif
+            </li>
             <li class="nav-item nav-profile dropdown">
               <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="nav-profile-img">
