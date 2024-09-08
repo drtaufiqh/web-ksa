@@ -510,7 +510,7 @@
                 } else if (petaSelect == 'konsistensi') {
                     url_post = '/jagung-get-data-peta'; // URL untuk Konsistensi Perwilayah
                 }
-                console.log(url_post);
+                // console.log(url_post);
 
                 $.ajax({
                     url: url_post,
@@ -527,7 +527,7 @@
                         // Simpan respons JSON ke variabel geodata
                         var geodata = response;
 
-                        console.log(geodata.features[0].properties);
+                        // console.log(geodata.features[0].properties);
 
                         // Hapus layer geojson yang ada jika ada
                         map.eachLayer(function(layer) {
@@ -575,7 +575,7 @@
             var tahun = $('#tahun_progres').val();
             var bulan = $('#bulan_progres').val();
             var jenis = $('#jenis_progres').val();
-            console.log(jenis);
+            // console.log(jenis);
 
             $.ajax({
                 url: '/jagung-get-data-progres',
@@ -588,8 +588,8 @@
                 },
                 dataType: 'json',
                 success: function(response) {
-                    console.log('Labels:', response.labels);
-                    console.log('Raw Data:', response.rawData);
+                    // console.log('Labels:', response.labels);
+                    // console.log('Raw Data:', response.rawData);
 
                     if (!Array.isArray(response.labels) || !Array.isArray(response.rawData)) {
                         console.error('Format data tidak sesuai.');
@@ -601,8 +601,8 @@
                     $('#chartContainer').append('<canvas id="Chart" style="display: initial; box-sizing: border-box; height: 105vh; width: 800px;font-weight: bold;"></canvas>');
 
                     // Debugging untuk memastikan canvas ditambahkan
-                    console.log($('#chartContainer').html());
-                    console.log(document.getElementById('Chart')); // Pastikan ini tidak bernilai null
+                    // console.log($('#chartContainer').html());
+                    // console.log(document.getElementById('Chart')); // Pastikan ini tidak bernilai null
 
                     var labels = response.labels;
                     var rawData = response.rawData;
