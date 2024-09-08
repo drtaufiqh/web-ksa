@@ -127,7 +127,7 @@
                         <div class="form-group">
                             <label>File upload</label>
                             <div style="width: 100%">
-                                <input type="file" name="file" class="form-control" accept=".xlsx,.csv" required>
+                                <input type="file" name="file" class="form-control" accept=".xlsx" required>
                                 <p style="margin: 0;font-size: 0.8rem;color: #b9b7b7;">Format penamaan file harus : tahunbulanA_kodekabupaten_padi.xlsx</p>
                                 <p style="margin: 0;font-size: 0.8rem;color: #b9b7b7;">Contoh : 202110A_3301_padi.xlsx</p>
                             </div>

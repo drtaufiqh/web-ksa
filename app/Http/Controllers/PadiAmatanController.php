@@ -49,9 +49,11 @@ class PadiAmatanController extends Controller
     public function import(Request $request){
         set_time_limit(5 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
 
+        $wil = Auth::user()->kode;
+
         // Validasi file
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:xls,xlsx',
+            'file' => 'required|mimes:xlsx',
         ]);
 
         if ($validator->fails()) {
@@ -70,6 +72,15 @@ class PadiAmatanController extends Controller
         $bulan = substr($fileName, 4, 2);
         $tabul = substr($fileName, 0, 6);
         $tabul_sesudah = TahunBulan::getTabulSesudah($tabul);
+        $wilFile = substr($fileName, 8, 4);
+        $jenis = substr($fileName, 13, 4);
+
+        if ($wil != $wilFile) {
+            return back()->withErrors(['input' => 'Pastikan format file sesuai dengan kabupaten/kota!'])->withInput();
+        }
+        if ($jenis != 'padi') {
+            return back()->withErrors(['input' => 'Pastikan format file sesuai!'])->withInput();
+        }
 
         // Ambil data kolom
         $kolom = $request->input('kolom');
