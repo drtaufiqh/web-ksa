@@ -288,11 +288,14 @@ class PadiAmatanController extends Controller
     }
 
     public function riwayat(){
+        $wil = Auth::user()->kode;
+        if ($wil == '3300') $wil = '33';
         $allKabKota = User::getAllKabKota();
         $data = DB::table('padi_amatans')
             ->join('users', 'padi_amatans.kode_kabkota', '=', 'users.kode')
             ->selectRaw('CONCAT(padi_amatans.kode_kabkota, " - ", users.nama) as kab_kota, padi_amatans.kode_kabkota as kode_kabkota, padi_amatans.tahun, padi_amatans.bulan, COUNT(*) as baris, MAX(padi_amatans.updated_at) as last_update')
             ->groupBy('padi_amatans.kode_kabkota', 'padi_amatans.tahun', 'padi_amatans.bulan', 'users.nama')
+            ->where('kode_kabkota', 'like', $wil . '%')
             ->get();
         return view('padi.riwayat', [
             'data' => $data,

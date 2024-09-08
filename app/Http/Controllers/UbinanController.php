@@ -56,11 +56,14 @@ class UbinanController extends Controller
         return view("ubinan.kelola");
     }
     public function showRiwayat(){
+        $wil = Auth::user()->kode;
+        if ($wil == '3300') $wil = '33';
         $allKabKota = User::getAllKabKota();
         $data = DB::table('ubinans')
             ->join('users', 'ubinans.kode_kabkota', '=', 'users.kode')
             ->selectRaw('CONCAT(ubinans.kode_kabkota, " - ", users.nama) as kab_kota, ubinans.kode_kabkota as kode_kabkota, ubinans.tahun, ubinans.bulan, COUNT(*) as baris, MAX(ubinans.updated_at) as last_update')
             ->groupBy('ubinans.kode_kabkota', 'ubinans.tahun', 'ubinans.bulan', 'users.nama')
+            ->where('kode_kabkota', 'like', $wil . '%')
             ->get();
         return view("ubinan.riwayat", [
             'data' => $data,

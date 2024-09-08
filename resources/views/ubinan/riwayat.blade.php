@@ -44,6 +44,7 @@
               <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                   <div class="card-body">
+                    @if (Auth::user()->role == 'prov')
                     <form class="forms-sample" style="display:flex">
                         <!-- Dropdown untuk memilih kab/kota -->
                             <label for="kabkota-select" style="margin-bottom:2rem">Wilayah Amatan</label>
@@ -54,6 +55,7 @@
                                 @endforeach
                             </select>
                     </form>
+                    @endif
                     <!-- Tabel data -->
                     <table id="datatable" class="display table table-striped" style="border: 1px solid #ebedf2;">
                         <thead>
@@ -167,6 +169,12 @@
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
+        var isprov = false;
+        @if (Auth::user()->role == 'prov')
+            isprov = true;
+        @endif
+    </script>
+    <script>
         $(document).ready(function () {
             // Initialize main DataTable
             var table = $('#datatable').DataTable({
@@ -247,19 +255,21 @@
                 ],
             });
 
-            $('#kabkota-select').on('change', function () {
-                var selectedValue = $(this).val();
+            if (isprov){
+                $('#kabkota-select').on('change', function () {
+                    var selectedValue = $(this).val();
 
-                if (selectedValue === 'all') {
-                    // Tampilkan semua baris dan kolom
-                    table.columns().search('').draw();
-                    // table.column(0).visible(true); // Tampilkan kolom Kab/Kota
-                } else {
-                    // Filter berdasarkan kab/kota yang dipilih
-                    table.columns(0).search(selectedValue).draw();
-                    // table.column(0).visible(false); // Sembunyikan kolom Kab/Kota
-                }
-            });
+                    if (selectedValue === 'all') {
+                        // Tampilkan semua baris dan kolom
+                        table.columns().search('').draw();
+                        // table.column(0).visible(true); // Tampilkan kolom Kab/Kota
+                    } else {
+                        // Filter berdasarkan kab/kota yang dipilih
+                        table.columns(0).search(selectedValue).draw();
+                        // table.column(0).visible(false); // Sembunyikan kolom Kab/Kota
+                    }
+                });
+            }
 
             // Aksi tombol lihat
             $('#datatable').on('click', '.view-btn', function () {
