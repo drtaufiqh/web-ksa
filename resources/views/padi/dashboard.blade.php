@@ -861,9 +861,9 @@
     document.getElementById('lihat_capaian').addEventListener('click', function() {
         $('#capaian').show();
         const jenisCapaian = document.getElementById('jenis_capaian').value;
-        const wilayahCapaian = '';
+        let wilayahCapaian = '';
         if (isprov) {
-            const wilayahCapaian = document.getElementById('wilayah_capaian').value;
+            wilayahCapaian = document.getElementById('wilayah_capaian').value;
         }
 
         // Lakukan permintaan AJAX
