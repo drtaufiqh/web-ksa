@@ -551,16 +551,20 @@
                                     text: '<i class="fa fa-download"></i> Unduh ',
                                     className: "btn btn-gradient-primary btn-icon-text mt-1",
                                     title: function() {
-                                        var tahun = $('#tahun').val();
-                                        var bulan = $('#bulan').val();
-                                        var kabkota = $('#kabkota-select option:selected').text();
-                                        return 'Validasi Amatan Padi ' + kabkota + ' - ' + bulan + '/' + tahun;
+                                        var tahun = $('#tahun_i').val();
+                                        var bulan = $('#bulan_i').val();
+                                        var tahunsampel = $('#tahunsampel_i').val();
+                                        var bulansampel = $('#bulansampel_i option:selected').text();
+                                        var kabkota = '{{ Auth::user()->kode }}';
+                                        return 'Padi Sampel Ubinan ' + bulansampel + ' ' + tahunsampel + ' ' + kabkota + ' Berdasarkan Amatan ' + bulan + ' ' + tahun;
                                     },
                                     filename: function() {
-                                        var tahun = $('#tahun').val();
-                                        var bulan = $('#bulan').val();
-                                        var kabkota = $('#kabkota-select option:selected').text();
-                                        return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
+                                        var tahun = $('#tahun_i').val();
+                                        var bulan = $('#bulan_i').val();
+                                        var tahunsampel = $('#tahunsampel_i').val();
+                                        var bulansampel = $('#bulansampel_i option:selected').text();
+                                        var kabkota = '{{ Auth::user()->kode }}';
+                                        return 'Padi Sampel Ubinan ' + bulansampel + ' ' + tahunsampel + ' ' + kabkota + ' Berdasarkan Amatan ' + bulan + ' ' + tahun;
                                     },
                                     init: function(api, node, config) {
                                         $(node).css({
@@ -573,10 +577,12 @@
                                     text: '<i class="fa fa-copy"></i> Salin ',
                                     className: "btn btn-gradient-primary btn-icon-text mt-1",
                                     title: function() {
-                                        var tahun = $('#tahun').val();
-                                        var bulan = $('#bulan').val();
-                                        var kabkota = $('#kabkota-select option:selected').text();
-                                        return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
+                                        var tahun = $('#tahun_i').val();
+                                        var bulan = $('#bulan_i').val();
+                                        var tahunsampel = $('#tahunsampel_i').val();
+                                        var bulansampel = $('#bulansampel_i option:selected').text();
+                                        var kabkota = '{{ Auth::user()->kode }}';
+                                        return 'Padi Sampel Ubinan ' + bulansampel + ' ' + tahunsampel + ' ' + kabkota + ' Berdasarkan Amatan ' + bulan + ' ' + tahun;
                                     },
                                     init: function(api, node, config) {
                                         $(node).css({

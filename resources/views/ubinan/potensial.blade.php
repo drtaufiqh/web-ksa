@@ -44,7 +44,7 @@
                     @csrf
                         <div class="form-group row" id="tahun_g" style="margin-bottom: 0;">
                         <label for="tahun_i" class="col-sm-3 col-form-label">Tahun Amatan</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm">
                                 <select type="text" class="form-control" id="tahun_i">
                                     <option value="<?= date("Y");?>"><?= date("Y");?></option>
                                     <option value="<?= ((int) date("Y")) - 1;?>"><?= ((int) date("Y")) - 1;?></option>
@@ -54,7 +54,7 @@
 
                         <div class="form-group row" id="bulan_g" style="margin-bottom: 0;">
                             <label for="bulan_i" class="col-sm-3 col-form-label">Bulan Amatan</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm">
                                 <select class="form-control" id="bulan_i">
                                     <option value="01" <?php if(date("m")=="01") echo "selected";?>>01 - Januari</option>
                                     <option value="02" <?php if(date("m")=="02") echo "selected";?>>02 - Februari</option>
@@ -74,7 +74,7 @@
 
                         <div class="form-group row" id="tahunsampel_g" style="margin-bottom: 0;">
                             <label for="tahunsampel_i" class="col-sm-3 col-form-label">Tahun Sampel</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm">
                                 <select class="form-control" id="tahunsampel_i">
                                     <option value="<?= date("Y");?>"><?= date("Y");?></option>
                                     <option value="<?= ((int) date("Y")) - 1;?>"><?= ((int) date("Y")) - 1;?></option>
@@ -84,7 +84,7 @@
 
                         <div class="form-group row" id="bulansampel_g" style="margin-bottom: 0;">
                             <label for="bulansampel_i" class="col-sm-3 col-form-label">Bulan sampel</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm">
                                 <select class="form-control" id="bulansampel_i">
                                     <option value="1" <?php if(date("m")<3) echo "selected";?>>Jan - Feb</option>
                                     <option value="3" <?php if(date("m")>=3 && date("m")<5) echo "selected";?>>Mar - Apr</option>
