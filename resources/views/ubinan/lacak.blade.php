@@ -44,7 +44,7 @@
                     @csrf
                         <div class="form-group row" id="tahun_g" style="margin-bottom: 0;">
                           <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Tahun Amatan</label>
-                          <div class="col-sm-9">
+                          <div class="col-sm">
                             <select type="text" class="form-control" id="tahun_i">
                                 <?php for($tahun=date('Y'); $tahun>=2021; $tahun--){
                                     echo '<option value="'.$tahun.'">'.$tahun.'</option>';
@@ -55,7 +55,7 @@
 
                         <div class="form-group row" id="bulan_g" style="margin-bottom: 0;">
                             <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Bulan Amatan</label>
-                            <div class="col-sm-9">
+                            <div class="col-sm">
                                 <select class="form-control" id="bulan_i">
                                     <option value="01" <?php if(date("m")=="01") echo "selected";?>>01 - Januari</option>
                                     <option value="02" <?php if(date("m")=="02") echo "selected";?>>02 - Februari</option>
@@ -74,8 +74,8 @@
                         </div>
 
                         <div class="form-group row" id="tahunsampel_g" style="margin-bottom: 0;">
-                            <label for="exampleInputMobile" class="col-sm-3 col-form-label">Tahun Sample</label>
-                            <div class="col-sm-9">
+                            <label for="exampleInputMobile" class="col-sm-3 col-form-label">Tahun Sampel</label>
+                            <div class="col-sm">
                               <select type="text" class="form-control" id="tahunsampel_i">
                                 <?php for($tahun=date('Y'); $tahun>=2021; $tahun--){
                                     echo '<option value="'.$tahun.'">'.$tahun.'</option>';
@@ -86,8 +86,8 @@
 
 
                         <div class="form-group row" id="bulansampel_g" style="margin-bottom: 0;">
-                            <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Bulan Sample</label>
-                            <div class="col-sm-9">
+                            <label for="exampleInputPassword2" class="col-sm-3 col-form-label">Bulan Sampel</label>
+                            <div class="col-sm">
                             <select class="form-control" id="bulansampel_i" >
                                 <option value="1" <?php if(date("m")<3) echo "selected";?>>Jan - Feb</option>
                                 <option value="3" <?php if(date("m")>=3 && date("m")<5) echo "selected";?>>Mar - Apr</option>
@@ -117,7 +117,7 @@
                   <form class="forms-sample">
 
                     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-dialog" role="document">
                             <div class="modal-content">
                             <div class="modal-header" id="headerModal">
                                 <h5 class="modal-title" id="judulModal"></h5>
@@ -197,29 +197,29 @@
     });
     var formKosong =
         '<form id="formulir">'+
-            '<div class="form-inline" id="segmen_g">'+
-                '<label style="width:25%">Segmen</label>'+
-                '<input type="text" class="form-control" id="segmen_i" style="width:75%">'+
+            '<div class="form-group" id="segmen_g">'+
+                '<label for="segmen_i">Segmen</label>'+
+                '<input type="text" class="form-control" id="segmen_i">'+
             '</div>'+
-            '<div class="form-inline" id="subsegmen_g">'+
-                '<label style="width:25%">Subsegmen</label>'+
-                '<input type="text" class="form-control" id="subsegmen_i" style="width:75%">'+
+            '<div class="form-group" id="subsegmen_g">'+
+                '<label for="subsegmen_i">Subsegmen</label>'+
+                '<input type="text" class="form-control" id="subsegmen_i">'+
             '</div>'+
-            '<div class="form-inline" id="nama_g">'+
-                '<label style="width:25%">Nama</label>'+
-                '<input type="text" class="form-control" id="nama_i" style="width:75%">'+
+            '<div class="form-group" id="nama_g">'+
+                '<label for="nama_i">Nama</label>'+
+                '<input type="text" class="form-control" id="nama_i">'+
             '</div>'+
-            '<div class="form-inline" id="nik_g">'+
-                '<label style="width:25%">NIK</label>'+
-                '<input type="text" class="form-control" id="nik_i" style="width:75%">'+
+            '<div class="form-group" id="nik_g">'+
+                '<label for="nik_i">NIK</label>'+
+                '<input type="text" class="form-control" id="nik_i">'+
             '</div>'+
-            '<div class="form-inline" id="alamat_g">'+
-                '<label style="width:25%">Alamat</label>'+
-                '<input type="text" class="form-control" id="alamat_i" style="width:75%">'+
+            '<div class="form-group" id="alamat_g">'+
+                '<label for="alamat_i">Alamat</label>'+
+                '<input type="text" class="form-control" id="alamat_i">'+
             '</div>'+
-            '<div class="form-inline" id="hp_g">'+
-                '<label style="width:25%">No HP</label>'+
-                '<input type="text" class="form-control" id="hp_i" style="width:75%">'+
+            '<div class="form-group" id="hp_g">'+
+                '<label for="hp_i">No HP</label>'+
+                '<input type="text" class="form-control" id="hp_i">'+
             '</div>'+
         '</form>';
 
@@ -230,39 +230,70 @@
             '<button id="tambah_btn" class="btn btn-sm btn-primary" onclick="tambah()">Tambah</button>'+
         '</div>';
 
+    // var formAda =
+    //     '<table id="tablePetani" class="table table-borderless">'+
+    //         '<tbody style="background: transparant;">'+
+    //         '<tr>'+
+    //             '<td>Segmen</td>'+
+    //             '<td id="a"></td>'+
+    //         '</tr>'+
+    //         '<tr>'+
+    //             '<td>Subsegmen</td>'+
+    //             '<td id="b"></td>'+
+    //         '</tr>'+
+    //         '<tr>'+
+    //             '<td>Nama</td>'+
+    //             '<td id="c"></td>'+
+    //         '</tr>'+
+    //         '<tr>'+
+    //             '<td>NIK</td>'+
+    //             '<td id="d"></td>'+
+    //         '</tr>'+
+    //         '<tr>'+
+    //             '<td>Alamat</td>'+
+    //             '<td id="e"></td>'+
+    //         '</tr>'+
+    //         '<tr>'+
+    //             '<td>HP</td>'+
+    //             '<td id="f"></td>'+
+    //         '</tr>'+
+    //         '</tbody>'+
+    //     '</table>';
     var formAda =
-        '<table id="tablePetani" class="table table-borderless">'+
-            '<tr>'+
-                '<td>Segmen</td>'+
-                '<td id="a"></td>'+
-            '</tr>'+
-            '<tr>'+
-                '<td>Subsegmen</td>'+
-                '<td id="b"></td>'+
-            '</tr>'+
-            '<tr>'+
-                '<td>Nama</td>'+
-                '<td id="c"></td>'+
-            '</tr>'+
-            '<tr>'+
-                '<td>NIK</td>'+
-                '<td id="d"></td>'+
-            '</tr>'+
-            '<tr>'+
-                '<td>Alamat</td>'+
-                '<td id="e"></td>'+
-            '</tr>'+
-            '<tr>'+
-                '<td>HP</td>'+
-                '<td id="f"></td>'+
-            '</tr>'+
-        '</table>';
+        '<form class="m-0 p-0">'+
+            '<div class="form-group">'+
+                '<label >Segmen</label>'+
+                '<p id="a" class="m-0 p-0"></p>'+
+            '</div>'+
+            '<div class="form-group">'+
+                '<label >Subsegmen</label>'+
+                '<p id="b" class="m-0 p-0"></p>'+
+            '</div>'+
+            '<div class="form-group">'+
+                '<label >Nama</label>'+
+                '<p id="c" class="m-0 p-0"></p>'+
+            '</div>'+
+            '<div class="form-group">'+
+                '<label >NIK</label>'+
+                '<p id="d" class="m-0 p-0"></p>'+
+            '</div>'+
+            '<div class="form-group">'+
+                '<label >Alamat</label>'+
+                '<p id="e" class="m-0 p-0"></p>'+
+            '</div>'+
+            '<div class="form-group">'+
+                '<label >No HP</label>'+
+                '<p id="f" class="m-0 p-0"></p>'+
+            '</div>'+
+        '</form>';
 
     var pesanAda =
         '<div id="tombolModal" style="text-align:center">'+
             '<div id="pesan" style="text-align:center"></div>'+
-            '<button type="button" id="ubah_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah()"><i class="fa fa-edit"></i> Edit </button>'+
-            '<button type="button" id="hapus_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus()"><i class="fa fa-trash-o"></i> Hapus </button>'+
+            '<div class="btn-group-right">'+
+                '<button type="button" id="ubah_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah()"><i class="fa fa-edit"></i> Edit </button>'+
+                '<button type="button" id="hapus_btn" class="btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus()"><i class="fa fa-trash-o"></i> Hapus </button>'+
+            '</div>'+
         '</div>';
 
     function unduh(){
@@ -317,9 +348,9 @@
         $('#segmen_i').val(tmp_segmen);
         $('#subsegmen_i').val(tmp_sub);
         $('#pesanContainer').html(
-            '<div id="tombolModal" style="text-align:center">'+
+            '<div id="tombolModal" class="d-flex justify-content-between">'+
                 '<div id="pesan" style="text-align:center"></div>'+
-                '<button type="button" id="submit_btn" type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
+                '<button id="submit_btn" type="button" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
             '</div>'
         );
     }
@@ -334,7 +365,7 @@
         $('#pesanContainer').html(
             '<div id="tombolModal" style="text-align:center">'+
                 '<div id="pesan" style="text-align:center"></div>'+
-                '<button type="button" id="submit_btn"type="submit" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
+                '<button id="submit_btn" type="button" class="btn btn-gradient-primary btn-icon-text" style="background: linear-gradient(to right, #696b4c, #b9af49);margin-bottom: 1rem;" onclick="submitData()">Submit</button>'+
             '</div>'
         );
     }
@@ -436,13 +467,13 @@
                     // tmp_data = d.sampel;
                     if(d.status){
                         $('#hasilValidasi').html(
-                            '<table class="table table-bordered table-sm" style="margin-top:5px">'+
+                            '<table class="table table-bordered table-sm" style="margin-bottom: 2rem ;margin-top: 1rem;">'+
                                 '<thead class="thead-light">'+
                                     '<tr>'+
-                                        '<th style="text-align:center">Keterangan</th>'+
-                                        '<th style="text-align:center">Fase</th>'+
-                                        '<th style="text-align:center">Subsegmen Utama</th>'+
-                                        '<th style="text-align:center">Subsegmen Cadangan</th>'+
+                                        '<th style="background-color: #5e5741;color: white;text-align:center">Keterangan</th>'+
+                                        '<th style="background-color: #5e5741;color: white;text-align:center">Fase</th>'+
+                                        '<th style="background-color: #5e5741;color: white;text-align:center">Subsegmen Utama</th>'+
+                                        '<th style="background-color: #5e5741;color: white;text-align:center">Subsegmen Cadangan</th>'+
                                     '</tr>'+
                                 '</thead>'+
                                 '<tbody>'+
@@ -467,7 +498,7 @@
                                 '</tbody>'+
                             '</table>'+
                             '<div style="overflow-x:scroll">'+
-                                '<table id="tabelHasil" class="display compact">'+
+                                '<table id="tabelHasil" class="table table-striped" style="border: 1px solid #ebedf2;">'+
                                     '<thead>'+
                                         '<tr>'+
                                             '<th>Kode Segmen</th>'+
@@ -509,7 +540,51 @@
                             )
                         }
                         $('#tabelHasil').DataTable({
-                            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+                            "pageLength": 10, // Jumlah default baris per halaman
+                            "lengthMenu": [[5,10,25,50,100,-1],[5, 10, 25, 50, 100, 'All']], // Opsi jumlah baris per halaman
+                            "order": [[ 0, "asc" ]], // Urutkan berdasarkan kolom pertama secara ascending
+                            "compact": true,
+                            dom: 'lfrtpB',
+                            buttons: [
+                                {
+                                    extend: 'excel',
+                                    text: '<i class="fa fa-download"></i> Unduh ',
+                                    className: "btn btn-gradient-primary btn-icon-text mt-1",
+                                    title: function() {
+                                        var tahun = $('#tahun').val();
+                                        var bulan = $('#bulan').val();
+                                        var kabkota = $('#kabkota-select option:selected').text();
+                                        return 'Validasi Amatan Padi ' + kabkota + ' - ' + bulan + '/' + tahun;
+                                    },
+                                    filename: function() {
+                                        var tahun = $('#tahun').val();
+                                        var bulan = $('#bulan').val();
+                                        var kabkota = $('#kabkota-select option:selected').text();
+                                        return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
+                                    },
+                                    init: function(api, node, config) {
+                                        $(node).css({
+                                            'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                                        });
+                                    }
+                                },
+                                {
+                                    extend: 'copy',
+                                    text: '<i class="fa fa-copy"></i> Salin ',
+                                    className: "btn btn-gradient-primary btn-icon-text mt-1",
+                                    title: function() {
+                                        var tahun = $('#tahun').val();
+                                        var bulan = $('#bulan').val();
+                                        var kabkota = $('#kabkota-select option:selected').text();
+                                        return 'Validasi Amatan Padi ' + kabkota + ' ' + bulan + ' ' + tahun;
+                                    },
+                                    init: function(api, node, config) {
+                                        $(node).css({
+                                            'background': 'linear-gradient(to right, #696b4c, #b9af49)',
+                                        });
+                                    }
+                                }
+                            ],
                         });
                     } else {
                         $('#hasilValidasi').html('<h4>'+d.message+'</h4>');
@@ -545,5 +620,11 @@
         // });
     }
 </script>
+<!-- DataTables Buttons JS -->
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.flash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.1.0/js/buttons.print.min.js"></script>
   </body>
 </html>
