@@ -18,7 +18,7 @@ class UbinanController extends Controller
         $minYear = Ubinan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->addHours(7)->year;
+        $currentYear = Carbon::now()->year;
 
         return view("ubinan.lacak",  [
             'minYear' => $minYear-1,
@@ -30,7 +30,7 @@ class UbinanController extends Controller
         $minYear = Ubinan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->addHours(7)->year;
+        $currentYear = Carbon::now()->year;
 
         return view("ubinan.potensial",  [
             'minYear' => $minYear-1,
@@ -45,7 +45,7 @@ class UbinanController extends Controller
         $minYear = Ubinan::min('tahun') ?? Carbon::now()->year;
 
         // Tahun sekarang
-        $currentYear = Carbon::now()->addHours(7)->year;
+        $currentYear = Carbon::now()->year;
 
         return view("ubinan.unggah",  [
             'minYear' => $minYear-1,
@@ -232,6 +232,10 @@ class UbinanController extends Controller
     }
 
     public function showDetail($id, $tahun, $bulan){
+        $wil = Auth::user()->kode;
+        if ($wil != '3300' && $wil != $id) {
+            return 'No Akses' ;
+        }
         // Ambil data detail dari database berdasarkan ID
         $data = Ubinan::where('kode_kabkota', $id)
             ->where('tahun', $tahun)
