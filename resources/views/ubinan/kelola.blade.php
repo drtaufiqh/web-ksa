@@ -265,7 +265,9 @@
 
         function hapus(y){
             var id = tmp_data[y]['id'];
-            var data = {kode_segmen: '', subsegmen: '', id: id};
+            var kodesegmen = tmp_data[y]['kode_segmen'];
+            var subsegmen = tmp_data[y]['subsegmen'];
+            var data = {kode_segmen: kodesegmen, subsegmen: subsegmen, id: id};
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
