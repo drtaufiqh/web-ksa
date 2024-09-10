@@ -63,6 +63,10 @@ Route::get('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->m
 Route::post('/padi_validasi', [PadiValidasiController::class, 'showValidasi'])->middleware('auth')->name('padi_validasi_post');
 Route::get('/padi-get-filtered-data', [PadiValidasiController::class, 'getFilteredData'])->middleware('auth');
 
+// padi_petugas
+Route::get('/padi_petugas', [PadiAmatanController::class, 'showPetugas'])->middleware('auth')->name('padi_petugas');
+Route::get('/padi-get-petugas', [PadiAmatanController::class, 'getPetugas'])->middleware('auth');
+
 // padi_panduan
 Route::get('/padi_panduan', function () {
     return view('padi.panduan');
@@ -101,6 +105,10 @@ Route::get('/jagung_detail/{id}/{tahun}/{bulan}', [JagungAmatanController::class
 Route::get('/jagung_validasi', [JagungValidasiController::class, 'showValidasi'])->middleware('auth')->name('jagung_validasi');
 Route::post('/jagung_validasi', [JagungValidasiController::class, 'showValidasi'])->middleware('auth')->name('jagung_validasi_post');
 Route::get('/get-filtered-data', [JagungValidasiController::class, 'getFilteredData'])->middleware('auth');
+
+// jagung_petugas
+Route::get('/jagung_petugas', [JagungAmatanController::class, 'showPetugas'])->middleware('auth')->name('jagung_petugas');
+Route::get('/jagung-get-petugas', [JagungAmatanController::class, 'getPetugas'])->middleware('auth');
 
 // jagung_panduan
 Route::get('/jagung_panduan', function () {

@@ -97,6 +97,12 @@
               </a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{{ route('jagung_petugas') }}">
+                <span class="menu-title">Petugas</span>
+                <i class="fa fa-users"></i>
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{{ route('jagung_kondef') }}">
                 <span class="menu-title">Kondef</span>
                 <i class="fa fa-sitemap"></i>

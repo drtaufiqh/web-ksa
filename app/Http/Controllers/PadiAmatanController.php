@@ -18,6 +18,77 @@ use Illuminate\Support\Facades\DB;
 
 class PadiAmatanController extends Controller
 {
+    public function getPetugas(Request $request) {
+        $tahun = $request->input('tahun');
+        $bulan = $request->input('bulan');
+        $kabkota = Auth::user()->kode;
+        if ($kabkota == '3300') $kabkota = $request->input('kabkota');
+
+        $query = DB::table('padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
+
+        if ($tahun) {
+            $query->where('tahun', $tahun);
+        }
+
+        if ($bulan) {
+            $query->where('bulan', $bulan);
+        }
+
+        if ($kabkota && $kabkota !== '3300') {
+            $query->where('kode_kabkota', $kabkota);
+        }
+
+        $data = $query->select(
+            'pcs',
+            DB::raw('COUNT(*) as target'), // Menghitung jumlah total record (target)
+            DB::raw('SUM(CASE
+                        WHEN a1 IS NOT NULL
+                            AND a2 IS NOT NULL
+                            AND a3 IS NOT NULL
+                            AND b1 IS NOT NULL
+                            AND b2 IS NOT NULL
+                            AND b3 IS NOT NULL
+                            AND c1 IS NOT NULL
+                            AND c2 IS NOT NULL
+                            AND c3 IS NOT NULL
+                        THEN 1 ELSE 0 END) as realisasi'), // Menghitung realisasi
+            DB::raw('(SUM(CASE
+                            WHEN a1 IS NOT NULL
+                                AND a2 IS NOT NULL
+                                AND a3 IS NOT NULL
+                                AND b1 IS NOT NULL
+                                AND b2 IS NOT NULL
+                                AND b3 IS NOT NULL
+                                AND c1 IS NOT NULL
+                                AND c2 IS NOT NULL
+                                AND c3 IS NOT NULL
+                            THEN 1 ELSE 0 END) / COUNT(*) * 100) as progres') // Menghitung progres
+        )
+        ->groupBy('pcs')
+        ->get();
+
+        return response()->json($data);
+    }
+
+    public function showPetugas(){
+        $wil = Auth::user()->kode;
+        if ($wil == '3300') $wil = '33';
+        $data = PadiAmatan::where('kode_kabkota', 'like', $wil . '%')->get();
+        // $data = PadiAmatan::paginate(10);
+        $allKabKota = User::getAllKabKota();
+        $tahun = Carbon::now()->year;
+        $bulan = date('m');
+        $wil = '3399';
+        return view('padi.petugas', [
+            'data' => $data,
+            'currentYear' => Carbon::now()->year,
+            'allKabKota' => $allKabKota,
+            'selected_tahun' => $tahun,
+            'selected_bulan' => $bulan,
+            'selected_wil' => $wil,
+        ]);
+    }
+
     public function showDashboard(){
         // Ambil tahun terkecil dari database
         $minYear = PadiAmatan::min('tahun') ?? Carbon::now()->year;
