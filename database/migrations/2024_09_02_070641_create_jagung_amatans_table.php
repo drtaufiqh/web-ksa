@@ -22,10 +22,10 @@ return new class extends Migration
             $table->string('kode_segmen', 10)->nullable()->default(null);
             $table->string('kode_kabkota', 4)->nullable()->default(null);
             $table->string('pcs', 64)->nullable()->default(null);
-            $table->string('a1', 2)->nullable()->default("0");
-            $table->string('a2', 2)->nullable()->default("0");
-            $table->string('b1', 2)->nullable()->default("0");
-            $table->string('b2', 2)->nullable()->default("0");
+            $table->string('a1', 2)->nullable()->default(null);
+            $table->string('a2', 2)->nullable()->default(null);
+            $table->string('b1', 2)->nullable()->default(null);
+            $table->string('b2', 2)->nullable()->default(null);
             $table->string('hasil_a1', 2)->nullable()->default(null);
             $table->string('hasil_a2', 2)->nullable()->default(null);
             $table->string('hasil_b1', 2)->nullable()->default(null);
