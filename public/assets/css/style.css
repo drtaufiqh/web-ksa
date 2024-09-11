@@ -26492,3 +26492,47 @@ dl li {
   border-color: #87c351;
 }
 /*# sourceMappingURL=maps/style.css.map */
+
+/* Progress bar container */
+.progress-bar {
+    position: relative;
+    width: 100%;
+    max-width: 250px; /* Restrict the max width */
+    height: 30px;
+    margin: 0 auto; /* Center the progress bar */
+    border-radius: 30px;
+    background-color: white;
+    box-shadow: 3px 4px 5px 0px rgba(204, 185, 185, 0.75);
+    overflow: hidden; /* Ensure the bar stays inside the container */
+  }
+
+  /* Progress bar fill */
+  .progress-bar span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    display: flex; /* Use flexbox to center the text */
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.8rem;
+    line-height: 1.7;
+    text-align: center;
+    border-radius: 30px;
+    transition: width 0.5s linear;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .progress-bar {
+        max-width: 150px; /* Smaller width on small screens */
+        height: 25px; /* Adjust height for smaller screens */
+    }
+
+    .progress-bar span {
+        font-size: 0.9rem; /* Smaller font size for smaller screens */
+        line-height: 1.5;
+    }
+  }
