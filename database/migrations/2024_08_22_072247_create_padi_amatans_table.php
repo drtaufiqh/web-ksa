@@ -31,6 +31,15 @@ return new class extends Migration
             $table->string('c1', 2)->nullable()->default(null);
             $table->string('c2', 2)->nullable()->default(null);
             $table->string('c3', 2)->nullable()->default(null);
+            $table->string('fb_a1')->nullable()->default(null);
+            $table->string('fb_a2')->nullable()->default(null);
+            $table->string('fb_a3')->nullable()->default(null);
+            $table->string('fb_b1')->nullable()->default(null);
+            $table->string('fb_b2')->nullable()->default(null);
+            $table->string('fb_b3')->nullable()->default(null);
+            $table->string('fb_c1')->nullable()->default(null);
+            $table->string('fb_c2')->nullable()->default(null);
+            $table->string('fb_c3')->nullable()->default(null);
             $table->string('hasil_a1', 2)->nullable()->default(null);
             $table->string('hasil_a2', 2)->nullable()->default(null);
             $table->string('hasil_a3', 2)->nullable()->default(null);

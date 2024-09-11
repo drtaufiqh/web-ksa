@@ -226,7 +226,7 @@ class PadiAmatanController extends Controller
 
         // Tentukan header minimal yang diharapkan
         $requiredHeader = [
-            'id segmen', 'subsegmen', 'nama', 'n', 'status'
+            'id segmen', 'subsegmen', 'nama', 'n', 'status', 'note'
         ];
         if($isSelected['n-1']){
             $requiredHeader[] = 'n-1';
@@ -333,6 +333,7 @@ class PadiAmatanController extends Controller
         $kode_kabkota = substr($kode_segmen, 0, 4);
         $status = $row[$headerIndexes['status']];
         $subsegmen = $row[$headerIndexes['subsegmen']];
+        $note = $row[$headerIndexes['note']];
 
         $n = $row[$headerIndexes[$nKolom]];
         $parts = explode('.', $n);
@@ -355,6 +356,7 @@ class PadiAmatanController extends Controller
         }
 
         $groupedData[$indeks][$mapping[$subsegmen]] = $nValue; // Gabungkan data
+        $groupedData[$indeks]['fb_'.$mapping[$subsegmen]] = $note; // Gabungkan data
         return $groupedData;
     }
 

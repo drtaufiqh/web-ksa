@@ -235,55 +235,123 @@
             "ajax": null, // Disable initial AJAX call
             "columns": [
                 { "data": "kode_segmen" },
-                { "data": "hasil_a1" },
-                { "data": "hasil_a2" },
-                { "data": "hasil_a3" },
-                { "data": "hasil_b1" },
-                { "data": "hasil_b2" },
-                { "data": "hasil_b3" },
-                { "data": "hasil_c1" },
-                { "data": "hasil_c2" },
-                { "data": "hasil_c3" },
+                // { "data": "hasil_a1" },
+                // { "data": "hasil_a2" },
+                // { "data": "hasil_a3" },
+                // { "data": "hasil_b1" },
+                // { "data": "hasil_b2" },
+                // { "data": "hasil_b3" },
+                // { "data": "hasil_c1" },
+                // { "data": "hasil_c2" },
+                // { "data": "hasil_c3" },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_a1 dengan tooltip feedback fb_a1
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_a1 + '">'
+                            + row.hasil_a1 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_a2 dengan tooltip feedback fb_a2
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_a2 + '">'
+                            + row.hasil_a2 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_a3 dengan tooltip feedback fb_a3
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_a3 + '">'
+                            + row.hasil_a3 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_b1 dengan tooltip feedback fb_b1
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_b1 + '">'
+                            + row.hasil_b1 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_b2 dengan tooltip feedback fb_b2
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_b2 + '">'
+                            + row.hasil_b2 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_b3 dengan tooltip feedback fb_b3
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_b3 + '">'
+                            + row.hasil_b3 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_c1 dengan tooltip feedback fb_c1
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_c1 + '">'
+                            + row.hasil_c1 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_c2 dengan tooltip feedback fb_c2
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_c2 + '">'
+                            + row.hasil_c2 + '</span>';
+                    }
+                },
+                {
+                    "data": null, // Kolom ini akan menampilkan hasil_c3 dengan tooltip feedback fb_c3
+                    "render": function (data, type, row) {
+                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_c3 + '">'
+                            + row.hasil_c3 + '</span>';
+                    }
+                },
                 { "data": "status" },
                 { "data": "evita" }
             ],
             "createdRow": function (row, data, dataIndex) {
-            // Array dengan kolom hasil
-            var hasilColumns = ['hasil_a1', 'hasil_a2', 'hasil_a3', 'hasil_b1', 'hasil_b2', 'hasil_b3', 'hasil_c1', 'hasil_c2', 'hasil_c3'];
+                // Array dengan kolom hasil
+                var hasilColumns = ['hasil_a1', 'hasil_a2', 'hasil_a3', 'hasil_b1', 'hasil_b2', 'hasil_b3', 'hasil_c1', 'hasil_c2', 'hasil_c3'];
 
-            // Loop melalui kolom hasil dan cek nilainya
-            hasilColumns.forEach(function (col, index) {
-                var cellValue = data[col];
-                var cell = $('td', row).eq(index + 1); // offset by 3 because columns 0-2 are not hasil_*
-                if (cellValue === 'K') {
-                    cell.css('background-color', '#abe96c').css('color', 'white');
-                } else if (cellValue === 'TK') {
-                    cell.css('background-color', '#ff5050').css('color', 'white');
-                } else if (cellValue === 'W') {
-                    cell.css('background-color', '#ffc37c').css('color', 'black');
+                // Loop melalui kolom hasil dan cek nilainya
+                hasilColumns.forEach(function (col, index) {
+                    var cellValue = data[col];
+                    var cell = $('td', row).eq(index + 1); // offset by 3 because columns 0-2 are not hasil_*
+                    if (cellValue === 'K') {
+                        cell.css('background-color', '#abe96c').css('color', 'white');
+                    } else if (cellValue === 'TK') {
+                        cell.css('background-color', '#ff5050').css('color', 'white');
+                    } else if (cellValue === 'W') {
+                        cell.css('background-color', '#ffc37c').css('color', 'black');
+                    }
+                });
+
+                // Kolom status logic
+                var status = data['status'];
+                var statusCell = $('td', row).eq(10);
+                if (status === 'Approved') {
+                    statusCell.html('<label class="badge badge-danger">' + status + '</label>');
+                } else {
+                    statusCell.html('<label class="badge badge-info">' + status + '</label>');
                 }
-            });
 
-            // Kolom status logic
-            var status = data['status'];
-            var statusCell = $('td', row).eq(10);
-            if (status === 'Approved') {
-                statusCell.html('<label class="badge badge-danger">' + status + '</label>');
-            } else {
-                statusCell.html('<label class="badge badge-info">' + status + '</label>');
-            }
+                // Kolom evita logic
+                var evita = data['evita'];
+                var evitaCell = $('td', row).eq(11);
+                if (evita === 'APPROVED') {
+                    evitaCell.html('<label class="badge badge-warning">' + evita + '</label>');
+                } else if (evita === 'REJECTED') {
+                    evitaCell.html('<label class="badge badge-info">' + evita + '</label>');
+                }else {
+                    evitaCell.html('<label class="badge badge-info">Data bulan sebelumnya tidak tersedia</label>');
+                }
 
-            // Kolom evita logic
-            var evita = data['evita'];
-            var evitaCell = $('td', row).eq(11);
-            if (evita === 'APPROVED') {
-                evitaCell.html('<label class="badge badge-warning">' + evita + '</label>');
-            } else if (evita === 'REJECTED') {
-                evitaCell.html('<label class="badge badge-info">' + evita + '</label>');
-            }else {
-                evitaCell.html('<label class="badge badge-info">Data bulan sebelumnya tidak tersedia</label>');
+                $('#datatable').on('draw.dt', function () {
+                    $('[data-toggle="tooltip"]').tooltip(); // Inisialisasi tooltip setelah DataTable dirender ulang
+                });
+
             }
-        }
         });
 
         // Event listener untuk tombol "Lihat"
