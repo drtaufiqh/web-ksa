@@ -27,6 +27,18 @@
     <link rel="stylesheet" href="/assets/css/style.css">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="/assets/img/logo.png" />
+    <style>
+        td.feedback-cell {
+            white-space: normal !important;
+            word-wrap: break-word;
+            max-width: 400px; /* Atur lebar maksimum untuk mengontrol wrapping */
+        }
+
+        /* Gunakan nowrap untuk kolom lain agar tidak melebar secara berlebihan */
+        .text-nowrap {
+            white-space: nowrap;
+        }
+    </style>
   </head>
   <body>
     <div class="container-scroller">
@@ -121,6 +133,7 @@
                                 <th>B2</th>
                                 <th> Status </th>
                                 <th> Segmen & Status</th>
+                                <th>Feedback</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -243,7 +256,8 @@
                 { "data": "hasil_b1" },
                 { "data": "hasil_b2" },
                 { "data": "status" },
-                { "data": "evita" }
+                { "data": "evita" },
+                { "data": "feedback", "className": "feedback-cell" } // Tambahkan class di kolom feedback
             ],
             "createdRow": function (row, data, dataIndex) {
             // Array dengan kolom hasil
