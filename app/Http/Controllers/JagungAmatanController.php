@@ -123,7 +123,7 @@ class JagungAmatanController extends Controller
             $uploadedFileExtension = $file->getClientOriginalExtension();
 
             // Format pesan error
-            $errorMessage = 'File yang diupload harus dalam format: xls, xlsx, csv. Sedangkan file yang Anda upload adalah format ' . $uploadedFileExtension . '.';
+            $errorMessage = 'File yang diupload harus dalam format: xlsx. Sedangkan file yang Anda upload adalah format ' . $uploadedFileExtension . '.';
 
             return back()->withErrors(['file' => $errorMessage])->withInput();
         }
@@ -231,6 +231,113 @@ class JagungAmatanController extends Controller
         $message_n = $this->proses($tabul_n_1, $tabul);
 
         return redirect()->back()->with('success', 'Data jagung ' . $tabul . ' berhasil diunggah.')->withInput();
+    }
+
+    public function importFeedback(Request $request){
+        $wil = Auth::user()->kode;
+        // Validasi file
+        $validator = Validator::make($request->all(), [
+            'file_fb' => 'required|mimes:xls,xlsx,csv',
+        ]);
+
+        if ($validator->fails()) {
+            // Ambil format file yang diupload
+            $file = $request->file('file_fb');
+            $uploadedFileExtension = $file->getClientOriginalExtension();
+
+            // Format pesan error
+            $errorMessage = 'File yang diupload harus dalam format: xlsx. Sedangkan file yang Anda upload adalah format ' . $uploadedFileExtension . '.';
+
+            return back()->withErrors(['file' => $errorMessage])->withInput();
+        }
+
+        // Ambil file
+        $file = $request->file('file_fb');
+        $bulanInput = $request->input('bulan_fb');
+        $tahunInput = $request->input('tahun_fb');
+        $tabulInput = $tahunInput . $bulanInput;
+
+        // Ambil nama file dan ambil 4 karakter pertama
+        $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $tahun = substr($fileName, 0, 4);
+        $bulan = substr($fileName, 4, 2);
+        $tabul = substr($fileName, 0, 6);
+        $wilFile = substr($fileName, 8, 4);
+        $jenis = substr($fileName, 13, 6);
+
+        if ($wil != $wilFile) {
+            return back()->withErrors(['input' => 'Pastikan format file sesuai dengan kabupaten/kota!'])->withInput();
+        }
+        if ($jenis != 'jagung') {
+            return back()->withErrors(['input' => 'Pastikan format file sesuai!'])->withInput();
+        }
+
+        if ($tabulInput != $tabul) {
+            return back()->withErrors(['input' => 'Pastikan format file sesuai dengan tahun dan bulan yang dipilih!'])->withInput();
+        }
+
+        // Baca file excel
+        $data = Excel::toArray([], $file);
+
+        // Ambil header (baris pertama) dari file excel
+        $header = array_map('trim', $data[0][0]);
+
+        // Tentukan header minimal yang diharapkan
+        $requiredHeader = [
+            'Kode Segmen', 'Feedback'
+        ];
+
+        // Validasi header
+        foreach ($requiredHeader as $requiredColumn) {
+            if (!in_array($requiredColumn, $header)) {
+                return back()->withErrors(['file' => 'Format kolom Excel tidak sesuai. Kolom ' . $requiredColumn . ' tidak ditemukan.'])->withInput();
+            }
+        }
+
+        // // Pemetaan indeks header untuk akses data
+        $headerIndexes = array_flip($header);
+        $groupedData = [];
+
+        // Proses data jika validasi sukses
+        foreach ($data[0] as $key => $row) {
+            if ($key == 0) {
+                continue; // Lewatkan header
+            }
+            $kode_segmen = $row[$headerIndexes['Kode Segmen']];
+            $feedback = $row[$headerIndexes['Feedback']];
+            $indeks = $tabul . $kode_segmen;
+            $kode_kabkota = substr($kode_segmen, 0, 4);
+
+            $groupedData[$indeks] = [
+                'indeks' => $indeks,
+                'tahun' => $tahun,
+                'bulan' => $bulan,
+                'kode_segmen' => $kode_segmen,
+                'kode_kabkota' => $kode_kabkota,
+                'feedback' => $feedback,
+                'akun' => Auth::user()->email,
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        // Masukkan data yang sudah digabung ke dalam database
+        foreach ($groupedData as $dataToInsert) {
+            $kodekab = $dataToInsert['kode_kabkota'];
+            if (Auth::user()->role == 'prov' || Auth::user()->kode == $kodekab){
+                // Periksa apakah entri dengan kode_segmen yang sama sudah ada
+                $existingRecord = JagungAmatan::where('indeks', $dataToInsert['indeks'])->first();
+
+                if ($existingRecord) {
+                    // Jika sudah ada, perbarui data
+                    $existingRecord->update($dataToInsert);
+                } else {
+                    // Jika tidak ada, buat entri baru
+                    JagungAmatan::create($dataToInsert);
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Feedback jagung ' . $tabul . ' berhasil diunggah.')->withInput();
     }
 
     public function riwayat(){

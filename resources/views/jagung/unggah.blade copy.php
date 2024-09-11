@@ -53,6 +53,8 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
+                </div>
+                <div class="card">
                 <div class="col-6" id="kiri">
                     <div class="page-header" style="background-color: #3b5740">
                         <h3 class="page-title"> Unggah Data Amatan </h3>
@@ -218,10 +220,10 @@
                     </div>
                 </div>
             </div>
-            </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           @include('components.footer')
+            </div>
           <!-- partial -->
         </div>
         <!-- main-panel ends -->
@@ -253,10 +255,6 @@
     document.getElementById('myForm').addEventListener('submit', function() {
         // Tampilkan spinner loading
         document.getElementById('loading1').style.display = 'block';
-    });
-    document.getElementById('myForm2').addEventListener('submit', function() {
-        // Tampilkan spinner loading
-        document.getElementById('loading12').style.display = 'block';
     });
 </script>
 </html>

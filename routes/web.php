@@ -96,6 +96,7 @@ Route::get('/unduh-jagung', [GambarController::class, 'unduhJagung'])->middlewar
 // jagung_unggah
 Route::get('/jagung_unggah', [JagungAmatanController::class, 'showUploadForm'])->middleware('auth')->name('jagung_unggah');
 Route::post('/jagungamatan/upload', [JagungAmatanController::class, 'import'])->middleware('auth')->name('jagungamatan.upload');
+Route::post('/jagungamatan/upfeedback', [JagungAmatanController::class, 'importFeedback'])->middleware('auth')->name('jagungamatan.upfeedback');
 
 // jagung_riwayat
 Route::get('/jagung_riwayat', [JagungAmatanController::class, 'riwayat'])->middleware('auth')->name('jagung_riwayat');
@@ -107,6 +108,7 @@ Route::post('/jagung_validasi', [JagungValidasiController::class, 'showValidasi'
 Route::get('/get-filtered-data', [JagungValidasiController::class, 'getFilteredData'])->middleware('auth');
 
 // jagung_petugas
+Route::get('/jagung_petugas', [JagungAmatanController::class, 'showPetugas'])->middleware('auth')->name('jagung_petugas');
 Route::get('/jagung_petugas', [JagungAmatanController::class, 'showPetugas'])->middleware('auth')->name('jagung_petugas');
 Route::get('/jagung-get-petugas', [JagungAmatanController::class, 'getPetugas'])->middleware('auth');
 

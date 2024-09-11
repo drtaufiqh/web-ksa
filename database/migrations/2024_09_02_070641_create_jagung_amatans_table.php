@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('hasil_a2', 2)->nullable()->default(null);
             $table->string('hasil_b1', 2)->nullable()->default(null);
             $table->string('hasil_b2', 2)->nullable()->default(null);
+            $table->string('feedback')->nullable()->default(null);
             $table->string('status', 20)->nullable()->default(null);
             $table->string('evita', 20)->nullable()->default(null);
             $table->string('akun', 20)->nullable()->default(null);
