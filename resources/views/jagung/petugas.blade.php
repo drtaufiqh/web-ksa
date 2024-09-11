@@ -227,25 +227,31 @@
                 { "data": "pcs" },
                 { "data": "target" },
                 { "data": "realisasi" },
-                { "data": "progres" }
+                {
+                    "data": "progres",
+                    "render": function (data, type, row) {
+                        // Format nilai progres agar hanya memiliki dua angka di belakang koma
+                        var formattedProgress = parseFloat(data).toFixed(2);
+
+                        // Buat progress bar
+                        return '<div class="progress-bar"><span data-width="' + formattedProgress + '%">' + formattedProgress + '%</span>'+'</div>';
+                    }
+                }
             ],
             "createdRow": function (row, data, dataIndex) {
-            // Array dengan kolom hasil
-            var hasilColumns = ['progres'];
+                // Dapatkan elemen span di dalam kolom progres
+                var $progressSpan = $('td:eq(3) .progress-bar span', row); // Kolom ke-4 berisi progress (offset 3 karena indeks mulai dari 0)
+                var progressValue = parseFloat(data['progres']); // Ambil nilai progress
 
-            // Loop melalui kolom hasil dan cek nilainya
-            hasilColumns.forEach(function (col, index) {
-                var cellValue = data[col];
-                var cell = $('td', row).eq(index + 3); // offset by 3 because columns 0-2 are not hasil_*
-                if (cellValue == 100) {
-                    cell.css('background-color', '#abe96c').css('color', 'white');
-                } else if (cellValue > 50) {
-                    cell.css('background-color', '#ffc37c').css('color', 'black');
-                } else if (cellValue > 0) {
-                    cell.css('background-color', '#ff5050').css('color', 'white');
+                // Terapkan warna pada span berdasarkan nilai progress
+                if (progressValue == 100) {
+                    $progressSpan.css('background-color', '#abe96c').css('color', 'black').css('width', progressValue +'%');
+                } else if (progressValue > 50) {
+                    $progressSpan.css('background-color', '#ffc37c').css('color', 'black').css('width', progressValue +'%');
+                } else if (progressValue > 0) {
+                    $progressSpan.css('background-color', '#ff5050').css('color', 'white').css('width', progressValue +'%');
                 }
-            });
-        }
+            }
         });
 
         // Event listener untuk tombol "Lihat"

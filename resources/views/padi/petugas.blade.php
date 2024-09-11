@@ -239,7 +239,6 @@
                 }
             ],
             "createdRow": function (row, data, dataIndex) {
-
                 // Dapatkan elemen span di dalam kolom progres
                 var $progressSpan = $('td:eq(3) .progress-bar span', row); // Kolom ke-4 berisi progress (offset 3 karena indeks mulai dari 0)
                 var progressValue = parseFloat(data['progres']); // Ambil nilai progress
