@@ -178,8 +178,8 @@
                       </div>
                     </div>
                     </div>
+                    </div>
 
-                    <div class="row">
                         <div class="card-body">
                             <h4 class="judul-chart"> Capaian Validasi </h4>
                             <div class="dropdown-chart">
@@ -219,7 +219,6 @@
                 </div>
               </div>
             </div>
-          </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           @include('components.footer')
