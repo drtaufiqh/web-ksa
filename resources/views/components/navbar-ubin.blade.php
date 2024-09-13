@@ -1,7 +1,7 @@
 <!-- resources/views/components/navbar.blade.php -->
  <!-- Navbar -->
-      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row" style ="background-image: url(/assets/img/bg-mode3.png);">
-        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start" style ="background-image: url(/assets/img/bg-mode3.png);">
+      <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row" style ="background-image: url(/assets/img/bg-mode3.png);background-position: center;">
+        <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start" style ="background-image: url(/assets/img/bg-mode3.png);background-position: center;">
           <a class="navbar-brand brand-logo" href="/index"><img src="/assets/img/logo-full.png" alt="logo" /></a>
           <a class="navbar-brand brand-logo-mini" href="/index"><img src="/assets/img/logo.png" alt="logo" /></a>
         </div>
@@ -88,7 +88,7 @@
       <!-- partial -->
       <div class="container-fluid page-body-wrapper">
         <!-- partial:../../partials/_sidebar.html -->
-        <nav class="sidebar sidebar-offcanvas" id="sidebar" style ="background-image: url(/assets/img/bg-mode3.png);">
+        <nav class="sidebar sidebar-offcanvas" id="sidebar" style ="background-image: url(/assets/img/bg-mode3.png);background-position: center;">
           <ul class="nav">
             <li class="nav-item">
               <a class="nav-link" href="{{ route('ubinan.lacak') }}">

@@ -35,8 +35,8 @@
 
         <!-- partial -->
         <div class="main-panel">
-          <div class="content-wrapper">
-            <div class="page-header">
+            <div class="content-wrapper" style="background:#fdffe9;">
+                <div class="page-header" style="background-color: #3b5740">
               <h3 class="page-title"> Report Petugas </h3>
             </div>
             <div class="row">

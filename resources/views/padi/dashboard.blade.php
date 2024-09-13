@@ -41,9 +41,9 @@
               <div class="card">
                 @if (Auth::user()->role == 'prov')
                   <div class="card-body">
-                    <div class="dropdownpadi" style="color: #3b5740;background-color: #def4ca;">
+                    <div class="dropdownpadi" style="color: #ffffff;background-color: #5d5e52;">
                         <label>Peta</label>
-                        <select id="petaSelect" style="background-color: #def4ca; border: transparent;color: #3b5740;font-weight: bold;">
+                        <select id="petaSelect" style="background-color: #5d5e52; border: transparent;color: #ffffff;font-weight: bold;">
                             <option value="sebaran">Sebaran Fase Amatan</option>
                             <option value="konsistensi">Konsistensi Perwilayah (subsegmen)</option>
                         </select>
@@ -62,7 +62,7 @@
                                 }
                             @endphp
                             <label for="tahun_peta">Tahun</label>
-                            <select id="tahun_peta" name="tahun_peta" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                            <select id="tahun_peta" name="tahun_peta" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                                 @foreach($years as $year)
                                     <option value="{{ $year }}" {{ $currentYear == $year ? 'selected' : '' }}>{{ $year }}</option>
                                 @endforeach
@@ -74,7 +74,7 @@
                                 $currentMonth = old('bulan_peta', date('m')); // Gunakan nilai lama jika tersedia
                             @endphp
                             <label for="bulan_peta">Bulan</label>
-                            <select id="bulan_peta" name="bulan_peta" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                            <select id="bulan_peta" name="bulan_peta" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                                 <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
                                 <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
                                 <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
@@ -92,7 +92,7 @@
 
                         <div class="dropdownpadi" id="faseAmatan">
                             <label for="fase">Fase Amatan</label>
-                            <select id="fase" name="fase" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                            <select id="fase" name="fase" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                                 <option value="1">01-Vegetatif Awal</option>
                                 <option value="2">02-Vegetatif Akhir</option>
                                 <option value="3">03-Generatif</option>
@@ -105,7 +105,7 @@
                             </select>
                         </div>
 
-                      <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
+                      <button id="lihat_peta" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #55926f;margin: 0.5rem;">
                         <i class="fa fa-refresh"></i> Lihat </button>
                     </div>
                     <div id="map" style="height: 70vh;background: #fbf8f8;"></div>
@@ -127,7 +127,7 @@
                             }
                         @endphp
                         <label for="tahun_progres">Tahun</label>
-                        <select id="tahun_progres" name="tahun_progres" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                        <select id="tahun_progres" name="tahun_progres" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                             @foreach($years as $year)
                                 <option value="{{ $year }}" {{ $currentYear == $year ? 'selected' : '' }}>{{ $year }}</option>
                             @endforeach
@@ -139,7 +139,7 @@
                             $currentMonth = old('bulan_progres', date('m')); // Gunakan nilai lama jika tersedia
                         @endphp
                         <label for="bulan_progres">Bulan</label>
-                        <select id="bulan_progres" name="bulan_progres" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                        <select id="bulan_progres" name="bulan_progres" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                             <option value="01" {{ $currentMonth == '01' ? 'selected' : '' }}>01 - Januari</option>
                             <option value="02" {{ $currentMonth == '02' ? 'selected' : '' }}>02 - Februari</option>
                             <option value="03" {{ $currentMonth == '03' ? 'selected' : '' }}>03 - Maret</option>
@@ -160,13 +160,13 @@
                             $currentMonth = old('jenis_progres', 'subsegmen'); // Gunakan nilai lama jika tersedia
                         @endphp
                       <label for="jenis_progres"></label>
-                          <select id="jenis_progres" name="jenis_progres" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                          <select id="jenis_progres" name="jenis_progres" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                             <option value="subsegmen">Subsegmen</option>
                             <option value="segmen">Segmen</option>
                             <option value="evita">Segmen dan Status</option>
                           </select>
                     </div>
-                    <button id="lihat_progres" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
+                    <button id="lihat_progres" type="button" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #55926f;margin: 0.5rem;">
                         <i class="fa fa-refresh"></i> Lihat </button>
                     </div>
                     <div>
@@ -182,7 +182,7 @@
                             <h4 class="judul-chart"> Capaian Validasi </h4>
                             <div class="dropdown-chart">
                                 <div class="dropdownpadi">
-                                    <select id="jenis_capaian" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                                    <select id="jenis_capaian" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                                         <option value="subsegmen">Subsegmen</option>
                                         <option value="segmen">Segmen</option>
                                         <option value="evita">Segmen dan Status</option>
@@ -190,12 +190,12 @@
                                 </div>
                                 @if (Auth::user()->role == 'prov')
                                 <div class="dropdownpadi">
-                                    <select id="wilayah_capaian" style="background-color: #a4d17c; border: transparent;color: #FFFFFF;font-weight: bold;">
+                                    <select id="wilayah_capaian" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">
                                         <option value="3399">Pilih Wilayah</option><option value="3300">Jawa Tengah</option><option value="3301">3301 - Cilacap</option><option value="3302">3302 - Banyumas</option><option value="3303">3303 - Purbalingga</option><option value="3304">3304 - Banjarnegara</option><option value="3305">3305 - Kebumen</option><option value="3306">3306 - Purworejo</option><option value="3307">3307 - Wonosobo</option><option value="3308">3308 - Magelang</option><option value="3309">3309 - Boyolali</option><option value="3310">3310 - Klaten</option><option value="3311">3311 - Sukoharjo</option><option value="3312">3312 - Wonogiri</option><option value="3313">3313 - Karanganyar</option><option value="3314">3314 - Sragen</option><option value="3315">3315 - Grobogan</option><option value="3316">3316 - Blora</option><option value="3317">3317 - Rembang</option><option value="3318">3318 - Pati</option><option value="3319">3319 - Kudus</option><option value="3320">3320 - Jepara</option><option value="3321">3321 - Demak</option><option value="3322">3322 - Semarang</option><option value="3323">3323 - Temanggung</option><option value="3324">3324 - Kendal</option><option value="3325">3325 - Batang</option><option value="3326">3326 - Pekalongan</option><option value="3327">3327 - Pemalang</option><option value="3328">3328 - Tegal</option><option value="3329">3329 - Brebes</option><option value="3371">3371 - Kota Magelang</option><option value="3372">3372 - Kota Surakarta</option><option value="3373">3373 - Kota Salatiga</option><option value="3374">3374 - Kota Semarang</option><option value="3375">3375 - Kota Pekalongan</option><option value="3376">3376 - Kota Tegal</option></select>
                                     </select>
                                 </div>
                                 @endif
-                                <button type="button" id="lihat_capaian" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #a4d17c;margin: 0.5rem;">
+                                <button type="button" id="lihat_capaian" class="btn btn-gradient-primary btn-icon-text" style="padding:0.6rem;background: #55926f;margin: 0.5rem;">
                                 <i class="fa fa-refresh"></i> Lihat </button>
                             </div>
                         <div id="capaian" class="col-lg-6 grid-margin stretch-card">

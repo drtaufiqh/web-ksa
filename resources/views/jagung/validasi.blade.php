@@ -47,7 +47,7 @@
 
         <!-- partial -->
         <div class="main-panel">
-        <div class="content-wrapper" style="background: linear-gradient(to right, #f4ffc8, #ddf3ca);">
+          <div class="content-wrapper" style="background:#fdffe9;">
             <div class="page-header" style="background-color: #3b5740">
               <h3 class="page-title"> Validasi Amatan </h3>
             </div>
