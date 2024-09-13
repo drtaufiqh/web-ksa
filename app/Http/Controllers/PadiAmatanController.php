@@ -118,7 +118,7 @@ class PadiAmatanController extends Controller
     }
 
     public function import(Request $request){
-        set_time_limit(5 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
+        set_time_limit(8 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
 
         $wil = Auth::user()->kode;
 
