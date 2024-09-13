@@ -144,7 +144,7 @@ class JagungAmatanController extends Controller
         $wilFile = substr($fileName, 8, 4);
         $jenis = substr($fileName, 13, 6);
 
-        if ($wil != $wilFile) {
+        if (($wil != '3300') && ($wil != $wilFile)) {
             return back()->withErrors(['input' => 'Pastikan format file sesuai dengan kabupaten/kota!'])->withInput();
         }
         if ($jenis != 'jagung') {
@@ -265,7 +265,7 @@ class JagungAmatanController extends Controller
         $wilFile = substr($fileName, 8, 4);
         $jenis = substr($fileName, 13, 6);
 
-        if ($wil != $wilFile) {
+        if (($wil != '3300') && ($wil != $wilFile)) {
             return back()->withErrors(['input' => 'Pastikan format file sesuai dengan kabupaten/kota!'])->withInput();
         }
         if ($jenis != 'jagung') {

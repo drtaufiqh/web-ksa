@@ -235,15 +235,6 @@
             "ajax": null, // Disable initial AJAX call
             "columns": [
                 { "data": "kode_segmen" },
-                // { "data": "hasil_a1" },
-                // { "data": "hasil_a2" },
-                // { "data": "hasil_a3" },
-                // { "data": "hasil_b1" },
-                // { "data": "hasil_b2" },
-                // { "data": "hasil_b3" },
-                // { "data": "hasil_c1" },
-                // { "data": "hasil_c2" },
-                // { "data": "hasil_c3" },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_a1 dengan tooltip feedback fb_a1
                     "render": function (data, type, row) {
