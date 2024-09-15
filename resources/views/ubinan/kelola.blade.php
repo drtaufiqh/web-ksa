@@ -32,7 +32,7 @@
 
         <!-- partial -->
         <div class="main-panel">
-          <div class="content-wrapper" style="background: linear-gradient(to right, #f1edc1, #dbe4be);">
+          <div class="content-wrapper" style="background: linear-gradient(to right, #f3efe7, #fff8e9);">
             <div class="page-header" style="background-color: #5e5741">
               <h3 class="page-title"> Database Petani</h3>
               <button type="button" id="tambah_btn" class="btn btn-gradient-primary btn-icon-text" onclick="tambah()" style="background: linear-gradient(to right, #696b4c, #b9af49)"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false">
@@ -414,7 +414,7 @@
                                     '<div class="col">'+
                                         '<button id="ubah_btn" type="button" class="mx-1 btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #87c351;" onclick="ubah('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-edit"></i> Edit </button>'+
                                         '<button id="hapus_btn" type="button" class="mx-1 btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #ff5050;" onclick="hapus('+y+')"  data-toggle="modal" data-target="#editModal"  data-backdrop="static" data-keyboard="false"><i class="fa fa-trash-o"></i> Hapus </button>'+
-                                        '<a href="' + contactUrl + '" class="mx-1 btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #007bff; color: white;" target="_blank"><i class="fa fa-envelope"></i> Hubungi </a>' +
+                                        '<a href="' + contactUrl + '" class="mx-1 btn btn-gradient-primary btn-icon-text" style="padding:0.5rem;background: #007bff; color: white;" target="_blank"><i class="fa fa-whatsapp"></i> Hubungi </a>' +
                                     '</div>'+
                                 '</td>'+
                             '</tr>'

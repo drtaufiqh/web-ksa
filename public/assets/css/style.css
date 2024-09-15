@@ -8607,7 +8607,7 @@ h4, .h4 {
 }
 @media (min-width: 1200px) {
   h4, .h4 {
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
 }
 
@@ -20914,7 +20914,8 @@ code {
 .page-header {
   padding: 7px;
   border-radius: 5px;
-  background-color: #a4d17c;
+  background-color: #18594f;
+  color: #ffffff;
 }
 .page-header .breadcrumb {
   border: 0;
@@ -22602,7 +22603,7 @@ code {
 
 /* gradient buttons */
 .btn-gradient-primary {
-  background: linear-gradient(to right ,#a4d17c ,#f4c35c);
+  background: linear-gradient(to right, #18594f, #2d7a30);
   border: 0;
   font-weight: bold;
   -webkit-transition: opacity 0.3s ease;
@@ -25830,7 +25831,7 @@ dl li {
   content: "\f0140";
 }
 .sidebar .nav .nav-item.active {
-  background: linear-gradient(to right, #dffdc5, #feffd8);
+    background: linear-gradient(to right, #efffe7, #feffd8);;
 }
 .sidebar .nav .nav-item.active > .nav-link .menu-title {
   color: #3b5740;
@@ -26379,7 +26380,7 @@ dl li {
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1;
-  background: linear-gradient(to right, #f6ffef, #feffd8);
+  background: #f6f5e8;
 }
 
 .popup {
@@ -26452,14 +26453,14 @@ dl li {
 .judul-chart{
     text-align: center;
     font-weight: bold;
-    color: #3b5740;
-    background-color: #def4ca;
+    color: #ffffff;
+    background-color: #5d5e52;
     padding: 0.5rem;
 }
 
 .dropdownpadi{
   padding: 0.5rem;
-  background-color: #a4d17c;
+  background-color: #18594f;
   color: #FFFF;
   font-weight: bold;
   margin: 0.5rem;

@@ -29,7 +29,7 @@
 
         <!-- partial -->
         <div class="main-panel">
-            <div class="content-wrapper" style="background: linear-gradient(to right, #f4ffc8, #ddf3ca);">
+            <div class="content-wrapper" style="background:#fdffe9;">
                 <div class="row" id="atas">
                     @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">

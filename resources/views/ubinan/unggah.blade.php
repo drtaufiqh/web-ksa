@@ -29,7 +29,7 @@
 
         <!-- partial -->
         <div class="main-panel">
-        <div class="content-wrapper" style="background: linear-gradient(to right, #f1edc1, #dbe4be);">
+        <div class="content-wrapper" style="background: linear-gradient(to right, #f3efe7, #fff8e9);">
             <div class="page-header" style="background-color: #5e5741">
               <h3 class="page-title"> Unggah Data Ubinan </h3>
             </div>

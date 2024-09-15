@@ -81,18 +81,20 @@ class PadiValidasiController extends Controller
     public function getFilteredData(Request $request) {
         $tahun = $request->input('tahun');
         $bulan = $request->input('bulan');
+        $tabul = $tahun . $bulan;
+        $tabul_sebelum = TahunBulan::getTabulSebelum( $tabul );
         $kabkota = Auth::user()->kode;
         if ($kabkota == '3300') $kabkota = $request->input('kabkota');
 
         $query = DB::table('padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
 
-        if ($tahun) {
-            $query->where('tahun', $tahun);
-        }
+        // if ($tabul_sebelum && $tabul_sebelum) {
+        $query->whereIn('tabul', [$tabul_sebelum, $tabul]);
+        // }
 
-        if ($bulan) {
-            $query->where('bulan', $bulan);
-        }
+        // if ($bulan) {
+        //     $query->where('bulan', $bulan);
+        // }
 
         if ($kabkota && $kabkota !== '3300') {
             $query->where('kode_kabkota', $kabkota);
@@ -100,7 +102,106 @@ class PadiValidasiController extends Controller
 
         $data = $query->get();
 
-        return response()->json($data);
+        // return response()->json($data);
+        // Proses penggabungan data
+        $groupedData = [];
+
+        foreach ($data as $row) {
+            $kode_segmen = $row->kode_segmen; // Misalkan 'indeks' adalah identifier untuk data
+            if (!isset($groupedData[$kode_segmen])) {
+                // Inisialisasi baris baru jika belum ada
+                $groupedData[$kode_segmen] = [
+                    'kode_segmen' => $row->kode_segmen,
+                    'a1' => null, // Placeholder untuk tabul_sebelum
+                    'a2' => null, // Placeholder untuk tabul_sebelum
+                    'a3' => null, // Placeholder untuk tabul_sebelum
+                    'b1' => null, // Placeholder untuk tabul_sebelum
+                    'b2' => null, // Placeholder untuk tabul_sebelum
+                    'b3' => null, // Placeholder untuk tabul_sebelum
+                    'c1' => null, // Placeholder untuk tabul_sebelum
+                    'c2' => null, // Placeholder untuk tabul_sebelum
+                    'c3' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_a1' => null, // Placeholder untuk tabul_sebelum
+                    'fb_a1' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_a2' => null, // Placeholder untuk tabul_sebelum
+                    'fb_a2' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_a3' => null, // Placeholder untuk tabul_sebelum
+                    'fb_a3' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_b1' => null, // Placeholder untuk tabul_sebelum
+                    'fb_b1' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_b2' => null, // Placeholder untuk tabul_sebelum
+                    'fb_b2' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_b3' => null, // Placeholder untuk tabul_sebelum
+                    'fb_b3' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_c1' => null, // Placeholder untuk tabul_sebelum
+                    'fb_c1' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_c2' => null, // Placeholder untuk tabul_sebelum
+                    'fb_c2' => null, // Placeholder untuk tabul_sebelum
+                    'hasil_c3' => null, // Placeholder untuk tabul_sebelum
+                    'fb_c3' => null, // Placeholder untuk tabul_sebelum
+                    'a1_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'a2_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'a3_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'b1_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'b2_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'b3_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'c1_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'c2_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'c3_sblm' => null, // Placeholder untuk tabul_sebelum
+                    'status' => null,         // Placeholder untuk tabul (bulan saat ini)
+                    'evita' => null,         // Placeholder untuk tabul (bulan saat ini)
+                    // Kolom lainnya sesuai dengan kebutuhan
+                ];
+            }
+
+            // Isi data untuk `tabul` atau `tabul_sebelum`
+            if ($row->tabul == $tabul_sebelum) {
+                $groupedData[$kode_segmen]['a1_sblm'] = $row->a1;
+                $groupedData[$kode_segmen]['a2_sblm'] = $row->a2;
+                $groupedData[$kode_segmen]['a3_sblm'] = $row->a3;
+                $groupedData[$kode_segmen]['b1_sblm'] = $row->b1;
+                $groupedData[$kode_segmen]['b2_sblm'] = $row->b2;
+                $groupedData[$kode_segmen]['b3_sblm'] = $row->b3;
+                $groupedData[$kode_segmen]['c1_sblm'] = $row->c1;
+                $groupedData[$kode_segmen]['c2_sblm'] = $row->c2;
+                $groupedData[$kode_segmen]['c3_sblm'] = $row->c3;
+            } elseif ($row->tabul == $tabul) {
+                $groupedData[$kode_segmen]['a1'] = $row->a1;
+                $groupedData[$kode_segmen]['a2'] = $row->a2;
+                $groupedData[$kode_segmen]['a3'] = $row->a3;
+                $groupedData[$kode_segmen]['b1'] = $row->b1;
+                $groupedData[$kode_segmen]['b2'] = $row->b2;
+                $groupedData[$kode_segmen]['b3'] = $row->b3;
+                $groupedData[$kode_segmen]['c1'] = $row->c1;
+                $groupedData[$kode_segmen]['c2'] = $row->c2;
+                $groupedData[$kode_segmen]['c3'] = $row->c3;
+                $groupedData[$kode_segmen]['hasil_a1'] = $row->hasil_a1;
+                $groupedData[$kode_segmen]['hasil_a2'] = $row->hasil_a2;
+                $groupedData[$kode_segmen]['hasil_a3'] = $row->hasil_a3;
+                $groupedData[$kode_segmen]['hasil_b1'] = $row->hasil_b1;
+                $groupedData[$kode_segmen]['hasil_b2'] = $row->hasil_b2;
+                $groupedData[$kode_segmen]['hasil_b3'] = $row->hasil_b3;
+                $groupedData[$kode_segmen]['hasil_c1'] = $row->hasil_c1;
+                $groupedData[$kode_segmen]['hasil_c2'] = $row->hasil_c2;
+                $groupedData[$kode_segmen]['hasil_c3'] = $row->hasil_c3;
+                $groupedData[$kode_segmen]['fb_a1'] = $row->fb_a1;
+                $groupedData[$kode_segmen]['fb_a2'] = $row->fb_a2;
+                $groupedData[$kode_segmen]['fb_a3'] = $row->fb_a3;
+                $groupedData[$kode_segmen]['fb_b1'] = $row->fb_b1;
+                $groupedData[$kode_segmen]['fb_b2'] = $row->fb_b2;
+                $groupedData[$kode_segmen]['fb_b3'] = $row->fb_b3;
+                $groupedData[$kode_segmen]['fb_c1'] = $row->fb_c1;
+                $groupedData[$kode_segmen]['fb_c2'] = $row->fb_c2;
+                $groupedData[$kode_segmen]['fb_c3'] = $row->fb_c3;
+                $groupedData[$kode_segmen]['status'] = $row->status;
+                $groupedData[$kode_segmen]['evita'] = $row->evita;
+            }
+        }
+
+        // Ubah array associative menjadi array biasa
+        $finalData = array_values($groupedData);
+
+        return response()->json($finalData);
     }
 
     function proses($wil=null,$tabul0=null,$tabul1=null,$output='array', Request $request) // output = 'json'

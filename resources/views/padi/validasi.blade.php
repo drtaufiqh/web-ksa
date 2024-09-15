@@ -235,76 +235,67 @@
             "ajax": null, // Disable initial AJAX call
             "columns": [
                 { "data": "kode_segmen" },
-                // { "data": "hasil_a1" },
-                // { "data": "hasil_a2" },
-                // { "data": "hasil_a3" },
-                // { "data": "hasil_b1" },
-                // { "data": "hasil_b2" },
-                // { "data": "hasil_b3" },
-                // { "data": "hasil_c1" },
-                // { "data": "hasil_c2" },
-                // { "data": "hasil_c3" },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_a1 dengan tooltip feedback fb_a1
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_a1 + '">'
-                            + row.hasil_a1 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.a1 + ') , (n-1=' + row.a1_sblm + ') Feedback: ' + row.fb_a1 + '">'
+                            + row.hasil_a1 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_a2 dengan tooltip feedback fb_a2
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_a2 + '">'
-                            + row.hasil_a2 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.a2 + ') , (n-1=' + row.a2_sblm + ') Feedback: ' + row.fb_a2 + '">'
+                            + row.hasil_a2 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_a3 dengan tooltip feedback fb_a3
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_a3 + '">'
-                            + row.hasil_a3 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.a3 + ') , (n-1=' + row.a3_sblm + ') Feedback: ' + row.fb_a3 + '">'
+                            + row.hasil_a3 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_b1 dengan tooltip feedback fb_b1
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_b1 + '">'
-                            + row.hasil_b1 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.b1 + ') , (n-1=' + row.b1_sblm + ') Feedback: ' + row.fb_b1 + '">'
+                            + row.hasil_b1 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_b2 dengan tooltip feedback fb_b2
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_b2 + '">'
-                            + row.hasil_b2 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.b2 + ') , (n-1=' + row.b2_sblm + ') Feedback: ' + row.fb_b2 + '">'
+                            + row.hasil_b2 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_b3 dengan tooltip feedback fb_b3
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_b3 + '">'
-                            + row.hasil_b3 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.b3 + ') , (n-1=' + row.b3_sblm + ') Feedback: ' + row.fb_b3 + '">'
+                            + row.hasil_b3 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_c1 dengan tooltip feedback fb_c1
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_c1 + '">'
-                            + row.hasil_c1 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.c1 + ') , (n-1=' + row.c1_sblm + ') Feedback: ' + row.fb_c1 + '">'
+                            + row.hasil_c1 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_c2 dengan tooltip feedback fb_c2
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_c2 + '">'
-                            + row.hasil_c2 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.c2 + ') , (n-1=' + row.c2_sblm + ') Feedback: ' + row.fb_c2 + '">'
+                            + row.hasil_c2 + '</div>';
                     }
                 },
                 {
                     "data": null, // Kolom ini akan menampilkan hasil_c3 dengan tooltip feedback fb_c3
                     "render": function (data, type, row) {
-                        return '<span data-toggle="tooltip" data-placement="top" title="Feedback: ' + row.fb_c3 + '">'
-                            + row.hasil_c3 + '</span>';
+                        return '<div data-toggle="tooltip" data-placement="top" title="(n=' + row.c3 + ') , (n-1=' + row.c3_sblm + ') Feedback: ' + row.fb_c3 + '">'
+                            + row.hasil_c3 + '</div>';
                     }
                 },
                 { "data": "status" },
