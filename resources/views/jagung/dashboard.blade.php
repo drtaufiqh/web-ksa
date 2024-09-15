@@ -181,7 +181,9 @@
                     </div>
 
                         <div class="card-body">
-                            <h4 class="judul-chart"> Capaian Validasi </h4>
+                        <div class="dropdownpadi" style="color: #3b5740;background-color: #def4ca;">
+                        <label>Capaian Validasi</label>
+                         </div>
                             <div class="dropdown-chart">
                                 <div class="dropdownpadi">
                                     <select id="jenis_capaian" style="background-color: #18594f; border: transparent;color: #FFFFFF;font-weight: bold;">

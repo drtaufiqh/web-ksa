@@ -218,7 +218,7 @@
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
           @include('components.footer')
@@ -226,9 +226,6 @@
         </div>
         <!-- main-panel ends -->
       </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
     <!-- endinject -->
