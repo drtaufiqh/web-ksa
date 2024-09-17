@@ -181,7 +181,7 @@
                     </div>
 
                         <div class="card-body">
-                        <div class="dropdownpadi" style="color: #3b5740;background-color: #5d5e52;">
+                        <div class="dropdownpadi" style="color: #ffffff;background-color: #5d5e52;">
                         <label>Capaian Validasi</label>
                          </div>
                             <div class="dropdown-chart">
