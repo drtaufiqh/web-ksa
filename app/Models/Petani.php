@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Petani extends Model
 {
     use HasFactory;
+    // Tentukan nama tabel dengan prefix 'paktani_'
+    protected $table = 'paktani_petanis';
 
     /**
      * The attributes that aren't mass assignable.
@@ -15,7 +17,7 @@ class Petani extends Model
      * @var array<int, string>
      */
     protected $guarded = [];
-    
+
     public static function fetchBySubsegmen($kode_segmen, $subsegmen)
     {
         $data = self::where('kode_segmen', $kode_segmen)

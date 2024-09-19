@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ubinans', function (Blueprint $table) {
+        Schema::create('paktani_ubinans', function (Blueprint $table) {
             $table->id();
             $table->string('indeks', 22)->nullable();
             $table->string('tabul', 6)->nullable();
@@ -50,6 +50,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ubinans');
+        Schema::dropIfExists('paktani_ubinans');
     }
 };

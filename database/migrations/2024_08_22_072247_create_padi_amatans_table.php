@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('padi_amatans', function (Blueprint $table) {
+        Schema::create('paktani_padi_amatans', function (Blueprint $table) {
             $table->id();
             $table->string('indeks', 20)->nullable()->default(null);
             $table->string('tabul', 6)->nullable()->default(null);
@@ -63,6 +63,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('padi_amatans');
+        Schema::dropIfExists('paktani_padi_amatans');
     }
 };

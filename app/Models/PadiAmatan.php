@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class PadiAmatan extends Model
 {
     use HasFactory;
+    // Tentukan nama tabel dengan prefix 'paktani_'
+    protected $table = 'paktani_padi_amatans';
 
     /**
      * The attributes that aren't mass assignable.

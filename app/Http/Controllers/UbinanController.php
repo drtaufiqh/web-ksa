@@ -59,10 +59,10 @@ class UbinanController extends Controller
         $wil = Auth::user()->kode;
         if ($wil == '3300') $wil = '33';
         $allKabKota = User::getAllKabKota();
-        $data = DB::table('ubinans')
-            ->join('users', 'ubinans.kode_kabkota', '=', 'users.kode')
-            ->selectRaw('CONCAT(ubinans.kode_kabkota, " - ", users.nama) as kab_kota, ubinans.kode_kabkota as kode_kabkota, ubinans.tahun, ubinans.bulan, COUNT(*) as baris, MAX(ubinans.updated_at) as last_update')
-            ->groupBy('ubinans.kode_kabkota', 'ubinans.tahun', 'ubinans.bulan', 'users.nama')
+        $data = DB::table('paktani_ubinans')
+            ->join('paktani_users', 'paktani_ubinans.kode_kabkota', '=', 'paktani_users.kode')
+            ->selectRaw('CONCAT(paktani_ubinans.kode_kabkota, " - ", paktani_users.nama) as kab_kota, paktani_ubinans.kode_kabkota as kode_kabkota, paktani_ubinans.tahun, paktani_ubinans.bulan, COUNT(*) as baris, MAX(paktani_ubinans.updated_at) as last_update')
+            ->groupBy('paktani_ubinans.kode_kabkota', 'paktani_ubinans.tahun', 'paktani_ubinans.bulan', 'paktani_users.nama')
             ->where('kode_kabkota', 'like', $wil . '%')
             ->get();
         return view("ubinan.riwayat", [
@@ -211,7 +211,7 @@ class UbinanController extends Controller
                         // 'arr_data' => $arr_data,
                         'message' => 'Data berhasil diupload',
                     );
-                    return redirect()->back()->with('success', 'Data jagung ' . $tabul . ' berhasil diunggah.')->withInput();
+                    return redirect()->back()->with('success', 'Data padi sampel ubinan ' . $tabul . ' berhasil diunggah.')->withInput();
                 } else {
                     $message = array(
                         'status' => false,
@@ -302,7 +302,7 @@ class UbinanController extends Controller
 
         if($err == 0){
             $dataSampel = Ubinan::getSampel($tabul0.$prov,$tabul1.$prov);
-            $tabel = 'padi_amatans';
+            $tabel = 'paktani_padi_amatans';
             $dataAmatan = Ubinan::getData($tabul.$prov,$tabel);
 
             $count = [];
@@ -434,7 +434,7 @@ class UbinanController extends Controller
             } else {
                 $dataSampel = Ubinan::getSampelSubround($tabul0.$prov,$tabul1.$prov,$tabul2.$prov,$tabul3.$prov);
             }
-            $tabel = 'padi_amatans';
+            $tabel = 'paktani_padi_amatans';
             $dataAmatan = Ubinan::getData($tabul.$prov,$tabel);
 
             $segmen = [];//segmen yang ada fase 2 dan 3

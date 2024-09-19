@@ -38,7 +38,7 @@ class JagungValidasiController extends Controller
     //     $kabkota = Auth::user()->kode;
     //     if ($kabkota == '3300') $kabkota = $request->input('kabkota');
 
-    //     $query = DB::table('jagung_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
+    //     $query = DB::table('paktani_jagung_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
 
     //     if ($tahun) {
     //         $query->where('tahun', $tahun);
@@ -66,7 +66,7 @@ class JagungValidasiController extends Controller
         $kabkota = Auth::user()->kode;
         if ($kabkota == '3300') $kabkota = $request->input('kabkota');
 
-        $query = DB::table('jagung_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
+        $query = DB::table('paktani_jagung_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
 
         // if ($tabul_sebelum && $tabul_sebelum) {
         $query->whereIn('tabul', [$tabul_sebelum, $tabul]);

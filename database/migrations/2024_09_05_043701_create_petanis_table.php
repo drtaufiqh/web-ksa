@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('petanis', function (Blueprint $table) {
+        Schema::create('paktani_petanis', function (Blueprint $table) {
             $table->id(); // id (Primary key)
             $table->string('kode_segmen', 9)->nullable(); // kode_segmen (Index)
             $table->string('subsegmen', 2)->nullable(); // subsegmen (Index)
@@ -37,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('petanis');
+        Schema::dropIfExists('paktani_petanis');
     }
 };

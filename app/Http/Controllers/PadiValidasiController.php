@@ -63,11 +63,6 @@ class PadiValidasiController extends Controller
         $tahun = Carbon::now()->year;
         $bulan = date('m');
         $wil = '3399';
-        // $data = DB::table('padi_amatans')
-        //     ->join('users', 'padi_amatans.kode_kabkota', '=', 'users.kode')
-        //     ->selectRaw('CONCAT(padi_amatans.kode_kabkota, " - ", users.nama) as kab_kota, padi_amatans.kode_kabkota as kode_kabkota, padi_amatans.tahun, padi_amatans.bulan, COUNT(*) as baris, MAX(padi_amatans.updated_at) as last_update')
-        //     ->groupBy('padi_amatans.kode_kabkota', 'padi_amatans.tahun', 'padi_amatans.bulan', 'users.nama')
-        //     ->get();
         return view('padi.validasi', [
             'data' => $data,
             'currentYear' => Carbon::now()->year,
@@ -86,7 +81,7 @@ class PadiValidasiController extends Controller
         $kabkota = Auth::user()->kode;
         if ($kabkota == '3300') $kabkota = $request->input('kabkota');
 
-        $query = DB::table('padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
+        $query = DB::table('paktani_padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
 
         // if ($tabul_sebelum && $tabul_sebelum) {
         $query->whereIn('tabul', [$tabul_sebelum, $tabul]);

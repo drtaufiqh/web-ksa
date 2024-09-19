@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jagung_validasis', function (Blueprint $table) {
+        Schema::create('paktani_jagung_validasis', function (Blueprint $table) {
             $table->id();
             $table->string('indeks', 10)->index(); // kolom 'indeks' dengan tipe varchar(10) dan index
             $table->integer('subsegmen_K'); // konsisten
@@ -42,6 +42,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jagung_validasis');
+        Schema::dropIfExists('paktani_jagung_validasis');
     }
 };

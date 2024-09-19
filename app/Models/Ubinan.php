@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 class Ubinan extends Model
 {
     use HasFactory;
+    // Tentukan nama tabel dengan prefix 'paktani_'
+    protected $table = 'paktani_ubinans';
 
     /**
      * The attributes that aren't mass assignable.
@@ -19,8 +21,7 @@ class Ubinan extends Model
 
     public static function getSampel($indeks0, $indeks1) {
         // Mengambil data berdasarkan indeks0
-        $data = DB::table('ubinans')
-                ->where('indeks', 'like', "$indeks0%")
+        $data = self::where('indeks', 'like', "$indeks0%")
                 ->get();
 
         $arr = [];
@@ -42,8 +43,7 @@ class Ubinan extends Model
         }
 
         // Mengambil data berdasarkan indeks1
-        $data1 = DB::table('ubinans')
-                ->where('indeks', 'like', "$indeks1%")
+        $data1 = self::where('indeks', 'like', "$indeks1%")
                 ->get();
 
         // Mengisi array dengan hasil query dari indeks1

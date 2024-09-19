@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    // Tentukan nama tabel dengan prefix 'paktani_'
+    protected $table = 'paktani_users';
 
     /**
      * The attributes that are mass assignable.

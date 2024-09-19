@@ -24,7 +24,7 @@ class JagungAmatanController extends Controller
         $kabkota = Auth::user()->kode;
         if ($kabkota == '3300') $kabkota = $request->input('kabkota');
 
-        $query = DB::table('jagung_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
+        $query = DB::table('paktani_jagung_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
 
         if ($tahun) {
             $query->where('tahun', $tahun);
@@ -344,10 +344,10 @@ class JagungAmatanController extends Controller
         $wil = Auth::user()->kode;
         if ($wil == '3300') $wil = '33';
         $allKabKota = User::getAllKabKota();
-        $data = DB::table('jagung_amatans')
-            ->join('users', 'jagung_amatans.kode_kabkota', '=', 'users.kode')
-            ->selectRaw('CONCAT(jagung_amatans.kode_kabkota, " - ", users.nama) as kab_kota, jagung_amatans.kode_kabkota as kode_kabkota, jagung_amatans.tahun, jagung_amatans.bulan, COUNT(*) as baris, MAX(jagung_amatans.updated_at) as last_update')
-            ->groupBy('jagung_amatans.kode_kabkota', 'jagung_amatans.tahun', 'jagung_amatans.bulan', 'users.nama')
+        $data = DB::table('paktani_jagung_amatans')
+            ->join('paktani_users', 'paktani_jagung_amatans.kode_kabkota', '=', 'paktani_users.kode')
+            ->selectRaw('CONCAT(paktani_jagung_amatans.kode_kabkota, " - ", paktani_users.nama) as kab_kota, paktani_jagung_amatans.kode_kabkota as kode_kabkota, paktani_jagung_amatans.tahun, paktani_jagung_amatans.bulan, COUNT(*) as baris, MAX(paktani_jagung_amatans.updated_at) as last_update')
+            ->groupBy('paktani_jagung_amatans.kode_kabkota', 'paktani_jagung_amatans.tahun', 'paktani_jagung_amatans.bulan', 'paktani_users.nama')
             ->where('kode_kabkota', 'like', $wil . '%')
             ->get();
         return view('jagung.riwayat', [

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('jagung_amatans', function (Blueprint $table) {
+        Schema::create('paktani_jagung_amatans', function (Blueprint $table) {
             $table->id();
             $table->string('indeks', 20)->nullable()->default(null);
             $table->string('tabul', 6)->nullable()->default(null);
@@ -45,6 +45,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jagung_amatans');
+        Schema::dropIfExists('paktani_jagung_amatans');
     }
 };

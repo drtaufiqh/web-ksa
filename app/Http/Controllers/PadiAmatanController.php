@@ -24,7 +24,7 @@ class PadiAmatanController extends Controller
         $kabkota = Auth::user()->kode;
         if ($kabkota == '3300') $kabkota = $request->input('kabkota');
 
-        $query = DB::table('padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
+        $query = DB::table('paktani_padi_amatans'); // Gantilah nama_tabel dengan nama tabel Anda
 
         if ($tahun) {
             $query->where('tahun', $tahun);
@@ -118,7 +118,7 @@ class PadiAmatanController extends Controller
     }
 
     public function import(Request $request){
-        set_time_limit(8 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
+        set_time_limit(10 * 60); // Mengatur maksimum waktu eksekusi menjadi 4 menit
 
         $wil = Auth::user()->kode;
 
@@ -364,10 +364,10 @@ class PadiAmatanController extends Controller
         $wil = Auth::user()->kode;
         if ($wil == '3300') $wil = '33';
         $allKabKota = User::getAllKabKota();
-        $data = DB::table('padi_amatans')
-            ->join('users', 'padi_amatans.kode_kabkota', '=', 'users.kode')
-            ->selectRaw('CONCAT(padi_amatans.kode_kabkota, " - ", users.nama) as kab_kota, padi_amatans.kode_kabkota as kode_kabkota, padi_amatans.tahun, padi_amatans.bulan, COUNT(*) as baris, MAX(padi_amatans.updated_at) as last_update')
-            ->groupBy('padi_amatans.kode_kabkota', 'padi_amatans.tahun', 'padi_amatans.bulan', 'users.nama')
+        $data = DB::table('paktani_padi_amatans')
+            ->join('paktani_users', 'paktani_padi_amatans.kode_kabkota', '=', 'paktani_users.kode')
+            ->selectRaw('CONCAT(paktani_padi_amatans.kode_kabkota, " - ", paktani_users.nama) as kab_kota, paktani_padi_amatans.kode_kabkota as kode_kabkota, paktani_padi_amatans.tahun, paktani_padi_amatans.bulan, COUNT(*) as baris, MAX(paktani_padi_amatans.updated_at) as last_update')
+            ->groupBy('paktani_padi_amatans.kode_kabkota', 'paktani_padi_amatans.tahun', 'paktani_padi_amatans.bulan', 'paktani_users.nama')
             ->where('kode_kabkota', 'like', $wil . '%')
             ->get();
         return view('padi.riwayat', [
